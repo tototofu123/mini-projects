@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
+from pathlib import Path
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -193,7 +194,7 @@ class App:
         if filename:
             self.file_path = filename
             # Show just the filename, not full path
-            display_name = filename.split('/')[-1]
+            display_name = Path(filename).name
             self.lbl_file.config(text=f"Selected: {display_name}", fg="black")
             
     def process(self):
