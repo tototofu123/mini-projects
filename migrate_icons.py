@@ -11,10 +11,10 @@ def get_hash(path):
     return h.hexdigest()
 
 def main():
-    source_dir = r"c:\Users\totot\.gemini\antigravity\antigravity_projects\massive_icons_temp\optimized"
-    target_dir = r"c:\Users\totot\.gemini\antigravity\antigravity_projects\svg"
-    meta_json = r"c:\Users\totot\.gemini\antigravity\antigravity_projects\massive_icons_temp\metadata\icons.metadata.json"
-    inv_json = r"c:\Users\totot\.gemini\antigravity\antigravity_projects\massive_icons_temp\metadata\inventory.json"
+    source_dir = r"/path/to/massive_icons_temp/optimized"
+    target_dir = r"/path/to/new/svg_folder"
+    meta_json = r"/path/to/massive_icons_temp/metadata/icons.metadata.json"
+    inv_json = r"/path/to/massive_icons_temp/metadata/inventory.json"
     
     os.makedirs(target_dir, exist_ok=True)
     
