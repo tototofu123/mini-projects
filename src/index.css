@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+    --font-sans: 'Space Grotesk', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #080808;
+}
+
+/* Leva panel theming overrides */
+:root {
+    --leva-colors-accent1: #00d4ff;
+    --leva-colors-accent2: #00b8d9;
+    --leva-colors-accent3: #0099b8;
+    --leva-colors-highlight1: rgba(0, 212, 255, 0.1);
+    --leva-colors-highlight2: rgba(0, 212, 255, 0.15);
+    --leva-colors-highlight3: rgba(0, 212, 255, 0.2);
+    --leva-colors-elevation1: #0d0d0d;
+    --leva-colors-elevation2: #111111;
+    --leva-colors-elevation3: #161616;
+    --leva-colors-toolTipBackground: #1a1a1a;
+    --leva-colors-toolTipText: #e1e1e1;
+    --leva-fonts-mono: 'Space Mono', monospace;
+    --leva-fonts-sans: 'Space Grotesk', sans-serif;
+    --leva-fontSizes-root: 11px;
+    --leva-radii-sm: 4px;
+    --leva-radii-lg: 8px;
+}
