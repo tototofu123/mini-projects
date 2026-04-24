@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quoridor Rustic</title>
+    <style>
+        :root {
+            --board-surface: #DEB887;
+            --board-grid: #8B4513;
+            --pawn-p1: #2563EB;
+            --pawn-p2: #DC2626;
+            --wall-solid: #1F2937;
+            --wall-ghost: rgba(31, 41, 55, 0.5);
+            --background: #F7F5F2;
+            --text-primary: #1A1C1E;
+            --cell-size: 48px;
+            --wall-gap: 12px;
+            --board-padding: 24px;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-primary);
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .wall-bank {
+            display: flex;
+            gap: 4px;
+        }
+
+        .bank-wall {
+            width: 8px;
+            height: 30px;
+            background-color: var(--wall-solid);
+            border-radius: 2px;
+            cursor: grab;
+        }
+
+        .bank-wall.dragging {
+            opacity: 0.5;
+        }
+
+        .board {
+            background-color: var(--board-surface);
+            padding: var(--board-padding);
+            border-radius: 8px;
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(9, var(--cell-size));
+            grid-template-rows: repeat(9, var(--cell-size));
+            gap: var(--wall-gap);
+        }
+
+        .cell {
+            background-color: var(--board-grid);
+            border-radius: 4px;
+            width: var(--cell-size);
+            height: var(--cell-size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cell.highlight {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .pawn {
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            transition: transform 0.1s ease;
+        }
+
+        .pawn-1 { background-color: var(--pawn-p1); }
+        .pawn-2 { background-color: var(--pawn-p2); }
+
+        /* Walls */
+        .wall {
+            position: absolute;
+            background-color: var(--wall-solid);
+            border-radius: 4px;
+            z-index: 10;
+        }
+
+        .wall.horizontal {
+            height: var(--wall-gap);
+            width: calc(var(--cell-size) * 2 + var(--wall-gap));
+        }
+
+        .wall.vertical {
+            width: var(--wall-gap);
+            height: calc(var(--cell-size) * 2 + var(--wall-gap));
+        }
+
+        .ghost-wall {
+            position: absolute;
+            background-color: var(--wall-ghost);
+            pointer-events: none;
+            z-index: 5;
+            display: none;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--wall-solid);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        #turn-indicator {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .turn-1 { color: var(--pawn-p1); }
+        .turn-2 { color: var(--pawn-p2); }
+    </style>
+</head>
+<body>
+
+    <h1>QUORIDOR</h1>
+    
+    <div id="turn-indicator" class="turn-1">Player 1's Turn</div>
+
+    <div class="game-container">
+        <!-- Player 2 Info (Top) -->
+        <div class="player-info">
+            <span>Player 2 (Red)</span>
+            <div id="p2-walls" class="wall-bank"></div>
+        </div>
+
+        <div id="board" class="board">
+            <!-- Cells generated via JS -->
+        </div>
+
+        <!-- Player 1 Info (Bottom) -->
+        <div class="player-info">
+            <span>Player 1 (Blue)</span>
+            <div id="p1-walls" class="wall-bank"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="toggleWallOrientation()">Rotate Wall (R)</button>
+        <button onclick="resetGame()">Reset Game</button>
+    </div>
+
+    <script>
+        const GRID_SIZE = 9;
+        const boardElement = document.getElementById('board');
+        const p1WallsElement = document.getElementById('p1-walls');
+        const p2WallsElement = document.getElementById('p2-walls');
+        const turnIndicator = document.getElementById('turn-indicator');
+
+        let state = {
+            players: [
+                { r: 8, c: 4, walls: 10, goal: 0, color: 'pawn-1' },
+                { r: 0, c: 4, walls: 10, goal: 8, color: 'pawn-2' }
+            ],
+            turn: 0, // 0 for P1, 1 for P2
+            walls: [], // { r, c, orientation: 'h'|'v' }
+            wallOrientation: 'h',
+            isGameOver: false
+        };
+
+        function initBoard() {
+            boardElement.innerHTML = '';
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.r = r;
+                    cell.dataset.c = c;
+                    cell.onclick = () => handleCellClick(r, c);
+                    cell.onmousemove = (e) => handleMouseMove(e, r, c);
+                    boardElement.appendChild(cell);
+                }
+            }
+            render();
+        }
+
+        function render() {
+            // Clear previous pawns and highlights
+            document.querySelectorAll('.pawn').forEach(p => p.remove());
+            document.querySelectorAll('.cell').forEach(c => c.classList.remove('highlight'));
+            document.querySelectorAll('.wall').forEach(w => w.remove());
+
+            // Render Pawns
+            state.players.forEach((p, index) => {
+                const cell = getCell(p.r, p.c);
+                const pawn = document.createElement('div');
+                pawn.className = `pawn ${p.color}`;
+                cell.appendChild(pawn);
+            });
+
+            // Render Walls
+            state.walls.forEach(wall => {
+                const wallEl = document.createElement('div');
+                wallEl.className = `wall ${wall.orientation === 'h' ? 'horizontal' : 'vertical'}`;
+                
+                // Calculate position
+                const cellSize = 48;
+                const gapSize = 12;
+                const padding = 24;
+
+                if (wall.orientation === 'h') {
+                    wallEl.style.top = `${padding + (wall.r + 1) * cellSize + wall.r * gapSize}px`;
+                    wallEl.style.left = `${padding + wall.c * (cellSize + gapSize)}px`;
+                } else {
+                    wallEl.style.top = `${padding + wall.r * (cellSize + gapSize)}px`;
+                    wallEl.style.left = `${padding + (wall.c + 1) * cellSize + wall.c * gapSize}px`;
+                }
+                boardElement.appendChild(wallEl);
+            });
+
+            // Render Wall Banks
+            renderBank(p1WallsElement, state.players[0].walls);
+            renderBank(p2WallsElement, state.players[1].walls);
+
+            // Turn Indicator
+            turnIndicator.textContent = state.isGameOver ? `Player ${state.turn + 1} Wins!` : `Player ${state.turn + 1}'s Turn`;
+            turnIndicator.className = `turn-${state.turn + 1}`;
+
+            if (!state.isGameOver) highlightValidMoves();
+        }
+
+        function renderBank(element, count) {
+            element.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const w = document.createElement('div');
+                w.className = 'bank-wall';
+                element.appendChild(w);
+            }
+        }
+
+        function getCell(r, c) {
+            return boardElement.children[r * GRID_SIZE + c];
+        }
+
+        function handleCellClick(r, c) {
+            if (state.isGameOver) return;
+
+            // Check if it's a valid move
+            const validMoves = getValidMoves(state.turn);
+            if (validMoves.some(m => m.r === r && m.c === c)) {
+                state.players[state.turn].r = r;
+                state.players[state.turn].c = c;
+                
+                if (r === state.players[state.turn].goal) {
+                    state.isGameOver = true;
+                    render();
+                    return;
+                }
+                
+                nextTurn();
+            } else {
+                // Try placing a wall if clicked on board intersections? 
+                // We'll use the mouse move for ghost walls and click for placement
+                const ghost = document.querySelector('.ghost-wall');
+                if (ghost && ghost.style.display !== 'none') {
+                    placeWall();
+                }
+            }
+        }
+
+        let pendingWall = null;
+
+        function handleMouseMove(e, r, c) {
+            if (state.isGameOver || state.players[state.turn].walls === 0) return;
+
+            // Logic to determine if we are near a gap for wall placement
+            const rect = getCell(r, c).getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Snap to nearest intersection
+            let wallR = r;
+            let wallC = c;
+            
+            // Only allow placement in gaps (r 0-7, c 0-7)
+            if (state.wallOrientation === 'h') {
+                if (y > 35 && r < 8) {
+                    if (x > 35 && c < 8) wallC = c;
+                    else if (x < 15 && c > 0) wallC = c - 1;
+                    else return hideGhost();
+                    
+                    showGhost(wallR, wallC, 'h');
+                } else hideGhost();
+            } else {
+                if (x > 35 && c < 8) {
+                    if (y > 35 && r < 8) wallR = r;
+                    else if (y < 15 && r > 0) wallR = r - 1;
+                    else return hideGhost();
+
+                    showGhost(wallR, wallC, 'v');
+                } else hideGhost();
+            }
+        }
+
+        function showGhost(r, c, orientation) {
+            let ghost = document.querySelector('.ghost-wall');
+            if (!ghost) {
+                ghost = document.createElement('div');
+                ghost.className = 'wall ghost-wall';
+                boardElement.appendChild(ghost);
+            }
+
+            // Check if placement is valid (overlaps)
+            const isValid = isValidWallPlacement(r, c, orientation);
+            
+            ghost.style.display = 'block';
+            ghost.className = `wall ghost-wall ${orientation === 'h' ? 'horizontal' : 'vertical'}`;
+            ghost.style.backgroundColor = isValid ? 'var(--wall-ghost)' : 'rgba(220, 38, 38, 0.5)';
+
+            const cellSize = 48;
+            const gapSize = 12;
+            const padding = 24;
+
+            if (orientation === 'h') {
+                ghost.style.top = `${padding + (r + 1) * cellSize + r * gapSize}px`;
+                ghost.style.left = `${padding + c * (cellSize + gapSize)}px`;
+            } else {
+                ghost.style.top = `${padding + r * (cellSize + gapSize)}px`;
+                ghost.style.left = `${padding + (c + 1) * cellSize + c * gapSize}px`;
+            }
+
+            pendingWall = isValid ? { r, c, orientation } : null;
+        }
+
+        function hideGhost() {
+            const ghost = document.querySelector('.ghost-wall');
+            if (ghost) ghost.style.display = 'none';
+            pendingWall = null;
+        }
+
+        function placeWall() {
+            if (pendingWall) {
+                state.walls.push(pendingWall);
+                state.players[state.turn].walls--;
+                nextTurn();
+                hideGhost();
+            }
+        }
+
+        function isValidWallPlacement(r, c, orientation) {
+            // 1. Boundary check
+            if (r < 0 || r > 7 || c < 0 || c > 7) return false;
+
+            // 2. Overlap check
+            for (let w of state.walls) {
+                if (w.orientation === orientation) {
+                    if (w.r === r && w.c === c) return false;
+                    if (orientation === 'h' && w.r === r && Math.abs(w.c - c) < 2) return false;
+                    if (orientation === 'v' && w.c === c && Math.abs(w.r - r) < 2) return false;
+                } else {
+                    // Intersection check
+                    if (w.r === r && w.c === c) return false;
+                }
+            }
+
+            // 3. Pathfinding check (BFS)
+            // Temporarily add wall
+            state.walls.push({ r, c, orientation });
+            const p1CanReach = canReachGoal(0);
+            const p2CanReach = canReachGoal(1);
+            state.walls.pop();
+
+            return p1CanReach && p2CanReach;
+        }
+
+        function canReachGoal(playerIdx) {
+            const p = state.players[playerIdx];
+            const queue = [{ r: p.r, c: p.c }];
+            const visited = new Set();
+            visited.add(`${p.r},${p.c}`);
+
+            while (queue.length > 0) {
+                const curr = queue.shift();
+                if (curr.r === p.goal) return true;
+
+                const neighbors = getNeighbors(curr.r, curr.c);
+                for (let n of neighbors) {
+                    const key = `${n.r},${n.c}`;
+                    if (!visited.has(key)) {
+                        visited.add(key);
+                        queue.push(n);
+                    }
+                }
+            }
+            return false;
+        }
+
+        function getNeighbors(r, c) {
+            const neighbors = [];
+            const dirs = [{dr: -1, dc: 0}, {dr: 1, dc: 0}, {dr: 0, dc: -1}, {dr: 0, dc: 1}];
+            
+            for (let d of dirs) {
+                const nr = r + d.dr;
+                const nc = c + d.dc;
+                if (nr >= 0 && nr < 9 && nc >= 0 && nc < 9) {
+                    if (!isWallBlocking(r, c, nr, nc)) {
+                        neighbors.push({ r: nr, c: nc });
+                    }
+                }
+            }
+            return neighbors;
+        }
+
+        function isWallBlocking(r1, c1, r2, c2) {
+            for (let w of state.walls) {
+                if (w.orientation === 'h') {
+                    // Wall between rows
+                    if (Math.min(r1, r2) === w.r && Math.max(r1, r2) === w.r + 1) {
+                        if (c1 === w.c || c1 === w.c + 1) return true;
+                    }
+                } else {
+                    // Wall between columns
+                    if (Math.min(c1, c2) === w.c && Math.max(c1, c2) === w.c + 1) {
+                        if (r1 === w.r || r1 === w.r + 1) return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function getValidMoves(playerIdx) {
+            const p = state.players[playerIdx];
+            const opp = state.players[1 - playerIdx];
+            let moves = getNeighbors(p.r, p.c);
+
+            // Handle jumping over opponent
+            moves = moves.flatMap(m => {
+                if (m.r === opp.r && m.c === opp.c) {
+                    const dr = m.r - p.r;
+                    const dc = m.c - p.c;
+                    const jumpR = m.r + dr;
+                    const jumpC = m.c + dc;
+
+                    // Standard jump
+                    if (jumpR >= 0 && jumpR < 9 && jumpC >= 0 && jumpC < 9 && !isWallBlocking(m.r, m.c, jumpR, jumpC)) {
+                        return [{ r: jumpR, c: jumpC }];
+                    } else {
+                        // Diagonal jump if blocked by wall or edge
+                        const diagonals = [];
+                        if (dr !== 0) { // Vertical jump blocked
+                            if (m.c > 0 && !isWallBlocking(m.r, m.c, m.r, m.c - 1)) diagonals.push({r: m.r, c: m.c - 1});
+                            if (m.c < 8 && !isWallBlocking(m.r, m.c, m.r, m.c + 1)) diagonals.push({r: m.r, c: m.c + 1});
+                        } else { // Horizontal jump blocked
+                            if (m.r > 0 && !isWallBlocking(m.r, m.c, m.r - 1, m.c)) diagonals.push({r: m.r - 1, c: m.c});
+                            if (m.r < 8 && !isWallBlocking(m.r, m.c, m.r + 1, m.c)) diagonals.push({r: m.r + 1, c: m.c});
+                        }
+                        return diagonals;
+                    }
+                }
+                return [m];
+            });
+
+            // Filter out move to own position (can happen with diagonal jump logic)
+            return moves.filter(m => !(m.r === p.r && m.c === p.c));
+        }
+
+        function highlightValidMoves() {
+            const moves = getValidMoves(state.turn);
+            moves.forEach(m => {
+                getCell(m.r, m.c).classList.add('highlight');
+            });
+        }
+
+        function nextTurn() {
+            state.turn = 1 - state.turn;
+            render();
+        }
+
+        function toggleWallOrientation() {
+            state.wallOrientation = state.wallOrientation === 'h' ? 'v' : 'h';
+        }
+
+        function resetGame() {
+            state = {
+                players: [
+                    { r: 8, c: 4, walls: 10, goal: 0, color: 'pawn-1' },
+                    { r: 0, c: 4, walls: 10, goal: 8, color: 'pawn-2' }
+                ],
+                turn: 0,
+                walls: [],
+                wallOrientation: 'h',
+                isGameOver: false
+            };
+            initBoard();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'r') toggleWallOrientation();
+        });
+
+        initBoard();
+    </script>
+</body>
+</html>
