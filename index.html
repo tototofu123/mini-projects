@@ -8,17 +8,19 @@
 
 
         :root {
-            --board-surface: #DEB887;
-            --board-grid: #8B4513;
+            --board-surface: #C78F55;
+            --board-grid: #6B3F1F;
             --pawn-p1: #2563EB;
             --pawn-p2: #DC2626;
-            --wall-solid: #1F2937;
-            --wall-ghost: rgba(31, 41, 55, 0.5);
-            --background: #F7F5F2;
-            --text-primary: #1A1C1E;
-            --cell-size: 48px;
-            --wall-gap: 12px;
-            --board-padding: 24px;
+            --wall-solid: #111827;
+            --wall-ghost: rgba(17, 24, 39, 0.45);
+            --background: #E9E1D5;
+            --text-primary: #1B1713;
+            --panel-bg: #F8F1E7;
+            --highlight: #FDE047;
+            --cell-size: clamp(34px, 7.2vw, 48px);
+            --wall-gap: clamp(8px, 1.8vw, 12px);
+            --board-padding: clamp(12px, 3vw, 24px);
         }
 
         body {
@@ -28,32 +30,43 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
             margin: 0;
             user-select: none;
+            padding: 20px 12px;
+            box-sizing: border-box;
         }
 
         h1 {
-            margin-bottom: 1rem;
+            margin: 0 0 0.75rem;
             font-weight: 800;
+            letter-spacing: 0.08em;
+            font-size: clamp(1.5rem, 4.8vw, 2.4rem);
         }
 
         .game-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 14px;
             align-items: center;
+            width: min(100%, 740px);
         }
 
         .player-info {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             width: 100%;
             padding: 10px 20px;
-            background: #fff;
+            background: var(--panel-bg);
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 2px solid #BA9269;
+            box-sizing: border-box;
+        }
+
+        .player-info.active {
+            border-color: var(--wall-solid);
         }
 
         .wall-bank {
@@ -63,7 +76,7 @@
 
         .bank-wall {
             width: 8px;
-            height: 30px;
+            height: 34px;
             background-color: var(--wall-solid);
             border-radius: 2px;
             cursor: grab;
@@ -82,6 +95,77 @@
             grid-template-columns: repeat(9, var(--cell-size));
             grid-template-rows: repeat(9, var(--cell-size));
             gap: var(--wall-gap);
+            border: 3px solid #5B3216;
+            box-sizing: border-box;
+        }
+
+        .board-stage {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .wall-toolbox {
+            background: var(--panel-bg);
+            border: 2px solid #BA9269;
+            border-radius: 8px;
+            padding: 10px 8px;
+            width: 68px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            box-sizing: border-box;
+        }
+
+        .wall-tool-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+        }
+
+        .wall-tool {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            border: 2px solid #5B3216;
+            background: #E6CCAF;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wall-tool.active {
+            box-shadow: 0 0 0 3px #FDE047;
+        }
+
+        .wall-tool:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
+        .wall-tool-piece {
+            background: var(--wall-solid);
+            border-radius: 3px;
+            transition: transform 120ms ease;
+        }
+
+        .wall-tool-piece.horizontal {
+            width: 30px;
+            height: 8px;
+        }
+
+        .wall-tool-piece.vertical {
+            width: 8px;
+            height: 30px;
+        }
+
+        #wall-tool-count {
+            font-size: 0.82rem;
+            font-weight: 700;
         }
 
         .cell {
@@ -94,10 +178,39 @@
             justify-content: center;
             cursor: pointer;
             position: relative;
+            transition: background-color 120ms ease;
         }
 
         .cell.highlight {
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: #89542D;
+            box-shadow: inset 0 0 0 3px var(--highlight);
+        }
+
+        .cell.highlight::after {
+            content: '';
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--highlight);
+            opacity: 0.95;
+            position: absolute;
+        }
+
+        .cell.preview-affected {
+            box-shadow: inset 0 0 0 3px #34D399;
+        }
+
+        .cell.preview-affected::before {
+            content: '';
+            position: absolute;
+            inset: 7px;
+            border-radius: 3px;
+            background: rgba(52, 211, 153, 0.22);
+            pointer-events: none;
+        }
+
+        .cell:hover {
+            background-color: #7A4925;
         }
 
         .pawn {
@@ -105,6 +218,8 @@
             height: 80%;
             border-radius: 50%;
             transition: transform 0.1s ease;
+            border: 3px solid #F8F1E7;
+            box-sizing: border-box;
         }
 
         .pawn-1 { background-color: var(--pawn-p1); }
@@ -134,17 +249,60 @@
             pointer-events: none;
             z-index: 5;
             display: none;
+            box-shadow: inset 0 0 0 2px #F8F1E7, 0 0 0 1px #111827;
+            opacity: 0.95;
+        }
+
+        .ghost-wall.invalid {
+            background-color: rgba(220, 38, 38, 0.65) !important;
+            box-shadow: inset 0 0 0 2px #F8F1E7, 0 0 0 1px #B91C1C;
+        }
+
+        .cursor-wall {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.92;
+            display: none;
+            transform: translate(-50%, -50%);
+            background: var(--wall-solid);
+            border-radius: 4px;
+            box-shadow: 0 0 0 2px #F8F1E7, 0 0 0 4px #111827;
+        }
+
+        .cursor-wall.horizontal {
+            width: calc(var(--cell-size) * 2 + var(--wall-gap));
+            height: var(--wall-gap);
+        }
+
+        .cursor-wall.vertical {
+            width: var(--wall-gap);
+            height: calc(var(--cell-size) * 2 + var(--wall-gap));
+        }
+
+        body.wall-tool-active {
+            cursor: crosshair;
+        }
+
+        .board.drag-active {
+            box-shadow: 0 0 0 4px #FDE047;
+        }
+
+        .board.drag-active .cell {
+            cursor: crosshair;
         }
 
         .controls {
-            margin-top: 20px;
+            margin-top: 16px;
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         button {
             padding: 10px 20px;
-            border: none;
+            border: 2px solid transparent;
             border-radius: 4px;
             background-color: var(--wall-solid);
             color: white;
@@ -156,10 +314,55 @@
             opacity: 0.9;
         }
 
+        button:focus-visible {
+            outline: none;
+            border-color: var(--highlight);
+        }
+
         #turn-indicator {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3.4vw, 1.25rem);
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
+        }
+
+        #wall-mode-indicator {
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .player-info {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+
+            .bank-wall {
+                width: 7px;
+                height: 28px;
+            }
+
+            .controls {
+                width: 100%;
+            }
+
+            button {
+                flex: 1;
+                min-width: 145px;
+                padding: 10px 12px;
+            }
+
+            .board-stage {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .wall-toolbox {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 8px 12px;
+            }
         }
 
         .turn-1 { color: var(--pawn-p1); }
@@ -171,24 +374,37 @@
     <h1>QUORIDOR</h1>
     
     <div id="turn-indicator" class="turn-1">Player 1's Turn</div>
+    <div id="wall-mode-indicator">Wall: Horizontal (Press R to rotate)</div>
 
     <div class="game-container">
         <!-- Player 2 Info (Top) -->
-        <div class="player-info">
+        <div id="p2-panel" class="player-info">
             <span>Player 2 (Red)</span>
             <div id="p2-walls" class="wall-bank"></div>
         </div>
 
-        <div id="board" class="board">
-            <!-- Cells generated via JS -->
+        <div class="board-stage">
+            <div id="board" class="board">
+                <!-- Cells generated via JS -->
+            </div>
+
+            <aside class="wall-toolbox">
+                <span class="wall-tool-label">Wall Tool</span>
+                <button id="wall-tool" class="wall-tool" type="button" title="Pick up a wall to place">
+                    <span id="wall-tool-piece" class="wall-tool-piece horizontal"></span>
+                </button>
+                <span id="wall-tool-count">10 left</span>
+            </aside>
         </div>
 
         <!-- Player 1 Info (Bottom) -->
-        <div class="player-info">
+        <div id="p1-panel" class="player-info active">
             <span>Player 1 (Blue)</span>
             <div id="p1-walls" class="wall-bank"></div>
         </div>
     </div>
+
+    <div id="cursor-wall" class="cursor-wall horizontal"></div>
 
     <div class="controls">
         <button onclick="toggleWallOrientation()">Rotate Wall (R)</button>
@@ -201,6 +417,13 @@
         const p1WallsElement = document.getElementById('p1-walls');
         const p2WallsElement = document.getElementById('p2-walls');
         const turnIndicator = document.getElementById('turn-indicator');
+        const wallModeIndicator = document.getElementById('wall-mode-indicator');
+        const p1Panel = document.getElementById('p1-panel');
+        const p2Panel = document.getElementById('p2-panel');
+        const wallToolElement = document.getElementById('wall-tool');
+        const wallToolCount = document.getElementById('wall-tool-count');
+        const wallToolPiece = document.getElementById('wall-tool-piece');
+        const cursorWall = document.getElementById('cursor-wall');
 
         let state = {
             players: [
@@ -210,8 +433,19 @@
             turn: 0, // 0 for P1, 1 for P2
             walls: [], // { r, c, orientation: 'h'|'v' }
             wallOrientation: 'h',
-            isGameOver: false
+            isGameOver: false,
+            isDraggingWall: false
         };
+
+        function getBoardMetrics() {
+            const boardStyles = getComputedStyle(boardElement);
+            const firstCell = getCell(0, 0);
+            const cellRect = firstCell ? firstCell.getBoundingClientRect() : null;
+            const cellSize = cellRect ? cellRect.width : 48;
+            const gapSize = parseFloat(boardStyles.columnGap) || 12;
+            const padding = parseFloat(boardStyles.paddingLeft) || 24;
+            return { cellSize, gapSize, padding };
+        }
 
         function initBoard() {
             boardElement.innerHTML = '';
@@ -222,7 +456,11 @@
                     cell.dataset.r = r;
                     cell.dataset.c = c;
                     cell.onclick = () => handleCellClick(r, c);
-                    cell.onmousemove = (e) => handleMouseMove(e, r, c);
+                    cell.onmousemove = (e) => {
+                        if (state.isDraggingWall) {
+                            updateWallPreviewFromPointer(e.clientX, e.clientY);
+                        }
+                    };
                     boardElement.appendChild(cell);
                 }
             }
@@ -232,7 +470,7 @@
         function render() {
             // Clear previous pawns and highlights
             document.querySelectorAll('.pawn').forEach(p => p.remove());
-            document.querySelectorAll('.cell').forEach(c => c.classList.remove('highlight'));
+            document.querySelectorAll('.cell').forEach(c => c.classList.remove('highlight', 'preview-affected'));
             document.querySelectorAll('.wall').forEach(w => w.remove());
 
             // Render Pawns
@@ -244,51 +482,133 @@
             });
 
             // Render Walls
+            const metrics = getBoardMetrics();
             state.walls.forEach(wall => {
                 const wallEl = document.createElement('div');
                 wallEl.className = `wall ${wall.orientation === 'h' ? 'horizontal' : 'vertical'}`;
-                
-                // Calculate position
-                const cellSize = 48;
-                const gapSize = 12;
-                const padding = 24;
-
-                if (wall.orientation === 'h') {
-                    wallEl.style.top = `${padding + (wall.r + 1) * cellSize + wall.r * gapSize}px`;
-                    wallEl.style.left = `${padding + wall.c * (cellSize + gapSize)}px`;
-                } else {
-                    wallEl.style.top = `${padding + wall.r * (cellSize + gapSize)}px`;
-                    wallEl.style.left = `${padding + (wall.c + 1) * cellSize + wall.c * gapSize}px`;
-                }
+                const rect = getWallRect(wall.r, wall.c, wall.orientation, metrics);
+                wallEl.style.top = `${rect.top}px`;
+                wallEl.style.left = `${rect.left}px`;
                 boardElement.appendChild(wallEl);
             });
 
             // Render Wall Banks
-            renderBank(p1WallsElement, state.players[0].walls);
-            renderBank(p2WallsElement, state.players[1].walls);
+            renderBank(p1WallsElement, state.players[0].walls, 0);
+            renderBank(p2WallsElement, state.players[1].walls, 1);
 
             // Turn Indicator
             turnIndicator.textContent = state.isGameOver ? `Player ${state.turn + 1} Wins!` : `Player ${state.turn + 1}'s Turn`;
             turnIndicator.className = `turn-${state.turn + 1}`;
+            wallModeIndicator.textContent = `Wall: ${state.wallOrientation === 'h' ? 'Horizontal' : 'Vertical'} (Press R to rotate)`;
+            updateWallToolUI();
+
+            p1Panel.classList.toggle('active', state.turn === 0 && !state.isGameOver);
+            p2Panel.classList.toggle('active', state.turn === 1 && !state.isGameOver);
 
             if (!state.isGameOver) highlightValidMoves();
         }
 
-        function renderBank(element, count) {
+        function renderBank(element, count, playerIdx) {
             element.innerHTML = '';
             for (let i = 0; i < count; i++) {
                 const w = document.createElement('div');
                 w.className = 'bank-wall';
+                if (state.turn !== playerIdx || state.isGameOver) {
+                    w.style.opacity = '0.35';
+                    w.style.cursor = 'not-allowed';
+                }
                 element.appendChild(w);
             }
+        }
+
+        function updateWallToolUI() {
+            const wallsLeft = state.players[state.turn].walls;
+            const canUseWallTool = !state.isGameOver && wallsLeft > 0;
+            wallToolCount.textContent = `${wallsLeft} left`;
+            wallToolElement.disabled = !canUseWallTool;
+            wallToolElement.classList.toggle('active', state.isDraggingWall);
+
+            wallToolPiece.className = `wall-tool-piece ${state.wallOrientation === 'h' ? 'horizontal' : 'vertical'}`;
+            cursorWall.className = `cursor-wall ${state.wallOrientation === 'h' ? 'horizontal' : 'vertical'}`;
+        }
+
+        function startWallDrag() {
+            if (state.isGameOver || state.players[state.turn].walls === 0) return;
+            state.isDraggingWall = true;
+            document.body.classList.add('wall-tool-active');
+            boardElement.classList.add('drag-active');
+            cursorWall.style.display = 'block';
+            updateWallToolUI();
+        }
+
+        function stopWallDrag() {
+            state.isDraggingWall = false;
+            document.body.classList.remove('wall-tool-active');
+            boardElement.classList.remove('drag-active');
+            cursorWall.style.display = 'none';
+            hideGhost();
+            updateWallToolUI();
         }
 
         function getCell(r, c) {
             return boardElement.children[r * GRID_SIZE + c];
         }
 
+        function getNearestCellFromPoint(clientX, clientY) {
+            const boardRect = boardElement.getBoundingClientRect();
+            if (clientX < boardRect.left || clientX > boardRect.right || clientY < boardRect.top || clientY > boardRect.bottom) {
+                return null;
+            }
+
+            let nearestCell = null;
+            let minDistance = Infinity;
+
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    const cell = getCell(r, c);
+                    const rect = cell.getBoundingClientRect();
+                    const cx = rect.left + rect.width / 2;
+                    const cy = rect.top + rect.height / 2;
+                    const distance = Math.hypot(clientX - cx, clientY - cy);
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        nearestCell = cell;
+                    }
+                }
+            }
+
+            return nearestCell;
+        }
+
+        function getWallRect(r, c, orientation, metrics = getBoardMetrics()) {
+            const { cellSize, gapSize, padding } = metrics;
+            const width = orientation === 'h' ? (cellSize * 2 + gapSize) : gapSize;
+            const height = orientation === 'h' ? gapSize : (cellSize * 2 + gapSize);
+
+            let top;
+            let left;
+
+            if (orientation === 'h') {
+                top = padding + (r + 1) * cellSize + r * gapSize;
+                left = padding + c * (cellSize + gapSize);
+            } else {
+                top = padding + r * (cellSize + gapSize);
+                left = padding + (c + 1) * cellSize + c * gapSize;
+            }
+
+            return { top, left, width, height };
+        }
+
         function handleCellClick(r, c) {
             if (state.isGameOver) return;
+
+            if (state.isDraggingWall) {
+                if (pendingWall) {
+                    placeWall();
+                }
+                return;
+            }
 
             // Check if it's a valid move
             const validMoves = getValidMoves(state.turn);
@@ -303,17 +623,52 @@
                 }
                 
                 nextTurn();
-            } else {
-                // Try placing a wall if clicked on board intersections? 
-                // We'll use the mouse move for ghost walls and click for placement
-                const ghost = document.querySelector('.ghost-wall');
-                if (ghost && ghost.style.display !== 'none') {
-                    placeWall();
-                }
             }
         }
 
         let pendingWall = null;
+
+        function clamp(value, min, max) {
+            return Math.max(min, Math.min(max, value));
+        }
+
+        function updateWallPreviewFromPointer(clientX, clientY) {
+            if (state.isGameOver || state.players[state.turn].walls === 0 || !state.isDraggingWall) {
+                hideGhost();
+                return;
+            }
+
+            const boardRect = boardElement.getBoundingClientRect();
+            if (clientX < boardRect.left || clientX > boardRect.right || clientY < boardRect.top || clientY > boardRect.bottom) {
+                hideGhost();
+                return;
+            }
+
+            const metrics = getBoardMetrics();
+            let bestSlot = null;
+            let minDistance = Infinity;
+
+            for (let r = 0; r <= 7; r++) {
+                for (let c = 0; c <= 7; c++) {
+                    const rect = getWallRect(r, c, state.wallOrientation, metrics);
+                    const centerX = boardRect.left + rect.left + rect.width / 2;
+                    const centerY = boardRect.top + rect.top + rect.height / 2;
+                    const distance = Math.hypot(clientX - centerX, clientY - centerY);
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        bestSlot = { r, c };
+                    }
+                }
+            }
+
+            if (!bestSlot) {
+                hideGhost();
+                return;
+            }
+
+            showGhost(bestSlot.r, bestSlot.c, state.wallOrientation);
+        }
 
         function handleMouseMove(e, r, c) {
             if (state.isGameOver || state.players[state.turn].walls === 0) return;
@@ -322,6 +677,8 @@
             const rect = getCell(r, c).getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
+            const { cellSize } = getBoardMetrics();
+            const edgeThreshold = cellSize * 0.3;
             
             // Snap to nearest intersection
             let wallR = r;
@@ -329,17 +686,17 @@
             
             // Only allow placement in gaps (r 0-7, c 0-7)
             if (state.wallOrientation === 'h') {
-                if (y > 35 && r < 8) {
-                    if (x > 35 && c < 8) wallC = c;
-                    else if (x < 15 && c > 0) wallC = c - 1;
+                if (y > cellSize - edgeThreshold && r < 8) {
+                    if (x > cellSize * 0.5 && c < 8) wallC = c;
+                    else if (x <= cellSize * 0.5 && c > 0) wallC = c - 1;
                     else return hideGhost();
                     
                     showGhost(wallR, wallC, 'h');
                 } else hideGhost();
             } else {
-                if (x > 35 && c < 8) {
-                    if (y > 35 && r < 8) wallR = r;
-                    else if (y < 15 && r > 0) wallR = r - 1;
+                if (x > cellSize - edgeThreshold && c < 8) {
+                    if (y > cellSize * 0.5 && r < 8) wallR = r;
+                    else if (y <= cellSize * 0.5 && r > 0) wallR = r - 1;
                     else return hideGhost();
 
                     showGhost(wallR, wallC, 'v');
@@ -360,27 +717,45 @@
             
             ghost.style.display = 'block';
             ghost.className = `wall ghost-wall ${orientation === 'h' ? 'horizontal' : 'vertical'}`;
-            ghost.style.backgroundColor = isValid ? 'var(--wall-ghost)' : 'rgba(220, 38, 38, 0.5)';
+            ghost.classList.toggle('invalid', !isValid);
+            ghost.style.backgroundColor = 'var(--wall-ghost)';
 
-            const cellSize = 48;
-            const gapSize = 12;
-            const padding = 24;
-
-            if (orientation === 'h') {
-                ghost.style.top = `${padding + (r + 1) * cellSize + r * gapSize}px`;
-                ghost.style.left = `${padding + c * (cellSize + gapSize)}px`;
-            } else {
-                ghost.style.top = `${padding + r * (cellSize + gapSize)}px`;
-                ghost.style.left = `${padding + (c + 1) * cellSize + c * gapSize}px`;
-            }
+            const rect = getWallRect(r, c, orientation);
+            ghost.style.top = `${rect.top}px`;
+            ghost.style.left = `${rect.left}px`;
 
             pendingWall = isValid ? { r, c, orientation } : null;
+            highlightAffectedSquares(r, c);
         }
 
         function hideGhost() {
             const ghost = document.querySelector('.ghost-wall');
             if (ghost) ghost.style.display = 'none';
+            clearAffectedSquares();
             pendingWall = null;
+        }
+
+        function clearAffectedSquares() {
+            document.querySelectorAll('.cell.preview-affected').forEach(cell => {
+                cell.classList.remove('preview-affected');
+            });
+        }
+
+        function highlightAffectedSquares(r, c) {
+            clearAffectedSquares();
+
+            const affected = [
+                { r, c },
+                { r, c: c + 1 },
+                { r: r + 1, c },
+                { r: r + 1, c: c + 1 }
+            ];
+
+            affected.forEach(pos => {
+                if (pos.r >= 0 && pos.r < GRID_SIZE && pos.c >= 0 && pos.c < GRID_SIZE) {
+                    getCell(pos.r, pos.c).classList.add('preview-affected');
+                }
+            });
         }
 
         function placeWall() {
@@ -388,7 +763,7 @@
                 state.walls.push(pendingWall);
                 state.players[state.turn].walls--;
                 nextTurn();
-                hideGhost();
+                stopWallDrag();
             }
         }
 
@@ -523,6 +898,9 @@
 
         function toggleWallOrientation() {
             state.wallOrientation = state.wallOrientation === 'h' ? 'v' : 'h';
+            hideGhost();
+            updateWallToolUI();
+            render();
         }
 
         function resetGame() {
@@ -534,13 +912,49 @@
                 turn: 0,
                 walls: [],
                 wallOrientation: 'h',
-                isGameOver: false
+                isGameOver: false,
+                isDraggingWall: false
             };
             initBoard();
         }
 
+        wallToolElement.addEventListener('click', () => {
+            if (state.isDraggingWall) {
+                stopWallDrag();
+                return;
+            }
+            startWallDrag();
+        });
+
+        boardElement.addEventListener('click', (e) => {
+            if (!state.isDraggingWall) return;
+            e.preventDefault();
+            e.stopPropagation();
+            if (pendingWall) {
+                placeWall();
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!state.isDraggingWall) return;
+
+            cursorWall.style.left = `${e.clientX}px`;
+            cursorWall.style.top = `${e.clientY}px`;
+            updateWallPreviewFromPointer(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!state.isDraggingWall || e.touches.length === 0) return;
+
+            const touch = e.touches[0];
+            cursorWall.style.left = `${touch.clientX}px`;
+            cursorWall.style.top = `${touch.clientY}px`;
+            updateWallPreviewFromPointer(touch.clientX, touch.clientY);
+        }, { passive: true });
+
         document.addEventListener('keydown', (e) => {
             if (e.key.toLowerCase() === 'r') toggleWallOrientation();
+            if (e.key === 'Escape') stopWallDrag();
         });
 
         initBoard();
