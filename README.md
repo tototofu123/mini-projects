@@ -56,3 +56,41 @@ GitHub Flavored Markdown (GFM) has strict security rules to prevent XSS (Cross-S
 ## Summary
 
 The trick to an "Awesome GitHub Profile" isn't advanced Markdown—it's advanced **Images**. By utilizing SVGs and automating their generation via GitHub Actions or serverless APIs, you bypass Markdown's static limitations to create a dynamic, personalized dashboard.
+
+
+## 🎨 Visual Showcase Gallery
+
+Here are some of the dynamically generated images and plugins in action from these repositories:
+
+<div align="center">
+  <img src="https://github.com/lowlighter/metrics/blob/examples/metrics.sponsors.svg" width="400" style="margin: 10px;" />
+  <img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=280144&theme=dark" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.classic.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.organization.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.isocalendar.fullyear.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.isocalendar.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.languages.indepth.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.languages.recent.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.languages.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.languages.details.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.stargazers.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.stargazers.graph.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.stargazers.worldmap.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.lines.history.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.lines.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.topics.icons.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.topics.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.stars.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.licenses.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.licenses.ratio.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.habits.charts.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.habits.facts.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.contributors.categories.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.contributors.contributions.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.followup.indepth.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.followup.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.followup.user.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.reactions.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.people.followers.svg" width="400" style="margin: 10px;" />
+  <img src="https://raw.githubusercontent.com/lowlighter/metrics/examples/metrics.plugin.people.repository.svg" width="400" style="margin: 10px;" />
+</div>
