@@ -60,33 +60,26 @@ The trick to an "Awesome GitHub Profile" isn't advanced Markdown—it's advanced
 
 ## 🎨 Visual Showcase Gallery: @tototofu123
 
-Here is the massive gallery of dynamic widgets, reverted back to show all the advanced plugins, but **all of them are now pulling your live data**!
+Here are the live dynamic SVG widgets generated specifically for your GitHub profile!
+
+*(Note: The `lowlighter/metrics` plugins require setting up a GitHub Action to run, as their public server blocks generating large plugins via hotlinks. We are showing the other fully working APIs here!)*
 
 <div align="center">
+  
+  ![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=58A6FF&width=435&lines=Hello%2C+I'm+tototofu123!;Welcome+to+my+Showcase!)
+  
+  <br><br>
 
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=58A6FF&width=435&lines=Hello%2C+I'm+tototofu123!;Welcome+to+my+Showcase!" alt="Typing SVG" />
-
+  ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=tototofu123&show_icons=true&theme=radical)
+  
+  ![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=tototofu123&layout=compact&theme=radical)
+  
   <br><br>
   
-  <img src="https://github-readme-stats.vercel.app/api?username=tototofu123&show_icons=true&theme=radical" alt="GitHub Stats" width="400" style="margin: 10px;" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=tototofu123&layout=compact&theme=radical" alt="Top Languages" width="400" style="margin: 10px;" />
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=tototofu123&theme=radical" alt="Contribution Streak" width="400" style="margin: 10px;" />
-  <img src="https://github-profile-trophy.vercel.app/?username=tototofu123&theme=radical" alt="GitHub Trophies" width="400" style="margin: 10px;" />
-
-  <img src="https://metrics.lecoq.io/tototofu123" alt="Metrics Classic" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?template=terminal" alt="Metrics Terminal" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_isocalendar=yes&plugin_isocalendar_duration=half-year" alt="Isometric Calendar" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_languages=yes" alt="Languages Plugin" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_stargazers=yes" alt="Stargazers" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_lines=yes" alt="Lines of Code" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_topics=yes" alt="Starred Topics" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_stars=yes" alt="Recently Starred" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_licenses=yes" alt="Repository Licenses" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_habits=yes&plugin_habits_charts=yes" alt="Coding Habits" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_contributors=yes" alt="Contributors" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_followup=yes" alt="Issues and PRs" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_reactions=yes" alt="Comment Reactions" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_people=yes" alt="People/Followers" width="400" style="margin: 10px;" />
-  <img src="https://metrics.lecoq.io/tototofu123?plugin_repositories=yes" alt="Featured Repositories" width="400" style="margin: 10px;" />
+  ![Contribution Streak](https://github-readme-streak-stats.herokuapp.com/?user=tototofu123&theme=radical)
+  
+  <br><br>
+  
+  ![GitHub Trophies](https://github-profile-trophy.vercel.app/?username=tototofu123&theme=radical)
 
 </div>
