@@ -1,17 +1,25 @@
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=526682619)
+# 🚀 JavaScript Codespace: Rapid Prototyping Template
 
-# JavaScript Portfolio Site with GitHub Codespaces and Copilot
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=526682619)
+[![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react&logoColor=black&style=flat-square)](https://react.dev/)
+[![Codespaces](https://img.shields.io/badge/GitHub-Codespaces-181717?logo=github&logoColor=white&style=flat-square)](https://github.com/features/codespaces)
+[![Copilot](https://img.shields.io/badge/AI-Copilot-blue?logo=github-copilot&logoColor=white&style=flat-square)](https://github.com/features/copilot)
+
+_Create, customize, and deploy your own portfolio website in minutes._ ✨
+
+A high-performance, developer-ready template optimized for **GitHub Codespaces** and **GitHub Copilot**. This repository provides a pre-configured development environment, allowing you to launch a [Codespace](https://github.com/features/codespaces/) and start building immediately without any local setup.
 
 > View these instructions in [Spanish](/translations/es/README.md) or [Portuguese](/translations/pt-BR/README.md)
 
-_Create, customize and deploy your own portfolio website in minutes._ ✨
+## ✨ Key Features
 
-In this template repository we have the development environment and base set and ready to go. So that you can immediately launch your [Codespace](https://github.com/features/codespaces/) environment and start customizing your site using [Copilot](https://copilot.github.com) to help you write code faster.
+- **⚡ Instant Launch**: One-click development environment with `.devcontainer` pre-configured.
+- **🤖 Copilot Optimized**: Designed to work seamlessly with GitHub Copilot for AI-assisted coding.
+- **🎨 Modular React Architecture**: Clean, component-based structure for easy customization.
+- **🚀 Zero Configuration**: Pre-installed linting (ESLint), formatting (Prettier), and build tools (Parcel).
+- **🌍 Deploy Ready**: Built-in support for Azure Static Web Apps and GitHub Pages.
 
-* **Who is this for?** __Anyone__ looking to create a portfolio site, learn web development, or test out Codespaces.
-* **How much experience do you need?** __Zero__. You decide how much you want to customize based on your experience, and time available.
-* **Tools needed:** _None_. No need to install anything! All you need is a web browser.
-* **Prerequisites:** _None_. This template includes your development environment and deployable web app for you to create your own site.
+---
 
 ## About this portfolio template
 
@@ -428,3 +436,6 @@ Explore how you can use Copilot to help you:
 
 ## 🔎 Found an issue or have an idea for improvement?
 Help us make this template repository better by [letting us know and opening an issue!](/../../issues/new).
+
+---
+*Optimized for rapid development and educational excellence. Updated 17-05-2026.*
