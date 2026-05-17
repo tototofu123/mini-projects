@@ -1,57 +1,73 @@
 <div align="center">
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+
+# 🚧 Barricade AI
+
+[![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react&logoColor=black&style=flat-square)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?logo=tailwind-css&logoColor=white&style=flat-square)](https://tailwindcss.com/)
+[![Gemini AI](https://img.shields.io/badge/AI-Gemini-orange?logo=google-gemini&logoColor=white&style=flat-square)](https://ai.google.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white&style=flat-square)](https://www.typescriptlang.org/)
+
+A modern digital implementation of the classic **Malefiz / Barricade** board game, featuring heuristic-based and Gemini AI-powered opponents with progressive difficulty levels.
+
 </div>
 
-# Barricade AI
+---
 
-A digital version of the classic **Malefiz / Barricade** board game, featuring AI opponents and three progressive difficulty levels.
+## ✨ Features
 
-Race all your pawns to the goal space at the top of the board before your opponents do. Roll the dice, move your pawns, and place barricades to block rival paths — but watch out, the AI will do the same to you.
+- **🎲 Dynamic Movement** — Strategic dice-based mechanics determining pawn mobility.
+- **🚧 Barricade Strategy** — Capture and reposition barricades to block rival paths or protect your lead.
+- **🤖 Gemini AI Opponents** — Up to three AI players utilizing heuristic logic and Google's Gemini SDK for decision-making.
+- **🗺️ Three Progressive Levels** — *Tutorial Valley* (2P), *The Divide* (3P), and *Barricade Pass* (4P).
+- **🎓 Interactive Tutorial** — A guided walkthrough on Level 1 to get new players up to speed instantly.
 
-## Features
+## 🛠️ Tech Stack
 
-- 🎲 **Dice-based movement** — roll to determine how far your pawns can move each turn
-- 🚧 **Barricade placement** — strategically block opponent routes after capturing a barricade
-- 🤖 **AI opponents** — up to three AI players with heuristic-based decision making
-- 🗺️ **Three levels** — Tutorial Valley (2P), The Divide (3P), and Barricade Pass (4P)
-- 🎓 **Built-in tutorial** — guided walkthrough on Level 1 for new players
+- **Framework**: [React 19](https://react.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Animation**: [Motion](https://motion.dev/) (`motion/react`)
+- **Intelligence**: [Google Gemini SDK](https://ai.google.dev/) (`@google/genai`)
+- **Build Tool**: [Vite](https://vitejs.dev/)
 
-## Tech Stack
+## 🚀 Getting Started
 
-- **React 19** + **TypeScript**
-- **Vite** for development and bundling
-- **Tailwind CSS v4** for styling
-- **Motion** (`motion/react`) for animations
-- **Google Gemini SDK** (`@google/genai`)
+**Prerequisites:** Node.js (v18+)
 
-## Run Locally
-
-**Prerequisites:** Node.js
-
-1. Install dependencies:
-   ```
+1. **Clone and Install:**
+   ```bash
+   gh repo clone tototofu123/barricade-game
+   cd barricade-game
    npm install
    ```
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Start the dev server:
+2. **Setup Environment:**
+   Set your `GEMINI_API_KEY` in `.env.local`:
+   ```env
+   GEMINI_API_KEY=your_key_here
    ```
+3. **Run Development Server:**
+   ```bash
    npm run dev
    ```
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+4. **Access the Game:** Open [http://localhost:3000](http://localhost:3000)
 
-## Scripts
+## 🎮 How to Play
+
+1. **Select a level** from the main menu.
+2. **Roll the dice** to determine your movement points.
+3. **Move your pawns** by clicking a highlighted destination.
+4. **Strategize**: If you land on a barricade, you must relocate it to any empty board space.
+5. **Win**: The first player to reach the **Goal** space wins!
+
+## 📜 Scripts
 
 | Command | Description |
 |---|---|
 | `npm run dev` | Start development server on port 3000 |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Type-check with TypeScript |
+| `npm run build` | Build production assets |
+| `npm run preview` | Preview the production build |
+| `npm run lint` | Run TypeScript type-checking |
 
-## How to Play
-
-1. Select a level from the main menu
-2. On your turn, click **Roll** to roll the dice
-3. Select one of your pawns, then click a highlighted destination to move it
-4. If you land on or capture a barricade, you must place it on an empty board space
-5. First player to get all their pawns to the **Goal** space wins!
+---
+*Created as an exploration of AI-integrated board game logic. Updated 17-05-2026.*
