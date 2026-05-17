@@ -1,23 +1,46 @@
-# Fourier Draw 🎨📐
+# 🎨 Fourier Draw: Mathematical Epicycles
 
-An algorithmic drawing tool that uses **Fourier Series** and epicycles to reconstruct images from complex paths.
+[![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white&style=flat-square)](https://www.python.org/)
+[![NumPy](https://img.shields.io/badge/NumPy-1.2x-013243?logo=numpy&logoColor=white&style=flat-square)](https://numpy.org/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-5C3EE8?logo=opencv&logoColor=white&style=flat-square)](https://opencv.org/)
+[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.x-11557c?style=flat-square)](https://matplotlib.org/)
 
-## 🚀 How it Works
-This project takes a set of coordinates (representing a shape or drawing) and calculates the complex Fourier coefficients. It then uses these coefficients to generate a series of rotating circles (epicycles) that, when combined, "draw" the original shape.
+An algorithmic drawing engine that utilizes the **Discrete Fourier Transform (DFT)** to decompose complex paths into a series of rotating circles, or **epicycles**. By calculating complex Fourier coefficients, the tool can reconstruct any closed loop path with mathematical precision.
 
-## 🛠️ Tech Stack
-- **Python 3**
-- **NumPy** for complex math and FFT
-- **Matplotlib** or **OpenCV** for visualization
+## 🧠 How it Works
 
-## 📂 Project Structure
-- `fourier_draw.py`: Main script for processing paths and animating epicycles.
-- `requirements.txt`: List of necessary Python libraries.
+1. **Path Mapping**: The tool takes a set of 2D coordinates representing a shape.
+2. **Complex Transformation**: Each coordinate $(x, y)$ is treated as a complex number $x + iy$.
+3. **Discrete Fourier Transform**: The script applies the DFT to these complex numbers to calculate the frequency, amplitude, and phase for a set of rotating vectors.
+4. **Epicycle Animation**: These vectors are visualized as a chain of connected circles (epicycles). As they rotate, the tip of the final vector traces out the original path.
 
-## 📖 Usage
-1. Provide a path or image data.
-2. Run the script to see the Fourier reconstruction in real-time.
-3. Adjust the number of circles to see how it affects the detail of the drawing.
+## ✨ Key Features
+
+- **📐 Precise Reconstruction**: Decompose any hand-drawn or generated path into its mathematical components.
+- **🔄 Real-time Visualization**: Watch the epicycles rotate and draw the path frame-by-frame using OpenCV or Matplotlib.
+- **🎛️ Variable Detail**: Control the number of Fourier coefficients used. Fewer coefficients result in a simplified, "abstract" version of the shape, while more coefficients provide 1:1 fidelity.
+- **🧪 Math-Driven Art**: A perfect bridge between signal processing concepts and generative art.
+
+## 🚀 Getting Started
+
+1. **Clone the Repo:**
+   ```bash
+   gh repo clone tototofu123/fourier_draw
+   ```
+
+2. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run the Simulation:**
+   ```bash
+   python fourier_draw.py
+   ```
 
 ## 📜 License
-MIT
+
+This project is licensed under the MIT License.
+
+---
+*Developed as an exploration of Fourier analysis in generative art. Updated 17-05-2026.*
