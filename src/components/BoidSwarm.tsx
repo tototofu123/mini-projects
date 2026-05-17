@@ -3,7 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { useBoidStore } from '../store/useBoidStore'
 
-const MAX_COUNT = 3000
+const MAX_COUNT = 5000 // Increased for CLI Demo
 
 // Module-level temp objects for performance
 const _obj = new THREE.Object3D()
@@ -14,7 +14,7 @@ const _c = new THREE.Color()
 const _cA = new THREE.Color()
 const _cB = new THREE.Color()
 
-// â”€â”€â”€ Organic Manta Geometry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ?€?€?€ Organic Manta Geometry ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
 
 function makeMantaGeo(): THREE.BufferGeometry {
     const geo = new THREE.BufferGeometry()
@@ -43,7 +43,7 @@ function makeMantaGeo(): THREE.BufferGeometry {
     return geo
 }
 
-// â”€â”€â”€ Helper: Vector Math â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ?€?€?€ Helper: Vector Math ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
 
 const normalize = (v: THREE.Vector3) => {
     const l = v.length()
@@ -67,7 +67,7 @@ const wrapEdge = (v: THREE.Vector3, size: number) => {
     else if (v.z < -size) v.z = size
 }
 
-// â”€â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ?€?€?€ Component ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
 
 interface BoidSwarmProps {
     mouseWorldRef: React.MutableRefObject<THREE.Vector3>
@@ -82,7 +82,7 @@ export default function BoidSwarm({ mouseWorldRef, mouseActiveRef }: BoidSwarmPr
     const velocities = useRef(new Float32Array(MAX_COUNT * 3))
     const meshRef = useRef<THREE.InstancedMesh | null>(null)
 
-    // â”€â”€â”€ Setup Mesh â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ?€?€?€ Setup Mesh ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
     const mesh = useMemo(() => {
         const geo = makeMantaGeo()
         // Use Basic material so it stays bright in dark fog
@@ -109,7 +109,7 @@ export default function BoidSwarm({ mouseWorldRef, mouseActiveRef }: BoidSwarmPr
         return () => { scene.remove(mesh) }
     }, [scene, mesh])
 
-    // â”€â”€â”€ Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ?€?€?€ Init ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
     useEffect(() => {
         const { count, speedMin, speedMax, worldSize } = useBoidStore.getState()
         const pos = positions.current
@@ -126,7 +126,7 @@ export default function BoidSwarm({ mouseWorldRef, mouseActiveRef }: BoidSwarmPr
         }
     }, [worldSize])
 
-    // â”€â”€â”€ Simulation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ?€?€?€ Simulation ?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€?€
     useFrame((state) => {
         const m = meshRef.current
         if (!m) return
