@@ -1,0 +1,156 @@
+================================================================================
+SECTION: PROJECTS (Modern / Air)
+
+Vibe: A clean, aerodynamic, modern art gallery. Suspended, high-pressure, light.
+Goal: Provide a stark contrast to the dark, heavy engine room. Showcase your
+portfolio using interactive "Air" physics (wind, gravity, springs) while keeping
+the actual project data perfectly readable.
+
+GLOBAL CONTAINER & ARCHITECTURE
+
+Background: #F8FAFC (Light Slate/Off-White). This is the "Inverted" palette.
+
+Text Color: #0F172A (Deep Matte Slate) for high contrast readability.
+
+Accent Colors: #64748B (Primary Accent) and #94A3B8 (Secondary UI).
+
+Scroll Context: The user is navigating inside the "Fake 3D" space established
+by the VR Headset transition.
+
+Layout: A full-screen canvas/container (min-height: 100vh) where elements
+float freely rather than sitting in rigid CSS boxes.
+
+LAYOUT ELEMENTS
+
+[ A. Section Header & Instructions ]
+
+Positioning: Fixed to the top-left of the viewport while inside this section.
+
+Header Text: [ MODERN GALLERY ]
+
+Typography: Syne, 48px to 64px, Weight 800, Color #0F172A.
+
+Interaction: Acts as the global Reset Button (Hover: #64748B, Click: Clears physics).
+
+Subtitle: Air Environment
+
+Typography: Space Grotesk, 14px, Uppercase, Color #64748B.
+
+Instructions: Move cursor to generate draft. Click empty space for gravity well. Drag cards to open.
+
+Typography: DM Sans, 14px, Color #94A3B8, max-width 250px.
+
+[ B. The Project Cards (The "Suspended" Grid) ]
+
+Base Layout: 4 to 6 rectangular cards arranged in a loose, staggered grid.
+
+Card Styling (Glassmorphism):
+
+background: rgba(255, 255, 255, 0.7); (Frosted white).
+
+backdrop-filter: blur(12px);
+
+border: 1px solid rgba(148, 163, 184, 0.3);
+
+border-radius: 16px;
+
+box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.1);
+
+Card Content:
+
+Title: Syne, 24px, Weight 700.
+
+Tags ([AI], [HARDWARE]): Space Grotesk, Pill-shaped background #F1F5F9.
+
+Excerpt: DM Sans, 14px.
+
+MICRO-INTERACTION 1: AIR PHYSICS (Springs & Wind)
+
+The cards do not sit statically. They are bound by a 2D physics engine.
+
+The Tethers (Spring Physics):
+
+Every card has an invisible "anchor" point in the grid.
+
+The card is attached to this anchor via a spring constraint (Hooke's Law).
+
+If pushed, the card will swing back to its anchor with a damping effect
+(friction: 0.85, tension: 0.05), eventually settling.
+
+Visual Cue: A faint, 1px #CBD5E1 line connects the top center of the card
+to an invisible point directly above it, mimicking a physical wire.
+
+The Wind (Cursor Draft Repulsion):
+
+The script calculates the velocity and trajectory of the user's cursor.
+
+As the cursor sweeps past a card (radius < 200px), it applies a repulsive
+force proportional to the mouse velocity.
+
+The card moves away on the X/Y axes and slightly rotates (tilts) to
+simulate aerodynamic drag.
+
+MICRO-INTERACTION 2: GRAVITY WELLS (Black Holes)
+
+The user can temporarily override the grid with gravity.
+
+The Click (Spawn):
+
+Clicking on any empty space (not a card, not the header) spawns a Gravity Well.
+
+Visual: A small #0F172A dot appears with concentric #94A3B8 rings that
+pulse outwards.
+
+The Pull:
+
+The well applies a constant attractive force to all Project Cards.
+
+The cards stretch on their tethers, piling up around the gravity well.
+
+The Reset (Header Click):
+
+Clicking the [ MODERN GALLERY ] header instantly destroys the active
+Gravity Well. The spring physics snap all cards back to their anchor points.
+
+MICRO-INTERACTION 3: THE CURTAIN PULL (Project Details)
+
+Instead of a standard click, viewing a project requires a tactile "drag" action.
+
+The Affordance (Hover State):
+
+When hovering over a specific card, the aerodynamic wind physics for that
+card are paused.
+
+The top-right corner of the card visually "folds" down slightly (using a
+CSS clip-path or SVG overlay), revealing a darker layer underneath,
+teaching the user it is a physical material.
+
+The Drag (Active State):
+
+The user clicks and drags the card to the left or right.
+
+As they drag, the card visually stretches and "tears" open like a curtain
+sliding on a rail.
+
+The Reveal (Modal State):
+
+Once dragged past a 30% threshold, the card snaps into a full-screen or
+large-center modal.
+
+The background darkens (background: rgba(15, 23, 42, 0.8)).
+
+The detailed project blog (images, GitHub links, deep-dive text) is revealed.
+
+The Project Tags ([Languages], [Tools], [AI]) detach from the card and
+slowly orbit the opened modal like planets.
+
+TECHNICAL UX & PERFORMANCE NOTES
+
+Physics Implementation: Driving DOM elements with inline transform: translate(x, y) rotate(r)
+via a requestAnimationFrame loop is highly performant for a small number
+of elements (4-8 cards). You do NOT need Canvas for the cards themselves,
+which ensures your text remains crisp and selectable for recruiters.
+
+Draw the "tethers" and the "gravity well" rings on a single full-screen <canvas>
+that sits strictly behind the DOM project cards using absolute positioning
+and pointer-events: none.

@@ -1,0 +1,118 @@
+================================================================================
+TOTOTOFU PORTFOLIO: THE MASTER FLOW (FUTURE -> ANCIENT -> REBOOT)
+
+Core Narrative: A descent from rigid, high-performance digital engineering
+down into chaotic, organic physics, ending with a hard snap back to reality.
+
+Global Constant: The t.tofu Fast-Travel Artifact sits in the corner,
+degrading from Chrome -> Glass -> Sunken Metal -> Stone as the user scrolls.
+
+PHASE 1: THE INITIATION (Future / Fire)
+
+[ SECTION: HERO ]
+
+Visual: Deep Matte Slate (#0F172A). Hyper-clean, rigid typography (Syne/Space Grotesk).
+
+Interaction: User discovers the "Gacha Mask." Hovering the main avatar photo
+creates a flashlight-mask revealing an ASCII/Pixel version. Clicking locks
+it in.
+
+Vibe: "I am a serious, high-end engineer."
+
+[ TRANSITION 1: THE THERMAL BLEED ]
+
+The "Scroll to Descend" text physically melts via SVG filters. A deep
+orange plasma glow bleeds up from the bottom of the screen. The Gacha mask
+unmounts; the cursor becomes a Plasma Reticle.
+
+[ SECTION: ABOUT ]
+
+Visual: Still Deep Slate, but lit by an ambient orange/amber core.
+
+Interaction: The bio text is an unreadable, blurry "Heat Haze". The user
+must physically drag their cursor over it to "cool" and read it. Clicking
+the UI boxes triggers a 1.5s plasma border melt.
+
+Vibe: "My code is powerful, volatile, and deeply interactive."
+
+PHASE 2: THE DESCENT (Modern / Air)
+
+[ TRANSITION 2: THE VR PORTAL ]
+
+The Plasma Reticle morphs into a glowing silver VR Headset.
+
+The camera zooms aggressively into the headset lenses. The screen flashes
+and inverts from Dark Mode to Light Mode (#F8FAFC).
+
+[ SECTION: PROJECTS ]
+
+Visual: Light Slate. Frosted glass project cards suspended in an invisible
+aerodynamic grid.
+
+Interaction: Wind Physics. Moving the mouse pushes the dangling cards.
+Clicking empty space spawns a Gravity Well that sucks the cards together.
+Users must physically "click and drag" a card to tear it open and view details.
+
+Vibe: "I build frictionless, modern, high-pressure UI."
+
+PHASE 3: THE ABYSS (Ancient / Water & Earth)
+
+[ TRANSITION 3: THE SHATTER & FLOOD ]
+
+As pressure builds, the Light Slate glass viewport shatters into falling
+polygons.
+
+A WebGL ink-drop displaces the falling glass, flooding the screen with
+Deep Indigo (#0A1128). Vertical scrolling halts and maps to horizontal panning.
+
+[ SECTION: SKILLS ]
+
+Visual: A dark, bioluminescent deep-sea trench. Horizontal cinematic scroll.
+
+Interaction: Boids Algorithm. The user's skills (Python, React) are glowing
+fish flocking around coral reefs (AI, UI). The cursor acts as bait. Clicking
+drops food, causing a feeding frenzy.
+
+Vibe: "I understand complex math, self-sustaining systems, and shaders."
+
+[ TRANSITION 4: THE ASCENT & THE WASH ]
+
+The horizontal timeline ends. The camera pitches up, breaking the water's
+surface with a flash. The background becomes Pitch Black (#000000).
+
+Scroll mapping changes to a rhythmic 1st-person "Head Bob" walking motion.
+
+A giant, dirt-covered rock approaches. A WebGL wave crashes against the screen,
+washing away the dirt mask to reveal carved text beneath.
+
+[ SECTION: CONTACT ]
+
+Visual: Pure Pitch Black.
+
+Interaction: The user is blind. The cursor is a 250px Radial Flashlight
+revealing the amber contact links carved in the stone. Finding and clicking
+the hidden "Torch Bracket" permanently ignites the cave with warm firelight.
+
+Vibe: "I reward users who explore and engage."
+
+PHASE 4: THE SYSTEM REBOOT (Deja Vu)
+
+[ TRANSITION 5: THE HARD SNAP ]
+
+The user scrolls past the bottom of the cave, crossing a 1px solid line.
+
+The threshold reads: > system.override(tototofu); // take off headset.
+
+Instant visual cut. Zero easing. Zero fading. The cave and all WebGL
+contexts are violently destroyed.
+
+[ SECTION: FOOTER ]
+
+Visual: We are instantly back in the Deep Matte Slate (#0F172A) environment
+from the Hero section.
+
+Interaction: None. A perfectly static, highly rigid, ultra-accessible
+4-column grid of links.
+
+Vibe: "I can build chaotic magic, but I never forget how to build
+clean, accessible, production-ready software."

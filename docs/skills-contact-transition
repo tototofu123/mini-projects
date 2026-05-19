@@ -1,0 +1,129 @@
+================================================================================
+TRANSITION PHASE: SKILLS -> CONTACT (The Ascent & The Wash)
+
+Vibe: Visceral, physical, and atmospheric. Escaping the digital ocean, walking
+onto a desolate night beach, and discovering an ancient artifact.
+Goal: Execute a flawless transition from 2D horizontal scrolling to a 1st-person
+3D "walking" camera, culminating in a complex WebGL fluid masking reveal.
+
+STAGE 1: THE ASCENT (Breaking the Surface)
+
+This occurs at the extreme right edge of the Skills section timeline (the end
+of the 300vw horizontal scroll).
+
+The Camera Pitch:
+
+Horizontal panning stops.
+
+As the user continues to scroll, the camera executes a simulated 3D "pitch"
+upwards (looking towards the surface).
+
+The bioluminescent #0A1128 water gradients fade to a lighter, murky teal
+as we approach the "surface".
+
+The Breach:
+
+The moment the scroll threshold is crossed to enter the Contact section,
+a full-screen "Water Droplet / Lens Clear" WebGL displacement effect triggers.
+
+The screen flashes a muted cyan/white for 0.2 seconds, simulating the
+camera breaking through the water tension into the air.
+
+Palette Swap: The background instantly becomes #000000 (Pitch Black night sky).
+
+STAGE 2: THE BEACH WALK (1st Person Camera Mechanics)
+
+Standard vertical scrolling resumes, but the mapping of that scroll is
+fundamentally altered to mimic human locomotion.
+
+The Environment:
+
+A subtle, very dark, grainy texture overlays the bottom half of the screen
+(wet sand).
+
+Ambient sound (optional, but implied visually): The rhythm of the visuals
+matches heavy footsteps in wet sand.
+
+The "Head Bob" Equation (Scroll-Linked Camera):
+
+The user's vertical scroll (scrollY) does NOT move a standard page up/down.
+It drives a mathematical timeline moving the camera forward (Z-axis).
+
+Y-Axis Bob: translateY(Math.sin(scrollY * frequency) * amplitude)
+
+Z-Axis Roll: rotateZ(Math.cos(scrollY * frequency) * slight_amplitude)
+
+Effect: As the user scrolls down, the entire viewport slightly dips, rises,
+and tilts left/right in a rhythmic pattern, perfectly mimicking a person
+walking forward towards a monolith.
+
+STAGE 3: THE DIRT MASK & THE MONOLITH
+
+As the user "walks" forward, a massive, screen-filling rock formation emerges
+from the pitch blackness.
+
+The Monolith Textures (Layering):
+
+Layer 1 (Bottom): The Clean Stone. Dark, wet, carved rock featuring your
+glowing #FCD34D (Amber) contact links (Resume, GitHub, etc.) deeply
+embossed into it.
+
+Layer 2 (Top): The Dirt & Sand mask. A highly textured, opaque layer of
+light ochre and gray sand that completely obscures the clean stone and
+the contact links underneath.
+
+STAGE 4: THE WASH (The Reveal)
+
+The user reaches the monolith. The "walking" scroll locks, and the final
+physics interaction takes over.
+
+The Trigger:
+
+When the camera is directly in front of the rock (scroll locked), a massive
+digital "wave" crashes against the screen from the bottom edge.
+
+The Fluid Shader (Erosion Effect):
+
+A WebGL fluid distortion pass sweeps upwards across the rock.
+
+Erase Masking: The wave acts as an alpha-mask eraser. Wherever the "water"
+touches Layer 2 (The Dirt), the dirt texture rapidly dissolves and washes
+away downwards, governed by a noise map so it clumps and streaks organically
+rather than fading as a flat block.
+
+The Aftermath:
+
+The dirt is gone. The underlying "Clean Stone" layer is revealed.
+
+The embossed contact links glow warmly in the dark.
+
+A faint, scrolling normal-map overlay makes the stone look wet and
+glistening for a few seconds before drying/settling into the pitch-black
+"Cave" environment.
+
+STAGE 5: HAND-OFF TO CAVE FLASHLIGHT
+
+Transition to Darkness:
+
+Once the wave recedes and the links are revealed, the ambient brightness
+of the rock slowly fades to 0% over 2 seconds.
+
+The screen is now pure black.
+
+Cursor Re-initialization:
+
+The cursor, which was disabled during the "Walk" and "Wash", reactivates.
+
+It now functions as the Radial Gradient Flashlight, ready for the user to
+sweep across the darkness to find the links and the unlit torch.
+
+TECHNICAL UX & PERFORMANCE NOTES
+
+The Walking Camera: Do not overdo the amplitude of the head bob. A maximum
+translation of 15-20px Y and 1 degree Z-rotation is enough to sell the effect.
+Anything higher will cause severe motion sickness for the user.
+
+The Wash Shader: This MUST be done using WebGL (Three.js custom shader material).
+You pass two textures (Dirt and Clean Rock) and use a third animated grayscale
+noise texture driven by a uniform u_time or u_progress to mix between
+them. CSS masking is not performant enough to simulate realistic liquid erosion.

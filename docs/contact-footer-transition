@@ -1,0 +1,78 @@
+================================================================================
+TRANSITION PHASE: CONTACT -> FOOTER (The Hard Snap)
+
+Vibe: Breaking the fourth wall. A hard system interrupt. Waking up from
+the simulation.
+Goal: Create a jarring, instantly memorable psychological loop ("Deja Vu")
+that proves your UI mastery by abruptly killing the chaotic physics and
+returning to a highly disciplined, static grid.
+
+SCROLL MECHANICS (The Threshold)
+
+This transition uses standard vertical scrolling, but relies on a strict
+Intersection Observer threshold to trigger the state change.
+
+The Boundary: There is no gradient or fade between the pitch-black Cave
+and the Footer. They are separated by a razor-sharp, 1px solid line
+using #1E293B (Light Slate).
+
+The Trigger Point: The transition event fires the exact millisecond the
+Footer's top boundary enters the viewport (0% threshold).
+
+STAGE 1: THE COMMAND PROMPT (Visual Cue)
+
+As the user scrolls down past the bottom of the cave, the first thing
+they see crossing the 1px boundary line is the override code.
+
+Text: > system.override(tototofu); // take off headset
+
+Typography: Space Grotesk, #94A3B8.
+
+Placement: Sitting directly on the top edge of the Footer container.
+It acts as the physical "tripwire" for the transition.
+
+STAGE 2: THE HARD SNAP (Execution)
+
+The moment the tripwire is crossed, the simulation is violently terminated.
+
+Color Reversion: The #000000 (Pitch Black) or Amber firelight of the
+Contact section instantly vanishes. The background below the line is pure
+#0F172A (Deep Matte Slate), exactly matching the Hero section.
+
+Canvas Destruction:
+
+Any remaining WebGL contexts, particle emitters, or active shaders from
+the Water and Earth sections are explicitly unmounted/destroyed.
+
+There must be absolutely ZERO lingering animations, fading opacities, or
+easing curves. It is a 0-millisecond binary cut.
+
+Lighting Reset: If the user had ignited the torch in the cave, scrolling
+past the tripwire extinguishes it instantly. If they scroll back up, the
+cave is pitch black again (the simulation has reset).
+
+STAGE 3: THE DEJA VU (Psychological Loop)
+
+The user is now fully in the Footer, realizing the journey has looped.
+
+Visual Echo: The user immediately recognizes the exact same 4-column UI
+grid structure, the same Space Grotesk typography, and the identical
+color palette from the very first section (Hero).
+
+The Artifact: The t.tofu logo, which was ancient stone a few pixels ago,
+is rendered here as a flat, pristine, single-color SVG (#1E293B), proving
+they have left the "physical" world and returned to the "digital" UI layer.
+
+TECHNICAL UX & PERFORMANCE NOTES
+
+React Cleanup: This transition acts as your garbage collector. Bind an
+IntersectionObserver to the Footer component. When isIntersecting is true,
+dispatch a global state (e.g., setSimulationActive(false)) that immediately
+unmounts the heavy Canvas components sitting in the DOM above it. This ensures
+that when the recruiter reaches the bottom of the page to click your Resume or
+GitHub links, the website is running at an ultra-lightweight 60fps with zero
+background GPU usage.
+
+CSS Warning: Triple-check that there are no transition: background-color 0.5s
+rules applied globally to the <body> or <main> wrapper, as that would ruin
+the instant "snap" effect.

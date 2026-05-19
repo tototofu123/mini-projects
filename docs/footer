@@ -1,0 +1,100 @@
+================================================================================
+SECTION: FOOTER (The Deja Vu)
+
+Vibe: Pure, uncompromising UI. A hard snap back to reality.
+Goal: Prove you can build chaotic, beautiful physics, but also know exactly
+how to clean up your DOM and deliver pristine accessibility.
+
+THE CONTAINER & ARCHITECTURE
+
+The Transition (The Hard Snap):
+
+Mechanism: A scroll-triggered state interrupt (e.g., Intersection Observer).
+
+Action: The exact moment the user scrolls past the top boundary, unmount
+or explicitly hide the WebGL Canvas context from the Water/Earth sections.
+NO fade-outs, NO smooth easing. It must be an instant, jarring cut.
+
+Background Color: #0F172A (Deep matte slate, identical to the Hero section).
+
+Top Border: A crisp, 1px solid line using #1E293B (Light Slate) to separate
+it from the pitch-black cave above.
+
+Layout Structure: A rigid, max-width flexbox or CSS Grid container,
+perfectly center-aligned.
+
+THE INTERRUPT PROMPT (Top Boundary Element)
+
+Text: > system.override(tototofu); // take off headset
+
+Placement: Positioned at the very top of the footer, acting as the physical
+threshold the user crosses.
+
+Typography: Space Grotesk (geometric UI font, replacing standard code fonts).
+
+Color: #94A3B8 (Cool Gray).
+
+Interaction: Optionally acts as a clickable button that instantly scrolls
+the user back to the top Hero section, resetting the entire journey.
+
+THE NAVIGATION GRID (Main Elements)
+
+Layout: A 4-column CSS Grid.
+
+[ Column Headers ]
+
+Text: "DEVELOPMENT", "DESIGN", "CONNECT", "STATUS"
+
+Typography: Space Grotesk, Weight: 600 (Bold), Uppercase, slightly expanded tracking.
+
+Color: #F8FAFC (High-contrast Off-white).
+
+[ Grid Links ]
+
+Typography: DM Sans (Clean body font for high readability).
+
+Color: #94A3B8 (Cool Gray).
+
+Hover State: Instant color swap to #F8FAFC (Off-white). No slow CSS transitions.
+
+Column 1 (Development):
+
+GitHub Repository
+
+Tech Blog (blog.lai.codes)
+
+Column 2 (Design):
+
+Figma Source
+
+Framer Prototypes
+
+Column 3 (Connect):
+
+LinkedIn
+
+Github (Profile)
+
+Column 4 (Status/Exploration):
+
+More about Me (explore) -> Coming Soon
+
+THE SIGN-OFF (Bottom Boundary Element)
+
+Layout: Full-width flex container spreading items between left and right edges.
+
+Left Text: © 2026 Toto Lai Man To. All systems operational.
+
+Right Text: The t.tofu logo mark, rendered as a simple, flat, single-color
+SVG (using #1E293B).
+
+Typography: DM Sans, Size: 12px or 14px.
+
+Color: #64748B (Darker slate gray so it fades into the background hierarchy).
+
+TECHNICAL UX NOTE
+
+Because this footer relies on the "Snap to Reality" effect, you MUST ensure
+that there are absolutely NO lingering CSS animations, floating particles,
+or requestAnimationFrame loops running in the background when this section
+is visible.

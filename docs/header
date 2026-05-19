@@ -1,0 +1,86 @@
+================================================================================
+SECTION: HEADER (The Fast-Travel Anchor)
+
+Vibe: A persistent, living artifact. Not a traditional navigation bar.
+Goal: Serve as a functional "escape hatch" for recruiters to skip the narrative
+and find your contact info, while acting as a visual anchor that proves your
+state-management and 3D rendering skills.
+
+THE CONTAINER & ARCHITECTURE
+
+Positioning: Fixed (or sticky) to the top of the viewport. It must persist
+across all sections (Future, Air, Water, Earth) until the final Footer snap.
+
+Z-Index: Extremely high (above all WebGL canvases, fluid simulations, and
+cave darkness overlays) to ensure it is always clickable.
+
+Layout: Minimalist structure. The t.tofu logo sits in the top left. The main navigation links (Projects, Skills, Contact) align perfectly in the center of the header to establish immediate context.
+
+THE ARTIFACT (TotoTofu Logo)
+
+Geometry: A 3D or pseudo-3D geometric block representing a piece of tofu.
+
+Graphic Detail: The top one-third of the block features a stylized, abstract
+"sauce" wave graphic.
+
+Label (Optional): A tiny, minimal label beneath or beside it reading t.tofu
+using the Space Grotesk font (Accent/UI font).
+
+SCROLL-LINKED ANIMATIONS (Material Degradation)
+
+The artifact does not stay the same; its material and texture dynamically
+change/degrade based on which section (era) the user is currently viewing.
+
+State 1: Future / Fire (Hero & About Sections)
+
+Material: Polished Chrome, Frosted Glass, or Neon.
+
+Colors: Sleek whites/grays with a subtle digital amber/plasma glow.
+
+State 2: Modern / Air (Projects Section)
+
+Material: Matte Silver / Clean Ceramic.
+
+Colors: Cool slate and muted gray.
+
+State 3: Water (Skills Section)
+
+Material: Sunken, oxidized metal or deep-sea glass.
+
+Colors: Dark indigo with bioluminescent aqua/teal edge highlights.
+
+State 4: Earth (Contact Section)
+
+Material: Ancient, moss-covered stone or heavily carved dark wood.
+
+Colors: Shadowy browns and charcoals. It reacts dynamically to the user's
+flashlight cursor.
+
+INTERACTIVE ANIMATIONS (Hover & Click)
+
+Hover State (The Tease):
+
+Action: When the cursor hovers over the artifact, it triggers a smooth,
+physics-based 3D rotation (e.g., a slight tilt on the X and Y axes tracking
+the mouse position).
+
+Visual Cue: A subtle tooltip or glowing text appears reading:
+[ Fast-Travel to Contact ].
+
+Click State (The Escape Hatch):
+
+Action: Clicking the artifact completely overrides the standard scroll behavior.
+
+Animation: Triggers a "fast-travel" tunnel or warp effect. The camera rapidly
+zooms through the Z-axis (or rapidly scrubs the timeline), bypassing the
+Air and Water sections entirely.
+
+Destination: Hard-drops the user directly into the pitch-black Earth (Cave)
+section, landing precisely at the torch bracket.
+
+TECHNICAL UX NOTE
+
+To maintain high performance, the material transitions (Chrome -> Stone) should
+ideally be handled via a shader material (if using Three.js) interpolating
+between textures based on the scroll progress (0 to 1), rather than mounting
+and unmounting entirely different 3D models.

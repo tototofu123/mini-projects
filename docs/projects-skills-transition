@@ -1,0 +1,107 @@
+================================================================================
+TRANSITION PHASE: PROJECTS -> SKILLS (The Shatter & Flood)
+
+Vibe: Breaking point. The high-pressure aerodynamic gallery cannot withstand
+the descent, resulting in a structural failure that plunges the user into
+a deep-sea ecosystem.
+Goal: Seamlessly transition the physics engine from 'Springs/Wind' to
+'Fluid/Boids', and shift the scroll direction from vertical to horizontal.
+
+SCROLL MECHANICS (The Directional Pivot)
+
+This transition marks the boundary where standard vertical scrolling is
+hijacked and mapped to a horizontal cinematic timeline.
+
+Container Setup: A position: sticky pinning container wrapping the end
+of the Projects section and the beginning of the Skills section.
+
+The Pivot: As the user scrolls vertically past the final Project Card, the
+viewport locks. Further downward mouse-wheeling no longer moves the page
+up/down, but instead scrubs a timeline that drives the Shatter sequence
+and subsequently pans the camera to the right (X-axis) into the Water section.
+
+STAGE 1: PRESSURE BUILD (80% - 95% Scroll Progress of Projects)
+
+Before the break, the UI warns the user of the impending depth.
+
+The Vignette: The clean #F8FAFC (Light Slate) background begins to darken
+at the extreme corners. A radial gradient vignette of #0A1128 (Deep Indigo)
+creeps inwards.
+
+Card Destabilization:
+
+The spring physics on any remaining visible Project Cards begin to fail.
+
+The cards undergo a rapid, low-amplitude vibration (simulating intense
+pressure via requestAnimationFrame X/Y coordinate noise).
+
+Visual Cue: A faint, jagged SVG "spiderweb" crack opacity fades in over the
+top-level viewport glass (z-index 99).
+
+STAGE 2: THE SHATTER (95% - 100% Scroll Progress)
+
+The threshold is crossed. The "VR Headset / Gallery Glass" completely fails.
+
+The Break:
+
+An instant, full-screen Canvas particle effect is triggered.
+
+The "glass" of the screen shatters into hundreds of sharp, polygonal
+shards (Canvas polygons mapped with the #F8FAFC background color).
+
+Gravity Shift:
+
+The shards are subjected to heavy downward gravity, tumbling out of the
+bottom of the viewport.
+
+Any remaining DOM Project Cards immediately unmount or drop identically.
+
+Audio/Haptic (Implied): A sharp, jarring visual flash of pure white (#FFFFFF)
+for exactly 1 frame to sell the impact of the break.
+
+STAGE 3: THE INK FLOOD & ORIENTATION SHIFT
+
+The void left by the shattered glass is instantly consumed by water.
+
+The Flood:
+
+Directly behind the falling shards, the background is revealed to be pure
+#0A1128 (Deep Indigo).
+
+A subtle "ink drop" or fluid displacement shader (WebGL) ripples outward
+from the center of the screen, distorting the falling shards as they sink.
+
+Horizontal Initiation:
+
+The user's vertical scroll input is now entirely mapped to horizontal
+movement (transform: translateX()).
+
+The camera begins its slow, stabilized cinematic pan to the right, revealing
+the dark expanse of the deep sea ecosystem.
+
+STAGE 4: PHYSICS HAND-OFF (Welcome to the Deep)
+
+The transition of the cursor's role is completed.
+
+Particle Metamorphosis: As the last glass shards sink out of frame, the
+first "Boids" (glowing, bioluminescent dots representing your skills) swim
+into the frame from the right side.
+
+Cursor Transformation:
+
+The cursor stops acting as an aerodynamic "wind draft" (from the Air section).
+
+It becomes a soft, glowing, interactive fluid emitter. Moving the mouse
+now leaves a faint, dissipating trail in the #0A1128 water, and acts as
+"bait" that gently attracts the Boid particles.
+
+TECHNICAL UX & PERFORMANCE NOTES
+
+Shatter Engine: Do not attempt to shatter DOM elements. Use an overlay <canvas>.
+Right before the shatter, take a snapshot of the UI (or just use solid geometric
+shard shapes) and run a simple 2D particle explosion.
+
+Scroll Hijacking: Use GSAP ScrollTrigger with pin: true. This handles the
+complex math of locking the viewport, running the shatter timeline, and smoothly
+translating Y-scroll to X-scroll without breaking native momentum scrolling
+on Mac trackpads or mobile devices.

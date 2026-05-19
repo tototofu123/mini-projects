@@ -1,0 +1,66 @@
+================================================================================
+TRANSITION PHASE: HERO -> ABOUT (The Heat Bleed)
+
+Vibe: Descending into the volatile, high-energy core of the system.
+Goal: Seamlessly bridge the highly structured Hero UI into the interactive
+plasma physics of the About section without breaking the "Future" aesthetic.
+
+SCROLL MECHANICS & PARALLAX
+
+Trigger: Standard native scroll. The transition begins when the user scrolls
+past 10vh (meaning the Hero section starts moving up).
+
+Hero Exit (Parallax): The elements in the Hero section (Avatar, TOTO TOFU text)
+do not scroll at a 1:1 ratio with the page. They scroll slightly slower
+(e.g., transform: translateY(Y * 0.4)), creating a feeling of depth as the
+About section slides up over them.
+
+Background Continuity: The deep matte slate (#0F172A) background remains
+continuous. There is no hard border or color block separating the two sections.
+
+VISUAL EFFECTS (The "Thermal Bleed")
+
+As the boundary between Hero and About crosses the bottom of the viewport,
+the "Fire/Heat" element is visually introduced.
+
+The Melting Prompt:
+
+The "Scroll to descend ↓" bouncing text at the bottom of the Hero section
+is the first casualty of the heat.
+
+As it approaches the top third of the viewport (during scroll), it applies
+an SVG displacement map (or CSS filter: url(#heat-ripple)), making it
+literally "melt" and distort into a heat haze before fading to opacity: 0.
+
+The Ambient Glow:
+
+A massive, highly diffused radial gradient (e.g., radial-gradient(circle at  center top, rgba(245, 158, 11, 0.05) 0%, transparent 70%)) bleeds upwards
+from the top boundary of the About section into the Hero section, hinting
+at the digital plasma below.
+
+CURSOR STATE HANDOFF
+
+The most critical part of this transition is the seamless handoff of the
+mouse tracking logic.
+
+Threshold: When the About section occupies > 50% of the viewport (tracked
+via Intersection Observer).
+
+State Change:
+
+The clip-path Gacha Mask from the Hero section is immediately unmounted
+or disabled to free up CPU/GPU resources.
+
+The cursor style shifts from the default crosshair to the "Plasma Shooter"
+reticle (a minimal SVG circle with four tick marks).
+
+The event listener tracking the mouse switches its output: instead of driving
+a clipping mask, it now drives the "Cooling/Magnetic Stabilizer" effect
+for the heat-haze text in the About section.
+
+TECHNICAL UX NOTE
+
+Do not use heavy WebGL for the transition boundary itself. Stick to CSS/SVG
+filters (like <feTurbulence> and <feDisplacementMap>) applied conditionally
+based on scroll position. This ensures the 60fps scrolling performance remains
+silky smooth as the user enters the heavy physics zone of the About section.
