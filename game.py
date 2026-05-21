@@ -10,7 +10,6 @@ JUMP_FORCE = -12
 MOVE_SPEED = 6
 
 WHITE = (255, 255, 255)
-BLACK = (20, 20, 30)
 PLAYER_COLOR = (100, 200, 255)
 PLATFORM_COLOR = (80, 220, 140)
 BG_COLOR = (20, 20, 35)
@@ -21,65 +20,29 @@ clock = pygame.time.Clock()
 font = pygame.font.SysFont("Arial", 28, bold=True)
 
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.image = pygame.Surface((30, 30))
-        self.image.fill(PLAYER_COLOR)
-        self.rect = self.image.get_rect()
-        self.rect.centerx = WIDTH // 2
-        self.rect.bottom = HEIGHT - 50
-        self.vel_y = 0
-        self.score = 0
-
-    def update(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.rect.x -= MOVE_SPEED
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.rect.x += MOVE_SPEED
-
-        self.vel_y += GRAVITY
-        self.rect.y += self.vel_y
-
-        if self.rect.right < 0:
-            self.rect.left = WIDTH
-        if self.rect.left > WIDTH:
-            self.rect.right = 0
-
-
-class Platform(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        self.image = pygame.Surface((70, 12))
-        self.image.fill(PLATFORM_COLOR)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-
-
-def generate_platforms(platforms, player):
-    while len(platforms) < 8:
-        x = random.randint(0, WIDTH - 70)
-        y = random.randint(-60, -10)
-        platforms.add(Platform(x, y))
-
-
 def main():
-    player = Player()
-    all_sprites = pygame.sprite.Group(player)
-    platforms = pygame.sprite.Group()
+    px = WIDTH // 2 - 15
+    py = HEIGHT - 90
+    pw, ph = 30, 30
+    vy = 0
+    on_ground = False
+    score = 0
+    game_over = False
 
-    for _ in range(7):
-        x = random.randint(0, WIDTH - 70)
-        y = random.randint(80, HEIGHT - 40)
-        p = Platform(x, y)
-        platforms.add(p)
-        all_sprites.add(p)
+    platforms = []
+    start_y = HEIGHT - 50
+    platforms.append({"x": WIDTH // 2 - 35, "y": start_y, "w": 70, "h": 12})
+
+    highest_y = start_y
+    for _ in range(6):
+        highest_y -= random.randint(50, 90)
+        platforms.append({
+            "x": random.randint(0, WIDTH - 70),
+            "y": highest_y,
+            "w": 70, "h": 12
+        })
 
     running = True
-    game_over = False
-    max_height = 0
 
     while running:
         clock.tick(FPS)
@@ -87,34 +50,65 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and game_over:
-                main()
-                return
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                if game_over:
+                    main()
+                    return
+                if on_ground:
+                    vy = JUMP_FORCE
 
         if not game_over:
-            all_sprites.update()
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_LEFT]:
+                px -= MOVE_SPEED
+            if keys[pygame.K_RIGHT]:
+                px += MOVE_SPEED
 
-            if player.vel_y > 0 and player.rect.y < HEIGHT // 2:
-                shift = HEIGHT // 2 - player.rect.y
-                player.rect.y = HEIGHT // 2
+            vy += GRAVITY
+            py += vy
+
+            if px + pw < 0:
+                px = WIDTH
+            if px > WIDTH:
+                px = -pw
+
+            on_ground = False
+
+            if vy > 0 and py < HEIGHT // 2:
+                shift = HEIGHT // 2 - py
+                py = HEIGHT // 2
                 for p in platforms:
-                    p.rect.y += shift
-                    if p.rect.y > HEIGHT:
-                        p.kill()
-                        player.score += 10
-                max_height += shift
-                generate_platforms(platforms, player)
+                    p["y"] += shift
+                platforms = [p for p in platforms if p["y"] <= HEIGHT]
+                score += len([p for p in platforms if p["y"] > HEIGHT])
+                highest_y -= shift
+                while len(platforms) < 8:
+                    highest_y -= random.randint(50, 90)
+                    platforms.append({
+                        "x": random.randint(0, WIDTH - 70),
+                        "y": highest_y,
+                        "w": 70, "h": 12
+                    })
 
             for p in platforms:
-                if player.vel_y > 0 and player.rect.colliderect(p.rect):
-                    player.vel_y = JUMP_FORCE
+                if (vy > 0 and
+                    px + pw > p["x"] and px < p["x"] + p["w"] and
+                    py + ph >= p["y"] and py + ph <= p["y"] + p["h"] + 8):
+                    vy = 0
+                    py = p["y"] - ph
+                    on_ground = True
 
-            if player.rect.top > HEIGHT:
+            if py > HEIGHT:
                 game_over = True
 
-        all_sprites.draw(screen)
+        screen.fill(BG_COLOR)
 
-        score_text = font.render(f"Score: {player.score}", True, WHITE)
+        for p in platforms:
+            pygame.draw.rect(screen, PLATFORM_COLOR, (p["x"], p["y"], p["w"], p["h"]), border_radius=6)
+
+        pygame.draw.rect(screen, PLAYER_COLOR, (px, py, pw, ph), border_radius=6)
+
+        score_text = font.render(f"Score: {score}", True, WHITE)
         screen.blit(score_text, (10, 10))
 
         if game_over:
