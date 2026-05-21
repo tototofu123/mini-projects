@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jumping Game</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #141423;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+canvas {
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(100, 200, 255, 0.15);
+}
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+const W = 480, H = 640;
+canvas.width = W;
+canvas.height = H;
+
+const GRAVITY = 0.5;
+const JUMP_FORCE = -12;
+const MOVE_SPEED = 6;
+
+const BG = '#141423';
+const PLAYER = '#64c8ff';
+const PLATFORM = '#50dc8c';
+const WHITE = '#ffffff';
+
+let player, platforms, score, gameOver, keys, animId;
+
+function init() {
+  player = { x: W / 2 - 15, y: H - 60, w: 30, h: 30, vy: 0 };
+  platforms = [];
+  score = 0;
+  gameOver = false;
+  keys = {};
+
+  for (let i = 0; i < 7; i++) {
+    platforms.push({
+      x: Math.random() * (W - 70),
+      y: 80 + Math.random() * (H - 120),
+      w: 70, h: 12
+    });
+  }
+}
+
+function generatePlatforms() {
+  while (platforms.length < 8) {
+    platforms.push({
+      x: Math.random() * (W - 70),
+      y: Math.random() * -50 - 10,
+      w: 70, h: 12
+    });
+  }
+}
+
+function update() {
+  if (gameOver) return;
+
+  if (keys['ArrowLeft'] || keys['KeyA']) player.x -= MOVE_SPEED;
+  if (keys['ArrowRight'] || keys['KeyD']) player.x += MOVE_SPEED;
+
+  player.vy += GRAVITY;
+  player.y += player.vy;
+
+  if (player.x + player.w < 0) player.x = W;
+  if (player.x > W) player.x = -player.w;
+
+  if (player.vy > 0 && player.y < H / 2) {
+    const shift = H / 2 - player.y;
+    player.y = H / 2;
+    for (let p of platforms) p.y += shift;
+    platforms = platforms.filter(p => p.y <= H);
+    score += 10;
+    generatePlatforms();
+  }
+
+  for (let p of platforms) {
+    if (player.vy > 0 &&
+        player.x + player.w > p.x && player.x < p.x + p.w &&
+        player.y + player.h >= p.y && player.y + player.h <= p.y + p.h + 8) {
+      player.vy = JUMP_FORCE;
+    }
+  }
+
+  if (player.y > H) gameOver = true;
+}
+
+function draw() {
+  ctx.fillStyle = BG;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.fillStyle = PLATFORM;
+  for (let p of platforms) {
+    ctx.beginPath();
+    ctx.roundRect(p.x, p.y, p.w, p.h, 6);
+    ctx.fill();
+  }
+
+  ctx.fillStyle = PLAYER;
+  ctx.beginPath();
+  ctx.roundRect(player.x, player.y, player.w, player.h, 6);
+  ctx.fill();
+
+  ctx.fillStyle = WHITE;
+  ctx.font = 'bold 24px Arial';
+  ctx.fillText(`Score: ${score}`, 12, 32);
+
+  if (gameOver) {
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = WHITE;
+    ctx.font = 'bold 36px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Game Over!', W / 2, H / 2 - 20);
+    ctx.font = '20px Arial';
+    ctx.fillText('Press SPACE to restart', W / 2, H / 2 + 20);
+    ctx.textAlign = 'start';
+  }
+}
+
+function loop() {
+  update();
+  draw();
+  animId = requestAnimationFrame(loop);
+}
+
+document.addEventListener('keydown', e => {
+  keys[e.code] = true;
+  if (e.code === 'Space' && gameOver) {
+    cancelAnimationFrame(animId);
+    init();
+    loop();
+  }
+});
+document.addEventListener('keyup', e => { keys[e.code] = false; });
+
+init();
+loop();
+</script>
+</body>
+</html>
