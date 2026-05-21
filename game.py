@@ -35,7 +35,7 @@ def main():
 
     highest_y = start_y
     for _ in range(6):
-        highest_y -= random.randint(50, 90)
+        highest_y -= random.randint(55, 75)
         platforms.append({
             "x": random.randint(0, WIDTH - 70),
             "y": highest_y,
@@ -83,7 +83,7 @@ def main():
                 score += len([p for p in platforms if p["y"] > HEIGHT])
                 highest_y -= shift
                 while len(platforms) < 8:
-                    highest_y -= random.randint(50, 90)
+                    highest_y -= random.randint(55, 75)
                     platforms.append({
                         "x": random.randint(0, WIDTH - 70),
                         "y": highest_y,
