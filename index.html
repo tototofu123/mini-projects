@@ -47,7 +47,7 @@ const WHITE = '#ffffff';
 let player, platforms, score, platformsCleared, gameOver, keys, animId;
 
 function init() {
-  player = { x: W / 2 - 15, y: H - 60, w: 30, h: 30, vy: 0 };
+  player = { x: W / 2 - 15, y: H - 60, w: 30, h: 30, vy: 0, onGround: false };
   platforms = [];
   score = 0;
   platformsCleared = 0;
@@ -119,13 +119,16 @@ function update() {
   }
 
   // Platform collision — only when falling down
+  player.onGround = false;
   for (let p of platforms) {
     if (player.vy > 0 &&
         player.x + player.w > p.x &&
         player.x < p.x + p.w &&
         player.y + player.h >= p.y &&
         player.y + player.h <= p.y + p.h + 10) {
-      player.vy = JUMP_FORCE;
+      player.vy = 0;
+      player.y = p.y - player.h;
+      player.onGround = true;
     }
   }
 
@@ -186,22 +189,31 @@ function restart() {
 // Keyboard
 document.addEventListener('keydown', e => {
   keys[e.code] = true;
-  if (e.code === 'Space') {
+  if (e.code === 'Space' || e.code === 'ArrowUp') {
     e.preventDefault();
-    if (gameOver) restart();
+    if (gameOver) {
+      restart();
+    } else if (player.onGround) {
+      player.vy = JUMP_FORCE;
+      player.onGround = false;
+    }
   }
 });
 document.addEventListener('keyup', e => { keys[e.code] = false; });
 
-// Touch controls — left/right halves of screen move player; tap on game over restarts
+// Touch controls — tap to jump, drag left/right half to move; tap on game over restarts
 let touchX = null;
 canvas.addEventListener('touchstart', e => {
   e.preventDefault();
   const t = e.touches[0];
   const rect = canvas.getBoundingClientRect();
-  const tx = t.clientX - rect.left;
-  touchX = tx;
-  if (gameOver) restart();
+  touchX = t.clientX - rect.left;
+  if (gameOver) {
+    restart();
+  } else if (player.onGround) {
+    player.vy = JUMP_FORCE;
+    player.onGround = false;
+  }
 }, { passive: false });
 canvas.addEventListener('touchmove', e => {
   e.preventDefault();

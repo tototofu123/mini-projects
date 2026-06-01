@@ -1,3 +1,7 @@
 @echo off
 cd /d "%~dp0"
-py -3.12 game.py
+if exist "dist\JumpingGame.exe" (
+    start "" "dist\JumpingGame.exe"
+) else (
+    py -3.12 game.py
+)
