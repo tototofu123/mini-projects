@@ -71,11 +71,13 @@ class PlatformGenerator:
         self.prev_y = start_y
         self.shape = "straight"
         self.shape_step = 0
-        self.shape_remaining = random.randint(3, 6)
+        self.shape_length = random.randint(3, 6)
+        self.shape_remaining = self.shape_length
 
     def _pick_new_shape(self):
         self.shape = random.choice(SHAPE_SEQUENCES)
-        self.shape_remaining = random.randint(3, 6)
+        self.shape_length = random.randint(3, 6)
+        self.shape_remaining = self.shape_length
         self.shape_step = 0
 
     def next(self):
@@ -91,7 +93,7 @@ class PlatformGenerator:
         elif self.shape == "zigzag":
             dx = shape_zigzag(self.shape_step)
         elif self.shape == "u_curve":
-            dx = shape_u_curve(self.shape_step, self.shape_remaining)
+            dx = shape_u_curve(self.shape_step, self.shape_length)
         else:  # drift
             dx = shape_drift()
 
@@ -185,11 +187,12 @@ def main():
                 while len(platforms) < 10:
                     platforms.append(gen.next())
 
-            # Platform collision (only when falling down)
+            # Platform collision (only when falling down) — swept check prevents tunneling
+            prev_bottom = py - vy + PH
             for p in platforms:
                 if (vy > 0 and
                         px + PW > p["x"] and px < p["x"] + p["w"] and
-                        py + PH >= p["y"] and py + PH <= p["y"] + p["h"] + 10):
+                        prev_bottom <= p["y"] + 5 and py + PH >= p["y"] - 5):
                     vy = 0
                     py = p["y"] - PH
                     on_ground = True

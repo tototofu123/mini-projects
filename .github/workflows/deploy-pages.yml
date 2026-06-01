@@ -1,10 +1,10 @@
-name: Deploy game to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
     paths:
-      - 'game.html'
+      - 'index.html'
   workflow_dispatch:
 
 permissions:
@@ -25,9 +25,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Wrap game.html as index.html for Pages
-        run: cp game.html index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

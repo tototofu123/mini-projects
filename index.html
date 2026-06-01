@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Jumping Game</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,15 +36,72 @@ canvas.height = H;
 const GRAVITY = 0.5;
 const JUMP_FORCE = -12;
 const MOVE_SPEED = 6;
-// Vertical gap between platforms (in pixels) — consistent spacing
-const PLATFORM_GAP = 80;
+const MIN_VERT_GAP = 45;
+const MAX_VERT_GAP = 105;
+const PLAT_W = 70, PLAT_H = 12;
 
 const BG = '#141423';
 const PLAYER_COLOR = '#64c8ff';
 const PLATFORM_COLOR = '#50dc8c';
 const WHITE = '#ffffff';
 
-let player, platforms, score, platformsCleared, gameOver, keys, animId;
+const SHAPE_SEQUENCES = ['straight', 'zigzag', 'u_curve', 'drift'];
+
+function createPlatformGenerator(startX, startY) {
+  let prevX = startX;
+  let prevY = startY;
+  let shape = 'straight';
+  let shapeStep = 0;
+  let shapeLength = 3 + Math.floor(Math.random() * 4);
+  let shapeRemaining = shapeLength;
+
+  function pickNewShape() {
+    shape = SHAPE_SEQUENCES[Math.floor(Math.random() * SHAPE_SEQUENCES.length)];
+    shapeLength = 3 + Math.floor(Math.random() * 4);
+    shapeRemaining = shapeLength;
+    shapeStep = 0;
+  }
+
+  function next() {
+    const dy = MIN_VERT_GAP + Math.floor(Math.random() * (MAX_VERT_GAP - MIN_VERT_GAP + 1));
+    const newY = prevY - dy;
+    let dx;
+
+    switch (shape) {
+      case 'straight':
+        dx = Math.floor(Math.random() * 121) - 60;
+        break;
+      case 'zigzag':
+        dx = (shapeStep % 2 === 0 ? 1 : -1) * (80 + Math.floor(Math.random() * 71));
+        break;
+      case 'u_curve':
+        dx = shapeStep < Math.floor(shapeLength / 2)
+          ? 90 + Math.floor(Math.random() * 51)
+          : -(90 + Math.floor(Math.random() * 51));
+        break;
+      case 'drift':
+        dx = (Math.random() < 0.5 ? 1 : -1) * (30 + Math.floor(Math.random() * 51));
+        break;
+    }
+
+    let newX = prevX + dx;
+    newX = ((newX % (W - PLAT_W)) + (W - PLAT_W)) % (W - PLAT_W);
+    newX = Math.max(0, Math.min(W - PLAT_W, newX));
+
+    prevX = newX;
+    prevY = newY;
+
+    shapeStep++;
+    shapeRemaining--;
+    if (shapeRemaining <= 0) pickNewShape();
+
+    return { x: newX, y: newY, w: PLAT_W, h: PLAT_H };
+  }
+
+  return { next };
+}
+
+let player, platforms, score, platformsCleared, gameOver, keys, animId, gen;
 
 function init() {
   player = { x: W / 2 - 15, y: H - 60, w: 30, h: 30, vy: 0, onGround: false };
@@ -54,38 +111,23 @@ function init() {
   gameOver = false;
   keys = {};
 
-  // Seed initial platforms with consistent vertical spacing from bottom
-  for (let i = 0; i < 8; i++) {
-    platforms.push(makePlatform(H - 80 - i * PLATFORM_GAP));
-  }
-  // Always put the first platform right under the player
+  const startX = W / 2 - PLAT_W / 2;
+  const startY = H - 50;
+  platforms.push({ x: startX, y: startY, w: PLAT_W, h: PLAT_H });
+  gen = createPlatformGenerator(startX, startY);
+
+  // Put the first platform right under the player
   platforms[0].x = player.x - 10;
   platforms[0].y = player.y + player.h + 4;
+
+  for (let i = 0; i < 8; i++) {
+    platforms.push(gen.next());
+  }
 }
 
-function makePlatform(y) {
-  return {
-    x: Math.random() * (W - 70),
-    y: y,
-    w: 70,
-    h: 12
-  };
-}
-
-// Find the topmost platform y currently in the array
-function topPlatformY() {
-  let top = Infinity;
-  for (let p of platforms) if (p.y < top) top = p.y;
-  return top;
-}
-
-// Fill platforms upward from the current topmost, spaced consistently
 function generatePlatforms() {
-  let top = topPlatformY();
-  // Keep generating above the viewport until we have enough offscreen buffer
-  while (top > -PLATFORM_GAP * 3) {
-    top -= PLATFORM_GAP;
-    platforms.push(makePlatform(top));
+  while (platforms.length < 10) {
+    platforms.push(gen.next());
   }
 }
 
@@ -118,14 +160,15 @@ function update() {
     generatePlatforms();
   }
 
-  // Platform collision — only when falling down
+  // Platform collision — only when falling down (swept check prevents tunneling)
   player.onGround = false;
+  const prevBottom = player.y - player.vy + player.h;
   for (let p of platforms) {
     if (player.vy > 0 &&
         player.x + player.w > p.x &&
         player.x < p.x + p.w &&
-        player.y + player.h >= p.y &&
-        player.y + player.h <= p.y + p.h + 10) {
+        prevBottom <= p.y + 5 &&
+        player.y + player.h >= p.y - 5) {
       player.vy = 0;
       player.y = p.y - player.h;
       player.onGround = true;
@@ -201,30 +244,52 @@ document.addEventListener('keydown', e => {
 });
 document.addEventListener('keyup', e => { keys[e.code] = false; });
 
-// Touch controls — tap to jump, drag left/right half to move; tap on game over restarts
-let touchX = null;
+// Touch controls — drag to move horizontally, quick-tap or swipe-up to jump
+let touchStartX = null, touchStartY = null, touchLastY = null, touchStartTime = null;
+let touchMoved = false;
 canvas.addEventListener('touchstart', e => {
   e.preventDefault();
   const t = e.touches[0];
   const rect = canvas.getBoundingClientRect();
-  touchX = t.clientX - rect.left;
-  if (gameOver) {
-    restart();
-  } else if (player.onGround) {
-    player.vy = JUMP_FORCE;
-    player.onGround = false;
-  }
+  touchStartX = t.clientX - rect.left;
+  touchStartY = touchLastY = t.clientY - rect.top;
+  touchStartTime = Date.now();
+  touchMoved = false;
 }, { passive: false });
 canvas.addEventListener('touchmove', e => {
   e.preventDefault();
-  touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
+  const t = e.touches[0];
+  const rect = canvas.getBoundingClientRect();
+  const cx = t.clientX - rect.left;
+  touchLastY = t.clientY - rect.top;
+  touchMoved = true;
   const half = W / 2;
-  keys['ArrowLeft'] = touchX < half;
-  keys['ArrowRight'] = touchX >= half;
+  keys['ArrowLeft'] = cx < half;
+  keys['ArrowRight'] = cx >= half;
 }, { passive: false });
 canvas.addEventListener('touchend', e => {
   e.preventDefault();
-  touchX = null;
+  const elapsed = Date.now() - touchStartTime;
+  if (gameOver) {
+    restart();
+  } else if (!touchMoved && elapsed < 250) {
+    // Quick tap = jump
+    if (player.onGround) {
+      player.vy = JUMP_FORCE;
+      player.onGround = false;
+    }
+  } else if (touchMoved && touchStartY - touchLastY > 30) {
+    // Swipe up = jump
+    if (player.onGround) {
+      player.vy = JUMP_FORCE;
+      player.onGround = false;
+    }
+  }
+  touchStartX = null;
+  touchStartY = null;
+  touchLastY = null;
+  touchStartTime = null;
+  touchMoved = false;
   keys['ArrowLeft'] = false;
   keys['ArrowRight'] = false;
 }, { passive: false });

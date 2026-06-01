@@ -1,21 +1,58 @@
-name: Auto-assign Copilot on new issues
+name: Auto-label and assign Copilot
 
 on:
   issues:
     types: [opened, reopened]
+  pull_request:
+    types: [opened, reopened]
 
 jobs:
-  assign-copilot:
+  label-and-assign:
     runs-on: ubuntu-latest
     permissions:
       issues: write
+      pull-requests: write
     steps:
-      - name: Assign Copilot to issue
+      - name: Auto-label based on title
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // Try to assign copilot (works with Copilot Individual/Business/Enterprise)
+            const title = context.payload.issue?.title || context.payload.pull_request?.title || '';
+            const labels = [];
+
+            if (/bug|fix|broken|error|crash|issue/i.test(title)) labels.push('bug');
+            if (/feature|enhancement|request|want|would like/i.test(title)) labels.push('enhancement');
+            if (/docs?|readme|documentation/i.test(title)) labels.push('documentation');
+            if (/question|how|help|?$/i.test(title)) labels.push('question');
+            if (/test/i.test(title)) labels.push('tests');
+            if (/deps?|upgrade|update|version/i.test(title)) labels.push('dependencies');
+
+            if (labels.length > 0) {
+              if (context.payload.issue) {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  labels: labels
+                });
+              } else if (context.payload.pull_request) {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.payload.pull_request.number,
+                  labels: labels
+                });
+              }
+              console.log('Added labels:', labels.join(', '));
+            }
+
+      - name: Assign Copilot to issue
+        if: github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
             try {
               await github.rest.issues.addAssignees({
                 owner: context.repo.owner,
@@ -23,12 +60,11 @@ jobs:
                 issue_number: context.issue.number,
                 assignees: ['copilot']
               });
-              console.log('Copilot assigned successfully');
+              console.log('Copilot assigned');
             } catch (e) {
               console.log('Could not assign copilot:', e.message);
             }
 
-            // Always post the comment so you know the workflow fired
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
