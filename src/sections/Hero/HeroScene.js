@@ -349,21 +349,34 @@ export class HeroScene {
   }
 
   createAsciiTexture(sourceTex) {
-    // Generate ASCII art version of the photo using canvas
     const canvas = document.createElement('canvas');
     canvas.width = 512;
     canvas.height = 682;
     const ctx = canvas.getContext('2d');
+
+    // Create a simple colored placeholder if image not loaded yet
+    const img = sourceTex.image;
+    if (!img || !img.complete || img.width === 0) {
+      // Return a placeholder texture
+      ctx.fillStyle = '#0F172A';
+      ctx.fillRect(0, 0, 512, 682);
+      ctx.fillStyle = '#00d5ff';
+      ctx.font = '24px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('ASCII MODE', 256, 341);
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
 
     // Draw source image to a temp canvas to get pixel data
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = 128;
     tempCanvas.height = 170;
     const tempCtx = tempCanvas.getContext('2d');
-    tempCtx.drawImage(sourceTex.image, 0, 0, 128, 170);
+    tempCtx.drawImage(img, 0, 0, 128, 170);
     const imageData = tempCtx.getImageData(0, 0, 128, 170);
 
-    // ASCII characters from dark to light
     const chars = ' .:-=+*#%@';
     const charWidth = 4;
     const charHeight = 4;
@@ -388,18 +401,29 @@ export class HeroScene {
   }
 
   createPixelTexture(sourceTex) {
-    // Generate pixelated version
     const canvas = document.createElement('canvas');
     canvas.width = 512;
     canvas.height = 682;
     const ctx = canvas.getContext('2d');
 
-    // Draw small then scale up with nearest-neighbor
+    const img = sourceTex.image;
+    if (!img || !img.complete || img.width === 0) {
+      ctx.fillStyle = '#0F172A';
+      ctx.fillRect(0, 0, 512, 682);
+      ctx.fillStyle = '#00d5ff';
+      ctx.font = '24px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('PIXEL MODE', 256, 341);
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    }
+
     const smallCanvas = document.createElement('canvas');
     smallCanvas.width = 32;
     smallCanvas.height = 42;
     const smallCtx = smallCanvas.getContext('2d');
-    smallCtx.drawImage(sourceTex.image, 0, 0, 32, 42);
+    smallCtx.drawImage(img, 0, 0, 32, 42);
 
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(smallCanvas, 0, 0, 512, 682);
