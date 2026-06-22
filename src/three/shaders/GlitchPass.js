@@ -1,6 +1,5 @@
 /**
  * GlitchPass — Custom post-processing pass for glitch/distortion effects
- * Used during photo mode transitions in the Hero section
  */
 
 import * as THREE from 'three';
@@ -33,13 +32,11 @@ const glitchFragmentShader = /* glsl */ `
       return;
     }
 
-    // RGB split
     float rgbSplit = intensity * 0.02;
     float r = texture2D(tDiffuse, uv + vec2(rgbSplit, 0.0)).r;
     float g = texture2D(tDiffuse, uv).g;
     float b = texture2D(tDiffuse, uv - vec2(rgbSplit, 0.0)).b;
 
-    // Horizontal glitch blocks
     float blockSize = 0.05;
     float blockY = floor(uv.y / blockSize);
     float blockRandom = random(vec2(blockY, floor(uTime * 20.0)));
@@ -48,7 +45,6 @@ const glitchFragmentShader = /* glsl */ `
       uv.x += shift;
     }
 
-    // Scanline during glitch
     float scanline = sin(uv.y * 200.0 + uTime * 50.0) * 0.5 + 0.5;
     scanline = step(0.98, scanline) * intensity * 0.3;
 
@@ -58,7 +54,6 @@ const glitchFragmentShader = /* glsl */ `
     color.b = mix(color.b, b, intensity);
     color.rgb += scanline;
 
-    // Noise
     float noise = random(uv + fract(uTime)) * intensity * 0.15;
     color.rgb += noise;
 
@@ -82,7 +77,16 @@ export class GlitchPass extends Pass {
       uniforms: this.uniforms
     });
 
-    this.fsQuad = new THREE.Pass.FullScreenQuad(this.material);
+    // FullScreenQuad may be at different paths depending on three.js version
+    if (THREE.Pass && THREE.Pass.FullScreenQuad) {
+      this.fsQuad = new THREE.Pass.FullScreenQuad(this.material);
+    } else {
+      // Fallback: create a simple fullscreen quad manually
+      const quadGeo = new THREE.PlaneGeometry(2, 2);
+      this.fsQuad = new THREE.Mesh(quadGeo, this.material);
+      this.fsQuad.frustumCulled = false;
+    }
+
     this.clock = new THREE.Clock();
   }
 
@@ -95,7 +99,16 @@ export class GlitchPass extends Pass {
     } else {
       renderer.setRenderTarget(writeBuffer);
     }
-    this.fsQuad.render(renderer);
+
+    if (this.fsQuad.render) {
+      this.fsQuad.render(renderer);
+    } else {
+      // Fallback: render manually
+      const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      const scene = new THREE.Scene();
+      scene.add(this.fsQuad);
+      renderer.render(scene, cam);
+    }
   }
 
   set intensity(v) {

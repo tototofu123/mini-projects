@@ -41,7 +41,7 @@ export class HeroScene {
     this.setupScene();
     this.setupCamera();
     this.setupLights();
-    await this.loadSpaceBackground();
+    this.loadSpaceBackground();
     this.buildSpaceStation();
     this.buildHologramDisplay();
     this.buildControlPanels();
@@ -108,82 +108,72 @@ export class HeroScene {
     this.scene.add(rim2, rim2.target);
   }
 
-  async loadSpaceBackground() {
-    // Try NASA APOD API first, fallback to gradient
-    try {
-      const res = await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&count=1');
-      const data = await res.json();
-      if (data[0] && data[0].hdurl) {
-        const loader = new THREE.TextureLoader();
-        this.spaceTexture = await loader.loadAsync(data[0].hdurl);
-        this.spaceTexture.colorSpace = THREE.SRGBColorSpace;
-      }
-    } catch (e) {
-      console.warn('NASA API failed, using fallback gradient');
-    }
-
-    // Create space sphere
+  loadSpaceBackground() {
+    // Procedural starfield — no external API needed
     const spaceGeo = new THREE.SphereGeometry(50, 64, 64);
-    let spaceMat;
+    const canvas = document.createElement('canvas');
+    canvas.width = 2048;
+    canvas.height = 1024;
+    const ctx = canvas.getContext('2d');
 
-    if (this.spaceTexture) {
-      spaceMat = new THREE.MeshBasicMaterial({
-        map: this.spaceTexture,
-        side: THREE.BackSide
-      });
-    } else {
-      // Fallback: procedural starfield
-      const canvas = document.createElement('canvas');
-      canvas.width = 2048;
-      canvas.height = 1024;
-      const ctx = canvas.getContext('2d');
+    // Deep space gradient
+    const grad = ctx.createLinearGradient(0, 0, 0, 1024);
+    grad.addColorStop(0, '#000011');
+    grad.addColorStop(0.3, '#0a0a2e');
+    grad.addColorStop(0.6, '#0f172a');
+    grad.addColorStop(1, '#000011');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 2048, 1024);
 
-      // Deep space gradient
-      const grad = ctx.createLinearGradient(0, 0, 0, 1024);
-      grad.addColorStop(0, '#000011');
-      grad.addColorStop(0.3, '#0a0a2e');
-      grad.addColorStop(0.6, '#0f172a');
-      grad.addColorStop(1, '#000011');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 2048, 1024);
-
-      // Stars
-      for (let i = 0; i < 2000; i++) {
-        const x = Math.random() * 2048;
-        const y = Math.random() * 1024;
-        const r = Math.random() * 2;
-        const brightness = Math.random();
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(248, 250, 252, ${brightness})`;
-        ctx.fill();
-      }
-
-      // Nebula blobs
-      for (let i = 0; i < 5; i++) {
-        const x = Math.random() * 2048;
-        const y = Math.random() * 1024;
-        const radius = 100 + Math.random() * 200;
-        const nebGrad = ctx.createRadialGradient(x, y, 0, x, y, radius);
-        const colors = [
-          'rgba(56, 189, 248, 0.08)',
-          'rgba(167, 139, 250, 0.06)',
-          'rgba(249, 115, 22, 0.05)',
-          'rgba(74, 222, 128, 0.04)'
-        ];
-        nebGrad.addColorStop(0, colors[i % colors.length]);
-        nebGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = nebGrad;
-        ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
-      }
-
-      const tex = new THREE.CanvasTexture(canvas);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      spaceMat = new THREE.MeshBasicMaterial({
-        map: tex,
-        side: THREE.BackSide
-      });
+    // Stars — 3000 of varying sizes and brightness
+    for (let i = 0; i < 3000; i++) {
+      const x = Math.random() * 2048;
+      const y = Math.random() * 1024;
+      const r = Math.random() * 2.5;
+      const brightness = 0.3 + Math.random() * 0.7;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(248, 250, 252, ${brightness})`;
+      ctx.fill();
     }
+
+    // Brighter stars with glow
+    for (let i = 0; i < 50; i++) {
+      const x = Math.random() * 2048;
+      const y = Math.random() * 1024;
+      const grad = ctx.createRadialGradient(x, y, 0, x, y, 6);
+      grad.addColorStop(0, 'rgba(248, 250, 252, 1)');
+      grad.addColorStop(0.5, 'rgba(248, 250, 252, 0.3)');
+      grad.addColorStop(1, 'transparent');
+      ctx.fillStyle = grad;
+      ctx.fillRect(x - 6, y - 6, 12, 12);
+    }
+
+    // Nebula blobs
+    const nebulaColors = [
+      'rgba(56, 189, 248, 0.06)',
+      'rgba(167, 139, 250, 0.05)',
+      'rgba(249, 115, 22, 0.04)',
+      'rgba(74, 222, 128, 0.03)',
+      'rgba(248, 113, 113, 0.03)',
+    ];
+    for (let i = 0; i < 8; i++) {
+      const x = Math.random() * 2048;
+      const y = Math.random() * 1024;
+      const radius = 80 + Math.random() * 250;
+      const nebGrad = ctx.createRadialGradient(x, y, 0, x, y, radius);
+      nebGrad.addColorStop(0, nebulaColors[i % nebulaColors.length]);
+      nebGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = nebGrad;
+      ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+    }
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    const spaceMat = new THREE.MeshBasicMaterial({
+      map: tex,
+      side: THREE.BackSide
+    });
 
     const spaceMesh = new THREE.Mesh(spaceGeo, spaceMat);
     this.scene.add(spaceMesh);
