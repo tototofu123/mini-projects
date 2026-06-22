@@ -26,7 +26,7 @@ export class SpringPhysicsEngine {
     this.bodies.set(body.id, body)
   }
 
-  update(deltaTime: number = 0.016) {
+  update(_deltaTime: number = 0.016) {
     for (const body of this.bodies.values()) {
       // Spring force
       const dx = body.anchorX - body.x

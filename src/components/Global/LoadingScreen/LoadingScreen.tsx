@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
-import { loadingAnimation } from './LoadingScreen.animation'
-import { setupLoadingScreenEffects } from './LoadingScreen.effects'
+import React, { useEffect, useState, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface LoadingScreenProps {
   onComplete?: () => void
@@ -10,28 +8,44 @@ interface LoadingScreenProps {
 export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
   const [isVisible, setIsVisible] = useState(true)
 
-  useEffect(() => {
-    setupLoadingScreenEffects({ onComplete: () => {
-      setIsVisible(false)
-      onComplete?.()
-    }})
+  const handleComplete = useCallback(() => {
+    onComplete?.()
   }, [onComplete])
 
-  if (!isVisible) return null
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setIsVisible(false)
+    }, 1800)
+
+    return () => window.clearTimeout(timer)
+  }, [])
 
   return (
-    <motion.div
-      className="fixed inset-0 bg-black z-[9999] flex items-center justify-center"
-      variants={loadingAnimation}
-      initial="initial"
-      animate="animate"
-      exit="exit"
+    <AnimatePresence
+      onExitComplete={() => {
+        handleComplete()
+      }}
     >
-      {/* t.tofu icon motion loop */}
-      <div className="w-24 h-24 flex items-center justify-center">
-        {/* Icon placeholder - will be replaced with actual SVG */}
-        <span className="text-white text-2xl font-bold">t.tofu</span>
-      </div>
-    </motion.div>
+      {isVisible && (
+        <motion.div
+          className="fixed inset-0 bg-black z-[9999] flex items-center justify-center"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
+        >
+          <motion.div
+            className="w-24 h-24 flex items-center justify-center"
+            initial={{ scale: 1 }}
+            animate={{ scale: [1, 1.08, 1] }}
+            transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <span className="text-white text-2xl font-bold font-space">t.tofu</span>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
+
+export default LoadingScreen

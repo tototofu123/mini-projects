@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { titleAnimation, titleCharAnimation } from './MainTitle.animation'
+import { titleAnimation } from './MainTitle.animation'
 import { setupMainTitleEffects } from './MainTitle.effects'
 
 export const MainTitle: React.FC = () => {

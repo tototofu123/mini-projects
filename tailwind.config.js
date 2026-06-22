@@ -22,6 +22,8 @@ export default {
         syne: ['Syne', 'sans-serif'],
         space: ['Space Grotesk', 'sans-serif'],
         dm: ['DM Sans', 'sans-serif'],
+        amarante: ['Amarante', 'cursive'],
+        limelight: ['Limelight', 'cursive'],
       },
     },
   },

@@ -35,11 +35,7 @@ export const navLinksAnimation = {
 }
 
 // Cryptographic decode effect for text
-export const cryptoDecodeAnimation = (text: string) => {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()'
-  const length = text.length
-  const frames = 24
-
+export const cryptoDecodeAnimation = () => {
   return {
     initial: { opacity: 0 },
     animate: {

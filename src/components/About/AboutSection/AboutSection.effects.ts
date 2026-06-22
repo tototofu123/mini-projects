@@ -1,1 +1,3 @@
-export const setupAboutSectionEffects = () => {}
+export const setupAboutSectionEffects = () => {
+  return () => {}
+}

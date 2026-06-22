@@ -28,15 +28,3 @@ export const iconMotionLoop = {
     },
   },
 }
-
-export const iconSlideUp = {
-  animate: {
-    y: [0, -100],
-    x: [-window.innerWidth / 2 + 60, 0],
-    transition: {
-      duration: 1.5,
-      delay: 1.5,
-      ease: 'easeInOut',
-    },
-  },
-}

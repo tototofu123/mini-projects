@@ -1,7 +1,7 @@
 import { RefObject } from 'react'
 
 interface HeaderEffectsProps {
-  headerRef: RefObject<HTMLDivElement>
+  headerRef: RefObject<HTMLDivElement | null>
   onMaterialChange: (state: 'chrome' | 'glass' | 'metal' | 'stone') => void
   onLogoClick: () => void
 }
@@ -14,7 +14,7 @@ export const setupHeaderEffects = ({
   // Track scroll position to update material state based on section
   const handleScroll = () => {
     const scrollY = window.scrollY
-    const totalHeight = document.body.scrollHeight
+    const totalHeight = document.body.scrollHeight || 1
     const scrollPercent = scrollY / totalHeight
 
     if (scrollPercent < 0.25) {
@@ -29,7 +29,7 @@ export const setupHeaderEffects = ({
   }
 
   // 3D tilt effect on logo hover
-  const handleLogoHover = (e: MouseEvent) => {
+  const handleLogoMouseMove = (e: MouseEvent) => {
     const logo = headerRef.current?.querySelector('a')
     if (!logo) return
 
@@ -43,27 +43,34 @@ export const setupHeaderEffects = ({
     logo.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
   }
 
-  const handleLogoHoverEnd = () => {
+  const handleLogoMouseLeave = () => {
     const logo = headerRef.current?.querySelector('a')
     if (logo) {
       logo.style.transform = ''
     }
   }
 
+  const handleLogoClick = (e: MouseEvent) => {
+    e.preventDefault()
+    onLogoClick()
+  }
+
   window.addEventListener('scroll', handleScroll)
 
   const logo = headerRef.current?.querySelector('a')
   if (logo) {
-    logo.addEventListener('mousemove', handleLogoHover as EventListener)
-    logo.addEventListener('mouseleave', handleLogoHoverEnd)
+    logo.addEventListener('mousemove', handleLogoMouseMove as EventListener)
+    logo.addEventListener('mouseleave', handleLogoMouseLeave)
+    logo.addEventListener('click', handleLogoClick as EventListener)
   }
 
   // Cleanup
   return () => {
     window.removeEventListener('scroll', handleScroll)
     if (logo) {
-      logo.removeEventListener('mousemove', handleLogoHover as EventListener)
-      logo.removeEventListener('mouseleave', handleLogoHoverEnd)
+      logo.removeEventListener('mousemove', handleLogoMouseMove as EventListener)
+      logo.removeEventListener('mouseleave', handleLogoMouseLeave)
+      logo.removeEventListener('click', handleLogoClick as EventListener)
     }
   }
 }

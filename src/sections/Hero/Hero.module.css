@@ -1,0 +1,181 @@
+/* ========================================
+   HERO SECTION — Space Station Hologram
+   ======================================== */
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #0F172A;
+}
+
+/* Three.js Canvas */
+.hero-canvas-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-canvas-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Text Overlay */
+.hero-text-overlay {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  text-align: right;
+  pointer-events: none;
+  max-width: 40%;
+}
+
+.hero-greeting {
+  margin: 0 0 1.5rem 0;
+}
+
+.greeting-line {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #94A3B8;
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  padding-bottom: 0.1em;
+}
+
+.greeting-name {
+  display: block;
+  font-family: 'Limelight', 'Amarante', serif;
+  font-size: 4rem;
+  font-weight: 800;
+  color: #F8FAFC;
+  line-height: 1.2;
+  padding-bottom: 0.1em;
+  text-shadow: 0 0 40px rgba(0, 213, 255, 0.3);
+}
+
+.hero-description {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.hero-role,
+.hero-location {
+  font-family: 'Amarante', 'Limelight', serif;
+  font-size: 1.75rem;
+  color: #94A3B8;
+  line-height: 1.5;
+  padding-bottom: 0.1em;
+  margin: 0;
+}
+
+/* Bottom Bar */
+.hero-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 2rem 4rem;
+  z-index: 10;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, transparent 100%);
+}
+
+.hero-streak {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #1E293B;
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.streak-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 380px;
+}
+
+.hero-subtitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  color: #94A3B8;
+  text-align: right;
+  line-height: 1.5;
+  max-width: 40%;
+  padding-bottom: 0.1em;
+}
+
+/* Photo Mode Indicator */
+.photo-mode-indicator {
+  position: absolute;
+  top: 100px;
+  left: 2rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  pointer-events: none;
+}
+
+.mode-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.65rem;
+  color: #64748B;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.mode-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  color: #00d5ff;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .hero-text-overlay {
+    right: 50%;
+    transform: translate(50%, -50%);
+    text-align: center;
+    max-width: 80%;
+  }
+  .greeting-name {
+    font-size: 3rem;
+  }
+  .hero-bottom-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    padding: 1.5rem 2rem;
+  }
+  .hero-subtitle {
+    max-width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .greeting-name {
+    font-size: 2.25rem;
+  }
+  .hero-role,
+  .hero-location {
+    font-size: 1.25rem;
+  }
+  .streak-img {
+    max-width: 280px;
+  }
+}
