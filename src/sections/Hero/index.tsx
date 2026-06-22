@@ -5,16 +5,25 @@ import { HeroScene } from './HeroScene';
 export const HeroSection: React.FC = () => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<HeroScene | null>(null);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || initialized.current) return;
+    initialized.current = true;
 
-    sceneRef.current = new HeroScene(canvasRef.current);
+    const scene = new HeroScene(canvasRef.current);
+    sceneRef.current = scene;
 
     return () => {
       if (sceneRef.current) {
-        sceneRef.current.dispose();
+        try {
+          sceneRef.current.dispose();
+        } catch (_e) {
+          // Ignore disposal errors during HMR
+        }
+        sceneRef.current = null;
       }
+      initialized.current = false;
     };
   }, []);
 
@@ -36,7 +45,7 @@ export const HeroSection: React.FC = () => {
       <div className="hero-bottom-bar">
         <div className="hero-streak">
           <img
-            src="https://github-readme-streak-stats.herokuapp.com/?user=tototofu123&theme=dark&hide_border=true&background=0F172A&stroke=1E293B&ring=F97316&fire=F97316&currStreakLabel=F97316&sideLabels=94A3B8&dates=64748B&currStreakNum=F8FAFC&sideNums=F8FAFAFC"
+            src="https://github-readme-streak-stats.herokuapp.com/?user=tototofu123&theme=dark&hide_border=true&background=0F172A&stroke=1E293B&ring=F97316&fire=F97316&currStreakLabel=F97316&sideLabels=94A3B8&dates=64748B&currStreakNum=F8FAFC&sideNums=F8FAFC"
             alt="GitHub Streak Stats"
             className="streak-img"
           />

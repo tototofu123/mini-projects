@@ -482,9 +482,13 @@ export class HeroScene {
   }
 
   setupEventListeners() {
-    window.addEventListener('resize', this.onResize.bind(this));
-    this.container.addEventListener('mousemove', this.onMouseMove.bind(this));
-    this.container.addEventListener('click', this.onClick.bind(this));
+    this._onResize = this.onResize.bind(this);
+    this._onMouseMove = this.onMouseMove.bind(this);
+    this._onClick = this.onClick.bind(this);
+
+    window.addEventListener('resize', this._onResize);
+    this.container.addEventListener('mousemove', this._onMouseMove);
+    this.container.addEventListener('click', this._onClick);
   }
 
   onResize() {
@@ -569,7 +573,7 @@ export class HeroScene {
   }
 
   animate() {
-    requestAnimationFrame(this.animate.bind(this));
+    this._animationId = requestAnimationFrame(this.animate.bind(this));
 
     const delta = this.clock.getDelta();
     const elapsed = this.clock.getElapsedTime();
@@ -617,10 +621,40 @@ export class HeroScene {
   }
 
   dispose() {
-    this.renderer.dispose();
-    this.composer.dispose();
-    window.removeEventListener('resize', this.onResize);
-    this.container.removeEventListener('mousemove', this.onMouseMove);
-    this.container.removeEventListener('click', this.onClick);
+    // Stop animation loop
+    if (this._animationId) {
+      cancelAnimationFrame(this._animationId);
+      this._animationId = null;
+    }
+
+    // Guard: scene might not be fully initialized
+    if (!this.renderer) return;
+
+    // Dispose Three.js resources
+    try { this.renderer.dispose(); } catch (_e) { /* ignore */ }
+    try { if (this.composer) this.composer.dispose(); } catch (_e) { /* ignore */ }
+
+    // Remove event listeners
+    try {
+      window.removeEventListener('resize', this._onResize);
+      this.container?.removeEventListener('mousemove', this._onMouseMove);
+      this.container?.removeEventListener('click', this._onClick);
+    } catch (_e) { /* ignore */ }
+
+    // Clear scene
+    if (this.scene) {
+      this.scene.traverse((obj) => {
+        try {
+          if (obj.geometry) obj.geometry.dispose();
+          if (obj.material) {
+            if (Array.isArray(obj.material)) {
+              obj.material.forEach(m => { try { m.dispose(); } catch (_e) {} });
+            } else {
+              try { obj.material.dispose(); } catch (_e) {}
+            }
+          }
+        } catch (_e) { /* ignore */ }
+      });
+    }
   }
 }

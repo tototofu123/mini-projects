@@ -1,8 +1,10 @@
 import { useState, useRef } from 'react';
 import { Header } from './components/Global/Header/Header';
 import { LoadingScreen } from './components/Global/LoadingScreen/LoadingScreen';
+// @ts-ignore
 import { HeroSection } from './sections/Hero';
-import { AboutSection } from './components/About/AboutSection/AboutSection';
+// @ts-ignore
+import { AboutSection } from './sections/About';
 import { ProjectsSection } from './components/Projects/ProjectsSection/ProjectsSection';
 import { SkillsSection } from './components/Skills/SkillsSection/SkillsSection';
 import { ContactSection } from './components/Contact/ContactSection/ContactSection';
@@ -10,7 +12,10 @@ import { FooterSection } from './components/Footer/FooterSection/FooterSection';
 import { SoundManager } from './audio/SoundManager';
 import { Sidebar } from './components/Global/Sidebar/Sidebar';
 import './index.css';
+// @ts-ignore
 import './sections/Hero/Hero.module.css';
+// @ts-ignore
+import './sections/About/About.module.css';
 
 export function App() {
   const [loading, setLoading] = useState(true);
