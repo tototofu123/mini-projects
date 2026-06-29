@@ -1,3 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medieval Castle - Qwythos</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script type="module">
         import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
         import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
@@ -65,7 +78,59 @@
         const woodDark6Mat = new THREE.MeshStandardMaterial({ color: 0x010101, roughness: 0.8 });
         const woodLight6Mat = new THREE.MeshStandardMaterial({ color: 0x482808, roughness: 0.7 });
         const woodDark7Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
-        const woodLight7Mat = new THREE.MeshStandardMaterial
+        const woodLight7Mat = new THREE.MeshStandardMaterial({ color: 0x280800, roughness: 0.7 });
+        const woodDark8Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight8Mat = new THREE.MeshStandardMaterial({ color: 0x080000, roughness: 0.7 });
+        const woodDark9Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight9Mat = new THREE.MeshStandardMaterial({ color: 0x000008, roughness: 0.7 });
+        const woodDark10Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight10Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark11Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight11Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark12Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight12Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark13Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight13Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark14Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight14Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark15Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight15Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark16Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight16Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark17Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight17Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark18Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight18Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark19Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight19Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark20Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight20Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark21Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight21Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark22Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight22Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark23Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight23Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark24Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight24Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark25Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight25Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark26Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight26Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark27Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight27Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark28Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight28Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark29Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight29Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark30Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight30Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark31Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight31Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark32Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight32Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark33Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight3
 
 
 Exiting...
