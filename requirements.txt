@@ -1,0 +1,20 @@
+# Training
+unsloth
+torch>=2.4
+transformers>=4.44
+datasets
+huggingface_hub
+accelerate
+peft
+trl
+
+# Inference
+llama-cpp-python
+
+# Router
+duckduckgo_search
+playwright
+
+# Utils
+sentencepiece
+protobuf
