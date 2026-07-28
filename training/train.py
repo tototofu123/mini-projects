@@ -83,7 +83,6 @@ def train(model, tokenizer, dataset):
         max_grad_norm=cfg.max_grad_norm,
         report_to="none",
         dataloader_num_workers=0,
-        packing=False,
     )
 
     trainer = SFTTrainer(
@@ -92,6 +91,7 @@ def train(model, tokenizer, dataset):
         train_dataset=dataset,
         dataset_text_field="text",
         max_seq_length=cfg.max_seq_length,
+        packing=False,
         args=args,
     )
     trainer.train()

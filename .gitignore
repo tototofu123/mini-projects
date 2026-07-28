@@ -10,3 +10,7 @@ models/base/
 *.safetensors
 *.bin
 *.pth
+*.log
+*.bat
+unsloth_compiled_cache/
+training.log*
