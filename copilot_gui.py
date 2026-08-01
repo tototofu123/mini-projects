@@ -142,14 +142,16 @@ def run(server, search, router, geo):
 
         decision = router.route(query)
         if decision == "search":
-            print_tool("searching web (AI answer)...")
+            print_tool("searching web (Perplexity → Bing AI answers)...")
             ai = search.ai_answer(query)
             if ai:
-                console.print(Text(ai, style="green"), soft_wrap=True)
+                src = getattr(search, "last_source", "ai")
+                src_label = {"perplexity": "Perplexity", "bing": "Bing"}.get(src, "AI")
+                console.print(Text(f"[{src_label}] {ai}", style="green"), soft_wrap=True)
                 history.append({"role": "user", "content": query})
                 history.append({"role": "assistant", "content": ai})
                 continue
-            print_tool("searching web (headless browser)...")
+            print_tool("searching organic results (DDG+Google+Brave+Yahoo, headless)...")
             try:
                 results = search.search(query, max_results=5)
             except Exception as e:

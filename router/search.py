@@ -94,6 +94,66 @@ def _clean_ai(text: str) -> str:
     return "\n".join(lines)
 
 
+_PPLX_WAIT_JS = r"""() => {
+    const el = document.querySelector('div[class*="prose"]');
+    if (!el) return false;
+    const t = (el.innerText || '');
+    return t.length > 60 && !t.includes('Searching the web');
+}"""
+
+_PPLX_ANSWER_JS = r"""() => {
+    const el = document.querySelector('div[class*="prose"]');
+    if (!el) return '';
+    let t = el.innerText || '';
+    const src = [...document.querySelectorAll('div,span')].find(e =>
+        /^\d+\s*sources?$/i.test((e.innerText || '').trim()));
+    if (src) t = t + '\n\n[' + src.innerText.trim() + ']';
+    return t;
+}"""
+
+
+_TIME_SENSITIVE = ("price", "gold", "bitcoin", "stock", "crypto", "election",
+                   "won", "winner", "latest", "version", "score", "match",
+                   "game", "weather", "today", "current", "time in", "when",
+                   "news", "update", "release", "result", "rate", "market",
+                   "election", "ago", "last")
+
+
+def _has_live_data_answer(answer: str) -> bool:
+    """Reject Perplexity answers that admit to having no live data."""
+    low = answer.lower()
+    for pat in ("i don't have live", "don't have real-time", "no live data",
+                "can't provide real-time", "i don't have real-time",
+                "don't have current", "as of my knowledge cutoff",
+                "i don't have real-time data"):
+        if pat in low:
+            return False
+    return True
+
+
+def _clean_perplexity(text: str) -> str:
+    """Strip Perplexity citation artifacts (+1 / source-name lines)."""
+    for marker in ("facts this depends on", "follow-ups", "sources:"):
+        idx = text.lower().find(marker)
+        if idx > 0:
+            text = text[:idx]
+    lines = []
+    for ln in text.splitlines():
+        ln = ln.strip()
+        if not ln:
+            continue
+        if re.fullmatch(r"[+\d\s]{1,6}", ln):
+            continue
+        low = ln.lower()
+        if low in ("follow-ups", "links", "images", "share", "answer",
+                   "searching the web", "sign in"):
+            continue
+        lines.append(ln)
+    while len(lines) > 1 and re.fullmatch(r"[a-z]{2,24}", lines[-1]):
+        lines.pop()
+    return "\n".join(lines)
+
+
 PRIORITY_DOMAINS = (
     "goldprice.org", "kitco.com", "tradingview.com", "investing.com",
     "livepriceofgold.com", "apmex.com", "bullionbypost", "tradingeconomics.com",
@@ -144,26 +204,75 @@ class SearchClient:
         self.ddgs = DDGS()
 
     def ai_answer(self, query: str) -> Optional[str]:
-        """Fetch the search engine's own AI answer box (headless browser).
+        """AI answer from multiple engines: Perplexity first, then Bing.
 
-        Google blocks this network with captchas, so we use Bing's AI
-        answer box instead — it's the same "AI overview" style result.
-        Returns the AI answer text or None.
+        Google's AI Overview is unreachable from this IP (captcha), so we
+        use Perplexity (free, cited, works headless) as the primary AI
+        source and Bing's AI answer box as fallback. For live-data queries
+        (prices, versions, results) Bing is tried first — Perplexity's
+        free web search is often stale ("I don't have live data").
+        Sets self.last_source ('perplexity'/'bing').
         """
-        # Note: the AI box disappears when minus-operators are in the query,
-        # so no "-wikipedia -dictionary" refinement here (only used for ddgs).
         q = query
         if any(w in q.lower() for w in PRICE_REFINERS):
             q += " usd"
         if "price" in q.lower():
             q += " today"
-        for _ in range(2):  # Bing is flaky on time widgets — retry once
-            answer = asyncio.run(self._fetch_bing_ai(q))
-            if not answer:
-                return None
-            if _answer_place_matches(answer, query):
-                return answer
+        self.last_source = None
+        time_sensitive = any(w in q.lower() for w in _TIME_SENSITIVE)
+        sources = ("bing", "perplexity") if time_sensitive else ("perplexity", "bing")
+        for src in sources:
+            if src == "perplexity":
+                answer = asyncio.run(self._fetch_perplexity(q))
+                if answer and _has_live_data_answer(answer):
+                    self.last_source = "perplexity"
+                    return answer
+            else:  # bing — flaky time widgets, validate + retry once
+                for _ in range(2):
+                    answer = asyncio.run(self._fetch_bing_ai(q))
+                    if not answer:
+                        break
+                    if _answer_place_matches(answer, query):
+                        self.last_source = "bing"
+                        return answer
         return None
+
+    @staticmethod
+    async def _fetch_perplexity(q: str) -> Optional[str]:
+        """Headless Perplexity search page → cited answer text."""
+        from playwright.async_api import async_playwright
+        try:
+            async with async_playwright() as p:
+                browser = await p.chromium.launch(headless=True, channel="chrome")
+                ctx = await browser.new_context(
+                    locale="en-US",
+                    user_agent=("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                "Chrome/151.0.0.0 Safari/537.36"),
+                    viewport={"width": 1280, "height": 900},
+                )
+                await ctx.add_init_script(
+                    "Object.defineProperty(navigator, 'webdriver', {get: () => undefined});")
+                page = await ctx.new_page()
+                try:
+                    await page.goto(
+                        f"https://www.perplexity.ai/search?q={q}",
+                        timeout=30000, wait_until="domcontentloaded")
+                    try:
+                        await page.wait_for_function(_PPLX_WAIT_JS, timeout=45000)
+                    except Exception:
+                        pass  # answer may already be rendered
+                    await page.wait_for_timeout(1500)
+                    answer = await page.evaluate(_PPLX_ANSWER_JS)
+                finally:
+                    await ctx.close()
+                    await browser.close()
+                answer = (answer or "").strip()
+                if len(answer) < 60:
+                    return None
+                return _clean_perplexity(answer)[:1200]
+        except Exception:
+            return None
 
     @staticmethod
     async def _fetch_bing_ai(q: str) -> Optional[str]:
@@ -197,9 +306,15 @@ class SearchClient:
             return None
 
     def search(self, query: str, max_results: int = 6) -> List[dict]:
+        """Organic results from MULTIPLE engines (DDG + Google + Brave +
+        Yahoo via DDG's aggregator — the proxy bypasses the IP captcha),
+        then a headless browser reads the top result pages.
+        """
         q = self._refine(query)
         try:
-            results = list(self.ddgs.text(q, max_results=max_results))
+            results = list(self.ddgs.text(
+                q, backend="duckduckgo,google,brave,yahoo",
+                max_results=max_results))
         except Exception:
             results = []
         if results:
