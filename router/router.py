@@ -1,29 +1,17 @@
-"""Router: decides local vs search for each query.
+"""Router: search-first for everything.
 
-Two-stage flow:
-1. Freshness check — query asks about current/latest info → search directly.
-2. Ask model first — if the model expresses uncertainty, search and
-   re-answer with grounded results.
+The 1B model is a helper (tool calling + answer synthesis), not a source
+of truth — it hallucinates facts. So every query goes to web search, and
+the model composes a grounded answer from the results. Only trivial
+small-talk stays local (no point searching the web for "hi").
 """
 import re
 from typing import Optional, List, Dict
 
-SEARCH_KEYWORDS = [
-    "latest", "current", "news", "update", "today", "now",
-    "recent", "newest", "released", "2025", "2026", "2027",
-    "announced", "weather", "price", "stock",
-]
-
-UNCERTAINTY_MARKERS = [
-    "i don't know", "i'm not sure", "i am not sure", "i'm unsure",
-    "i don't have", "i cannot", "i'm unable", "i'm not aware",
-    "as of my last", "my knowledge cutoff", "i was trained on",
-    "i don't have access", "not sure", "cannot provide",
-]
-
-CONFIDENCE_MARKERS = [
-    "i'm confident", "i know", "here is", "certainly", "definitely",
-    "of course", "sure", "here's", "yes,", "absolutely",
+GREETING_KEYWORDS = [
+    "hi", "hello", "hey", "yo", "thanks", "thank you", "good morning",
+    "good afternoon", "good evening", "how are you", "what's up",
+    "whats up", "bye", "goodbye", "ok", "okay", "cool",
 ]
 
 
@@ -33,26 +21,18 @@ class Router:
         self.search_client = search_client
 
     def wants_search(self, query: str) -> bool:
-        """Stage 1: freshness/recency check."""
-        q = query.lower()
-        # A bare number means a year reference → likely current info
-        return any(kw in q for kw in SEARCH_KEYWORDS)
+        """Everything searches online, except trivial small talk."""
+        q = query.lower().strip()
+        if q in GREETING_KEYWORDS:
+            return False
+        return True
 
     def is_uncertain(self, response: str) -> bool:
-        """Stage 2: did the model signal it doesn't know?"""
-        r = response.lower()
-        hits = sum(1 for m in UNCERTAINTY_MARKERS if m in r)
-        confidence = sum(1 for m in CONFIDENCE_MARKERS if m in r)
-        # Uncertainty wins unless the model is clearly confident
-        return hits > 0 and hits > confidence
+        return False
 
     def route(self, query: str, model_response: str = "") -> str:
-        """Returns 'search', 'local', or 'model_uncertain'."""
-        if self.wants_search(query):
-            return "search"
-        if model_response and self.is_uncertain(model_response):
-            return "model_uncertain"
-        return "local"
+        """Returns 'search' or 'local'. Search is the default."""
+        return "search" if self.wants_search(query) else "local"
 
     def answer(self, query: str) -> Dict:
         """End-to-end tool-calling loop.
@@ -60,19 +40,8 @@ class Router:
         Returns {'decision', 'answer', 'searched'}.
         """
         decision = self.route(query)
-        searched = False
-
         if decision == "search":
-            searched = True
             results = self.search_client.search(query)
             context = self.search_client.summarize(query, results)
-            answer = context
-        elif decision == "model_uncertain":
-            searched = True
-            results = self.search_client.search(query)
-            context = self.search_client.summarize(query, results)
-            answer = context
-        else:
-            answer = self.model.generate(query)
-
-        return {"decision": decision, "answer": answer, "searched": searched}
+            return {"decision": decision, "answer": context, "searched": True}
+        return {"decision": decision, "answer": self.model.generate(query), "searched": False}
