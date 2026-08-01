@@ -53,6 +53,12 @@ SYSTEM_PROMPT = (
     "For code questions give working code. Think briefly, then give the answer."
 )
 
+def _geo_context() -> str:
+    from router import geo
+    g = geo.detect()
+    return (f"User location/timezone: {geo.describe()}. "
+            f"Local time: {g['local_time']}")
+
 def stream_answer(server, messages, max_tokens=512, temperature=0.7) -> None:
     """Typewriter streaming of the model answer, thinking in gray."""
     thinking_buf = ""
@@ -79,7 +85,7 @@ def stream_answer(server, messages, max_tokens=512, temperature=0.7) -> None:
         print_error("\n[interrupted]")
     print()
 
-def run(server, search, router):
+def run(server, search, router, geo):
     console.print(BANNER)
     console.print("[dim]Type 'exit' to quit. Try: 'latest react version', 'write a merge function'[/dim]")
     console.print()
@@ -97,7 +103,20 @@ def run(server, search, router):
 
         decision = router.route(query)
         if decision == "search":
-            print_tool("searching web...")
+            if geo.is_date_time_query(query):
+                g = geo.detect()
+                print_tool("reading local clock...")
+                console.print(
+                    Text(
+                        f"Today is {g['local_time']} ({geo.describe()}).",
+                        style="green",
+                    ),
+                    soft_wrap=True,
+                )
+                history.append({"role": "user", "content": query})
+                history.append({"role": "assistant", "content": "answered from local clock"})
+                continue
+            print_tool("searching web (headless browser)...")
             try:
                 results = search.search(query, max_results=5)
             except Exception as e:
@@ -106,8 +125,9 @@ def run(server, search, router):
             print_search_results(results)
             context = search.summarize(query, results)
             messages = [{"role": "system", "content":
-                "You answer from web search results. Extract the concrete fact "
-                "(numbers, dates, versions). If results lack the answer, say so."}] + history + [
+                f"{_geo_context()}. You answer from web search results. Extract the "
+                "concrete fact (numbers, dates, versions, prices). If results lack "
+                "the answer, say so."}] + history + [
                 {"role": "user", "content":
                     f"Question: {query}\n\n"
                     f"Search results (use ONLY these to answer):\n{context}"},
@@ -128,7 +148,9 @@ def main():
     from inference.server import LocalServer
     from router.router import Router
     from router.search import SearchClient
+    from router import geo
 
+    geo.detect()  # warm up location cache
     gguf_path = ROOT / "models" / "gguf" / "minicpm5-copilot-q8_0.gguf"
     if not gguf_path.exists():
         print_error(f"Model not found at {gguf_path}")
@@ -145,7 +167,7 @@ def main():
     search = SearchClient()
     router = Router()
     try:
-        run(server, search, router)
+        run(server, search, router, geo)
     finally:
         print_tool("shutting down server...")
         server.stop()
