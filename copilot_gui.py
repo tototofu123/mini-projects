@@ -131,6 +131,13 @@ def run(server, search, router, geo):
 
         decision = router.route(query)
         if decision == "search":
+            print_tool("searching web (AI answer)...")
+            ai = search.ai_answer(query)
+            if ai:
+                console.print(Text(ai, style="green"), soft_wrap=True)
+                history.append({"role": "user", "content": query})
+                history.append({"role": "assistant", "content": ai})
+                continue
             print_tool("searching web (headless browser)...")
             try:
                 results = search.search(query, max_results=5)

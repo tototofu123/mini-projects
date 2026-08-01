@@ -38,18 +38,106 @@ JS_CLEAN = """() => {
 }"""
 
 
+def _clean_ai(text: str) -> str:
+    """Strip Bing UI noise (Like/Dislike/Feedback/news boilerplate)."""
+    lines = []
+    for ln in text.splitlines():
+        ln = ln.strip()
+        if not ln:
+            continue
+        low = ln.lower()
+        if low in ("like", "dislike", "feedback", "see more news"):
+            continue
+        if low.startswith("news about") or ln.startswith("· "):
+            continue
+        lines.append(ln)
+    return "\n".join(lines)
+
+
+PRIORITY_DOMAINS = (
+    "goldprice.org", "kitco.com", "tradingview.com", "investing.com",
+    "livepriceofgold.com", "apmex.com", "bullionbypost", "tradingeconomics.com",
+    "metals.live", "silverprice.org", "coinbase.com", "finance.yahoo.com",
+    "reuters.com", "bloomberg.com", "cnbc.com", "marketwatch.com",
+    "nvidia.com", "python.org", "nodejs.org", "react.dev", "npmjs.com",
+    "stackoverflow.com", "github.com", "developer.mozilla.org", "w3schools.com",
+    "openai.com", "anthropic.com", "docker.com", "kubernetes.io",
+)
+
+PRICE_REFINERS = ("price", "rate", "value", "cost", "usd", "costs", "how much", "per ounce", "per kg")
+
+
 class SearchClient:
     def __init__(self):
         self.ddgs = DDGS()
 
-    def search(self, query: str, max_results: int = 5) -> List[dict]:
+    def ai_answer(self, query: str) -> Optional[str]:
+        """Fetch the search engine's own AI answer box (headless browser).
+
+        Google blocks this network with captchas, so we use Bing's AI
+        answer box instead — it's the same "AI overview" style result.
+        Returns the AI answer text or None.
+        """
+        q = self._refine(query)
+        return asyncio.run(self._fetch_bing_ai(q))
+
+    @staticmethod
+    async def _fetch_bing_ai(q: str) -> Optional[str]:
+        from playwright.async_api import async_playwright
         try:
-            results = list(self.ddgs.text(query, max_results=max_results))
+            async with async_playwright() as p:
+                browser = await p.chromium.launch(headless=True, channel="chrome")
+                ctx = await browser.new_context(
+                    locale="en-US",
+                    user_agent=("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                "Chrome/151.0.0.0 Safari/537.36"),
+                    viewport={"width": 1280, "height": 900},
+                )
+                await ctx.add_init_script(
+                    "Object.defineProperty(navigator, 'webdriver', {get: () => undefined});")
+                page = await ctx.new_page()
+                try:
+                    await page.goto(
+                        f"https://www.bing.com/search?q={q}&setlang=en",
+                        timeout=25000, wait_until="domcontentloaded")
+                    await page.wait_for_timeout(4000)
+                    text = await page.evaluate("""() => {
+                        const el = document.querySelector('.b_ans');
+                        if (!el) return '';
+                        return el.innerText || '';
+                    }""")
+                    text = (text or "").strip()
+                finally:
+                    await ctx.close()
+                    await browser.close()
+                if len(text) < 40:
+                    return None
+                return _clean_ai(text[:900])
+        except Exception:
+            return None
+
+    def search(self, query: str, max_results: int = 6) -> List[dict]:
+        q = self._refine(query)
+        try:
+            results = list(self.ddgs.text(q, max_results=max_results))
         except Exception:
             results = []
         if results:
-            results = self._read_pages(results, query)
+            results = self._read_pages(results, q)
         return results
+
+    @staticmethod
+    def _refine(query: str) -> str:
+        """Attract data-rich pages: add currency for price queries,
+        exclude generic encyclopedic pages."""
+        q = query
+        if any(w in q.lower() for w in PRICE_REFINERS):
+            q += " usd"
+        if "price" in q.lower():
+            q += " today"
+        q += " -wikipedia -dictionary"
+        return q
 
     def summarize(self, query: str, results: List[dict]) -> str:
         if not results:
@@ -57,14 +145,41 @@ class SearchClient:
         ranked = [r for r in results if (r.get("page_text") or "").strip()]
         ranked.sort(key=lambda r: (r.get("score", 0), len(r.get("page_text", ""))), reverse=True)
         parts = []
-        for i, r in enumerate(ranked[:4]):
+        for i, r in enumerate(ranked[:3]):
             head = f"Source {i+1}: {r.get('title', '')} ({r.get('href', '')})"
             body = (r.get("page_text") or "").strip() or (r.get("body") or "")
             if body:
                 parts.append(f"{head}\n{body[:1200]}")
         if not parts:
             return f"No usable results found for '{query}'."
-        return f"Search results for '{query}':\n\n" + "\n\n".join(parts)
+        facts = self._key_facts(ranked[:3])
+        out = f"Search results for '{query}':\n\n" + "\n\n".join(parts)
+        if facts:
+            out = "KEY FACTS extracted from the sources (quote these numbers exactly):\n" + \
+                  "\n".join(f" - {f}" for f in facts[:8]) + "\n\n" + out
+        return out
+
+    @staticmethod
+    def _key_facts(ranked: List[dict]) -> List[str]:
+        """Pull the most concrete lines (prices, amounts, dates, versions)
+        out of the top pages, so the weak model can quote them."""
+        lines = []
+        for r in ranked:
+            for ln in (r.get("page_text") or "").splitlines():
+                ln = ln.strip()
+                if not ln or len(ln) > 140:
+                    continue
+                if re.search(r"[$£€]\s?\d[\d,]*\.?\d*", ln) or re.search(
+                        r"(?:per|price|cost|worth|rate|version|released|today|as of)\b", ln, re.I):
+                    if re.search(r"\d", ln):
+                        lines.append(ln)
+        seen = set()
+        out = []
+        for ln in lines:
+            if ln not in seen:
+                seen.add(ln)
+                out.append(ln)
+        return out
 
     @staticmethod
     def _score_text(text: str) -> float:
@@ -78,9 +193,14 @@ class SearchClient:
         return money * 5 + big * 3 + date * 2 + min(words, 400) / 400.0
 
     def _read_pages(self, results: List[dict], query: str) -> List[dict]:
-        """Open up to 3 non-junk result pages headless and read main text."""
+        """Open up to 3 non-junk result pages headless and read main text.
+        Known data-rich domains are preferred over generic pages."""
+        good = [r for r in results
+                if any(d in (r.get("href") or "").lower() for d in PRIORITY_DOMAINS)]
+        rest = [r for r in results if r not in good]
+        ordered = good + rest
         candidates = []
-        for r in results:
+        for r in ordered:
             href = (r.get("href") or "").lower()
             if any(skip in href for skip in BROWSER_SKIP):
                 continue
