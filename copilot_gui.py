@@ -111,6 +111,14 @@ def run(server, search, router, geo):
             continue
         history = history[-8:]  # keep recent context only
 
+        router.remember_name(query)
+        name_ans = router.my_name_answer(query)
+        if name_ans:
+            console.print(Text(name_ans, style="green"), soft_wrap=True)
+            history.append({"role": "user", "content": query})
+            history.append({"role": "assistant", "content": name_ans})
+            continue
+
         if geo.is_date_time_query(query):
             print_tool("reading local clock...")
             answer = geo.clock_answer(query)
@@ -119,15 +127,18 @@ def run(server, search, router, geo):
                 history.append({"role": "user", "content": query})
                 history.append({"role": "assistant", "content": "answered from local clock"})
                 continue
-            print_thinking(geo.clock_context())
-            print_tool("computing from local clock...")
-            messages = [{"role": "system", "content":
-                f"{SYSTEM_PROMPT} {geo.clock_context()}"}] + history + [
-                {"role": "user", "content": query}]
-            stream_answer(server, messages)
-            history.append({"role": "user", "content": query})
-            history.append({"role": "assistant", "content": ""})
-            continue
+            if geo.is_place_time_query(query):
+                print_tool("location time — searching web...")
+            else:
+                print_thinking(geo.clock_context())
+                print_tool("computing from local clock...")
+                messages = [{"role": "system", "content":
+                    f"{SYSTEM_PROMPT} {geo.clock_context()}"}] + history + [
+                    {"role": "user", "content": query}]
+                stream_answer(server, messages)
+                history.append({"role": "user", "content": query})
+                history.append({"role": "assistant", "content": ""})
+                continue
 
         decision = router.route(query)
         if decision == "search":

@@ -109,6 +109,22 @@ def is_date_time_query(q: str) -> bool:
     return False
 
 
+def is_place_time_query(q: str) -> bool:
+    """'time in USA' / 'what time is it in Tokyo' — needs real timezone
+    data the local clock can't provide, so route to web search."""
+    _TIME_UNITS = {"day", "days", "week", "weeks", "month", "months",
+                   "year", "years", "minute", "minutes", "hour", "hours",
+                   "second", "seconds"}
+    q = q.lower().strip()
+    m = re.search(r"\btime(?:\s+is\s+it)?\s+(?:in|at)\s+([a-z]{2,})", q)
+    if m and m.group(1) not in _TIME_UNITS:
+        return True
+    m = re.search(r"\b(?:what|current|local)\s+clock\s+(?:in|at)\s+([a-z]{2,})", q)
+    if m and m.group(1) not in _TIME_UNITS:
+        return True
+    return False
+
+
 def clock_context() -> str:
     """Current local time as a sentence, injected into the model prompt."""
     g = detect()
@@ -169,6 +185,7 @@ def clock_answer(q: str) -> str:
     date arithmetic, so this stays deterministic.
     """
     ql = _fix_typos(q.lower().strip())
+    ql = re.sub(r"^(hi|hello|hey|yo)[\s,!]+", "", ql)  # strip greeting prefix
     ql = ql.replace("whats", "what is").replace("what's", "what is")
     ql = ql.replace("today date", "date today")
     g = detect()
@@ -178,6 +195,10 @@ def clock_answer(q: str) -> str:
     def out(label: str, target: datetime) -> str:
         return (f"Local time now: {now.strftime('%A, %Y-%m-%d %H:%M')} {tz}.\n"
                 f"{label}: {target.strftime('%A, %Y-%m-%d')}.")
+
+    def out_time(label: str, target: datetime) -> str:
+        return (f"Local time now: {now.strftime('%A, %Y-%m-%d %H:%M')} {tz}.\n"
+                f"{label}: {target.strftime('%A, %Y-%m-%d %H:%M')}.")
 
     def base() -> str:
         return f"Local time now: {now.strftime('%A, %Y-%m-%d %H:%M')} {tz}."
@@ -194,6 +215,16 @@ def clock_answer(q: str) -> str:
     if m:
         n = _to_int(m.group("n"))
         return out(f"{n} day{'s' if n>1 else ''} ago", now - timedelta(days=n))
+    m = re.search(rf"{_NUM}\s+hour(?:s)?\s+ago", ql)
+    if m:
+        n = _to_int(m.group("n"))
+        return out_time(f"{n} hour{'s' if n>1 else ''} ago",
+                        now - timedelta(hours=n))
+    m = re.search(rf"{_NUM}\s+minute(?:s)?\s+ago", ql)
+    if m:
+        n = _to_int(m.group("n"))
+        return out_time(f"{n} minute{'s' if n>1 else ''} ago",
+                        now - timedelta(minutes=n))
     m = re.search(rf"{_NUM}\s+week(?:s)?\s+ago", ql)
     if m:
         n = _to_int(m.group("n"))
@@ -210,6 +241,16 @@ def clock_answer(q: str) -> str:
     if m:
         n = _to_int(m.group("n"))
         return out(f"In {n} day{'s' if n>1 else ''}", now + timedelta(days=n))
+    m = re.search(rf"(?:in|after)\s+{_NUM}\s+hour(?:s)?", ql)
+    if m:
+        n = _to_int(m.group("n"))
+        return out_time(f"In {n} hour{'s' if n>1 else ''}",
+                        now + timedelta(hours=n))
+    m = re.search(rf"(?:in|after)\s+{_NUM}\s+minute(?:s)?", ql)
+    if m:
+        n = _to_int(m.group("n"))
+        return out_time(f"In {n} minute{'s' if n>1 else ''}",
+                        now + timedelta(minutes=n))
     m = re.search(rf"(?:in|after)\s+{_NUM}\s+week(?:s)?", ql)
     if m:
         n = _to_int(m.group("n"))

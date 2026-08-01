@@ -107,6 +107,38 @@ PRIORITY_DOMAINS = (
 PRICE_REFINERS = ("price", "rate", "value", "cost", "usd", "costs", "how much", "per ounce", "per kg")
 
 
+_PLACE_ALIASES = {
+    "usa": "united states", "us": "united states", "u.s.": "united states",
+    "uk": "united kingdom", "england": "united kingdom",
+    "hk": "hong kong", "nyc": "new york", "ny": "new york",
+    "la": "los angeles", "sf": "san francisco", "dc": "washington",
+    "korea": "south korea", "switzerland": "swiss",
+}
+
+_SKIP_PLACE_WORDS = {"what", "whats", "is", "the", "time", "in", "at", "it",
+                     "current", "local", "now", "today", "clock", "of"}
+
+
+def _answer_place_matches(answer: str, query: str) -> bool:
+    """Bing sometimes serves a wrong-location time widget (e.g. India for
+    'time in usa'). Check the answer's place against the query's place."""
+    m = re.search(r"time\s+in\s+(.+?)(?:\s*\(|$)", answer, re.I)
+    if not m:
+        return True  # not a time-widget answer; can't verify
+    place = m.group(1).lower()
+    q_words = set(w for w in re.findall(r"[a-z]{2,}", query.lower())
+                  if w not in _SKIP_PLACE_WORDS)
+    if not q_words:
+        return True
+    for w in q_words:
+        if w in place:
+            return True
+        alias = _PLACE_ALIASES.get(w)
+        if alias and (alias in place or alias.split()[-1] in place):
+            return True
+    return False
+
+
 class SearchClient:
     def __init__(self):
         self.ddgs = DDGS()
@@ -125,7 +157,13 @@ class SearchClient:
             q += " usd"
         if "price" in q.lower():
             q += " today"
-        return asyncio.run(self._fetch_bing_ai(q))
+        for _ in range(2):  # Bing is flaky on time widgets — retry once
+            answer = asyncio.run(self._fetch_bing_ai(q))
+            if not answer:
+                return None
+            if _answer_place_matches(answer, query):
+                return answer
+        return None
 
     @staticmethod
     async def _fetch_bing_ai(q: str) -> Optional[str]:
