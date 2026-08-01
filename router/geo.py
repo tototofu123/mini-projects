@@ -86,8 +86,17 @@ def describe() -> str:
     return "; ".join(parts)
 
 
+_TOPIC_WORDS = [
+    "price", "stock", "weather", "forecast", "news", "latest", "version",
+    "update", "release", "rate", "temperature", "market", "gold", "bitcoin",
+    "crypto", "score", "game", "match", "election", "result",
+]
+
+
 def is_date_time_query(q: str) -> bool:
     q = q.lower().strip()
+    if any(w in q for w in _TOPIC_WORDS):
+        return False
     if re.search(r"\b(yesterday|tomorrow|tonight|today|ago|now|date|time|"
                  r"hour|minute|second|week|month|year)\b", q):
         return True
@@ -110,14 +119,18 @@ def clock_context() -> str:
 
 
 _DATE_WORDS = ["yesterday", "tomorrow", "today"]
+_SAFE_WORDS = {"day", "days", "week", "weeks", "month", "months", "year",
+               "years", "ago", "now", "in", "after", "before", "time", "date",
+               "today", "tomorrow", "yesterday", "minute", "minutes", "hour",
+               "hours", "what", "is", "the", "it", "and", "of", "was", "will"}
 
 
 def _fix_typos(q: str) -> str:
-    """Fuzzy-correct date words: any close misspelling of yesterday/
-    tomorrow/today maps to the correct word."""
+    """Fuzzy-correct date words: close misspellings of yesterday/
+    tomorrow/today map to the correct word. Safe words are never touched."""
     fixed = []
     for w in q.split():
-        if w in _DATE_WORDS:
+        if w in _SAFE_WORDS:
             fixed.append(w)
             continue
         if "yester" in w:
@@ -156,6 +169,8 @@ def clock_answer(q: str) -> str:
     date arithmetic, so this stays deterministic.
     """
     ql = _fix_typos(q.lower().strip())
+    ql = ql.replace("whats", "what is").replace("what's", "what is")
+    ql = ql.replace("today date", "date today")
     g = detect()
     now = datetime.fromisoformat(g["local_time"].replace(" ", "T"))
     tz = f"({g['tz_name']}, UTC{g['tz_offset']})"
@@ -167,9 +182,9 @@ def clock_answer(q: str) -> str:
     def base() -> str:
         return f"Local time now: {now.strftime('%A, %Y-%m-%d %H:%M')} {tz}."
 
-    if re.match(r"^(?:what(?:'s| is)?|the)?\s*(?:time|time now|current time|clock)(?:\s+is\s+it)?\??$", ql):
+    if re.match(r"^(?:(?:what(?:'s| is)?|the)\s+)?(?:the\s+)?(?:time|time now|current time|clock)(?:\s+is\s+it)?(?:\s+today)?\??$", ql):
         return base()
-    if re.match(r"^(?:what(?:'s| is)?|the)?\s*(?:date|today|today'?s date|what day is it)\??$", ql):
+    if re.match(r"^(?:(?:what(?:'s| is)?|the)\s+)?(?:the\s+)?(?:date|today|today'?s date|what day is it)(?:\s+today)?\??$", ql):
         return f"Today's date: {now.strftime('%A, %Y-%m-%d')} {tz}."
     if "yesterday" in ql:
         return out("Yesterday", now - timedelta(days=1))
