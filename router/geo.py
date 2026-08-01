@@ -108,6 +108,19 @@ def _add_months(d: datetime, n: int) -> datetime:
     return d.replace(year=year, month=month, day=day)
 
 
+_NUM = r"(?P<n>\d+|one|a|an|two|three|four|five|six|seven|eight|nine|ten)"
+
+
+def _to_int(s: str) -> int:
+    words = {
+        "one": 1, "a": 1, "an": 1, "two": 2, "three": 3, "four": 4,
+        "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+    }
+    if s in words:
+        return words[s]
+    return int(s)
+
+
 def clock_answer(q: str) -> str:
     """Answer date/time questions from the local clock."""
     g = detect()
@@ -123,17 +136,22 @@ def clock_answer(q: str) -> str:
         return when(now - timedelta(days=1), "Yesterday")
     if re.search(r"\b(tomorrow|next\s+day)\b", ql):
         return when(now + timedelta(days=1), "Tomorrow")
-    m = re.search(r"(\d+)\s+(day|days)\s+ago", ql)
+    m = re.search(rf"{_NUM}\s+day(?:s)?\s+ago", ql)
     if m:
-        return when(now - timedelta(days=int(m.group(1))), f"{m.group(1)} days ago")
-    m = re.search(r"(\d+)\s+(week|weeks)\s+ago", ql)
+        n = _to_int(m.group(1))
+        return when(now - timedelta(days=n), f"{n} day{'s' if n>1 else ''} ago")
+    m = re.search(rf"{_NUM}\s+week(?:s)?\s+ago", ql)
     if m:
-        n = int(m.group(1))
+        n = _to_int(m.group(1))
         return when(now - timedelta(weeks=n), f"{n} week{'s' if n>1 else ''} ago")
-    m = re.search(r"(\d+)\s+(month|months)\s+ago", ql)
+    m = re.search(rf"{_NUM}\s+month(?:s)?\s+ago", ql)
     if m:
-        n = int(m.group(1))
+        n = _to_int(m.group(1))
         return when(_add_months(now, -n), f"{n} month{'s' if n>1 else ''} ago")
+    m = re.search(rf"{_NUM}\s+year(?:s)?\s+ago", ql)
+    if m:
+        n = _to_int(m.group(1))
+        return when(now - timedelta(days=365 * n), f"{n} year{'s' if n>1 else ''} ago")
     m = re.search(r"(?:in|after)\s+(\d+)\s+(day|days)", ql)
     if m:
         n = int(m.group(1))

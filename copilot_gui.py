@@ -100,6 +100,13 @@ def run(server, search, router, geo):
             continue
         if query.lower() in ("exit", "quit"):
             break
+        if len(query) < 3:
+            console.print(Text(
+                "Please ask a full question, e.g. 'write a merge function' or "
+                "'gold price today'.", style="dim yellow",
+            ), soft_wrap=True)
+            continue
+        history = history[-8:]  # keep recent context only
 
         if geo.is_date_time_query(query):
             print_tool("reading local clock...")
