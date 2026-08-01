@@ -110,9 +110,20 @@ def run(server, search, router, geo):
 
         if geo.is_date_time_query(query):
             print_tool("reading local clock...")
-            console.print(Text(geo.clock_answer(query), style="green"), soft_wrap=True)
+            answer = geo.clock_answer(query)
+            if answer:
+                console.print(Text(answer, style="green"), soft_wrap=True)
+                history.append({"role": "user", "content": query})
+                history.append({"role": "assistant", "content": "answered from local clock"})
+                continue
+            print_thinking(geo.clock_context())
+            print_tool("computing from local clock...")
+            messages = [{"role": "system", "content":
+                f"{SYSTEM_PROMPT} {geo.clock_context()}"}] + history + [
+                {"role": "user", "content": query}]
+            stream_answer(server, messages)
             history.append({"role": "user", "content": query})
-            history.append({"role": "assistant", "content": "answered from local clock"})
+            history.append({"role": "assistant", "content": ""})
             continue
 
         decision = router.route(query)

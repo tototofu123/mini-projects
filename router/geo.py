@@ -99,77 +99,94 @@ def is_date_time_query(q: str) -> bool:
     return False
 
 
+def clock_context() -> str:
+    """Current local time as a sentence, injected into the model prompt."""
+    g = detect()
+    now = datetime.fromisoformat(g["local_time"].replace(" ", "T"))
+    return (f"Current local time: {now.strftime('%A, %Y-%m-%d %H:%M')} "
+            f"({g['tz_name']}, UTC{g['tz_offset']}). "
+            f"Use this as ground truth for any date/time question.")
+
+
+_TYPO_FIX = {
+    "yesterdat": "yesterday", "yestarday": "yesterday", "yesturday": "yesterday",
+    "tomorow": "tomorrow", "tomoro": "tomorrow", "tommarow": "tomorrow",
+    "tmrw": "tomorrow", "tommorow": "tomorrow", "2morrow": "tomorrow",
+    "2day": "today", "todays": "today", "2moro": "tomorrow",
+}
+_NUM = r"(?P<n>\d+|one|two|three|four|five|six|seven|eight|nine|ten|a|an)"
+
+
+def _to_int(s: str) -> int:
+    w = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
+         "seven": 7, "eight": 8, "nine": 9, "ten": 10, "a": 1, "an": 1}
+    try:
+        return int(s)
+    except ValueError:
+        return w.get(s, 1)
+
+
 def _add_months(d: datetime, n: int) -> datetime:
     month = d.month - 1 + n
     year = d.year + month // 12
     month = month % 12 + 1
-    day = min(d.day, [31, 29 if year % 4 == 0 and (year % 100 != 0 or year % 400 == 0) else 28,
-                      31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1])
-    return d.replace(year=year, month=month, day=day)
-
-
-_NUM = r"(?P<n>\d+|one|a|an|two|three|four|five|six|seven|eight|nine|ten)"
-
-
-def _to_int(s: str) -> int:
-    words = {
-        "one": 1, "a": 1, "an": 1, "two": 2, "three": 3, "four": 4,
-        "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
-    }
-    if s in words:
-        return words[s]
-    return int(s)
+    last = [31, 29 if (year % 4 == 0 and (year % 100 or year % 400 == 0)) else 28,
+            31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1]
+    return d.replace(year=year, month=month, day=min(d.day, last))
 
 
 def clock_answer(q: str) -> str:
-    """Answer date/time questions from the local clock."""
+    """Answer date/time questions from the local clock.
+
+    Uses a small fuzzy parser (typo-tolerant). The 1B model cannot do
+    date arithmetic, so this stays deterministic.
+    """
+    ql = " ".join(_TYPO_FIX.get(w, w) for w in q.lower().split())
     g = detect()
     now = datetime.fromisoformat(g["local_time"].replace(" ", "T"))
-    ql = q.lower().strip()
-    fmt = "%A, %Y-%m-%d %H:%M"
-    base = f"Local time now: {now.strftime(fmt)} ({g['tz_name']}, UTC{g['tz_offset']})."
+    tz = f"({g['tz_name']}, UTC{g['tz_offset']})"
 
-    def when(target: datetime, label: str) -> str:
-        return f"{base}\n{label}: {target.strftime('%A, %Y-%m-%d')}."
+    def out(label: str, target: datetime) -> str:
+        return (f"Local time now: {now.strftime('%A, %Y-%m-%d %H:%M')} {tz}.\n"
+                f"{label}: {target.strftime('%A, %Y-%m-%d')}.")
 
-    if re.search(r"\b(yesterday|last\s+day)\b", ql):
-        return when(now - timedelta(days=1), "Yesterday")
-    if re.search(r"\b(tomorrow|next\s+day)\b", ql):
-        return when(now + timedelta(days=1), "Tomorrow")
+    def base() -> str:
+        return f"Local time now: {now.strftime('%A, %Y-%m-%d %H:%M')} {tz}."
+
+    if re.match(r"^(?:what(?:'s| is)?|the)?\s*(?:time|time now|current time|clock)(?:\s+is\s+it)?\??$", ql):
+        return base()
+    if re.match(r"^(?:what(?:'s| is)?|the)?\s*(?:date|today|today'?s date|what day is it)\??$", ql):
+        return f"Today's date: {now.strftime('%A, %Y-%m-%d')} {tz}."
+    if "yesterday" in ql:
+        return out("Yesterday", now - timedelta(days=1))
+    if "tomorrow" in ql:
+        return out("Tomorrow", now + timedelta(days=1))
     m = re.search(rf"{_NUM}\s+day(?:s)?\s+ago", ql)
     if m:
-        n = _to_int(m.group(1))
-        return when(now - timedelta(days=n), f"{n} day{'s' if n>1 else ''} ago")
+        n = _to_int(m.group("n"))
+        return out(f"{n} day{'s' if n>1 else ''} ago", now - timedelta(days=n))
     m = re.search(rf"{_NUM}\s+week(?:s)?\s+ago", ql)
     if m:
-        n = _to_int(m.group(1))
-        return when(now - timedelta(weeks=n), f"{n} week{'s' if n>1 else ''} ago")
+        n = _to_int(m.group("n"))
+        return out(f"{n} week{'s' if n>1 else ''} ago", now - timedelta(weeks=n))
     m = re.search(rf"{_NUM}\s+month(?:s)?\s+ago", ql)
     if m:
-        n = _to_int(m.group(1))
-        return when(_add_months(now, -n), f"{n} month{'s' if n>1 else ''} ago")
+        n = _to_int(m.group("n"))
+        return out(f"{n} month{'s' if n>1 else ''} ago", _add_months(now, -n))
     m = re.search(rf"{_NUM}\s+year(?:s)?\s+ago", ql)
     if m:
-        n = _to_int(m.group(1))
-        return when(now - timedelta(days=365 * n), f"{n} year{'s' if n>1 else ''} ago")
-    m = re.search(r"(?:in|after)\s+(\d+)\s+(day|days)", ql)
+        n = _to_int(m.group("n"))
+        return out(f"{n} year{'s' if n>1 else ''} ago", now - timedelta(days=365 * n))
+    m = re.search(rf"(?:in|after)\s+{_NUM}\s+day(?:s)?", ql)
     if m:
-        n = int(m.group(1))
-        return when(now + timedelta(days=n), f"In {n} day{'s' if n>1 else ''}")
-    m = re.search(r"(?:in|after)\s+(\d+)\s+(week|weeks)", ql)
+        n = _to_int(m.group("n"))
+        return out(f"In {n} day{'s' if n>1 else ''}", now + timedelta(days=n))
+    m = re.search(rf"(?:in|after)\s+{_NUM}\s+week(?:s)?", ql)
     if m:
-        n = int(m.group(1))
-        return when(now + timedelta(weeks=n), f"In {n} week{'s' if n>1 else ''}")
-    m = re.search(r"before\s+(\d+)\s+(day|days)", ql)
-    if m:
-        n = int(m.group(1))
-        return when(now - timedelta(days=n), f"{n} day{'s' if n>1 else ''} before")
-    if re.search(r"\b(last|previous)\s+week\b", ql):
-        return when(now - timedelta(weeks=1), "Last week (7 days ago)")
-    if re.search(r"\b(next)\s+week\b", ql):
-        return when(now + timedelta(weeks=1), "Next week (7 days from now)")
-    if re.search(r"\b(one|a)\s+week\s+ago\b", ql):
-        return when(now - timedelta(weeks=1), "One week ago")
-    if re.search(r"\b(time|now)\b", ql):
-        return base
-    return base
+        n = _to_int(m.group("n"))
+        return out(f"In {n} week{'s' if n>1 else ''}", now + timedelta(weeks=n))
+    if re.search(r"\b(last|previous|one|a)\s+week", ql):
+        return out("Last week (7 days ago)", now - timedelta(weeks=1))
+    if re.search(r"\bnext\s+week", ql):
+        return out("Next week (7 days from now)", now + timedelta(weeks=1))
+    return ""
