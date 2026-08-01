@@ -101,21 +101,15 @@ def run(server, search, router, geo):
         if query.lower() in ("exit", "quit"):
             break
 
+        if geo.is_date_time_query(query):
+            print_tool("reading local clock...")
+            console.print(Text(geo.clock_answer(query), style="green"), soft_wrap=True)
+            history.append({"role": "user", "content": query})
+            history.append({"role": "assistant", "content": "answered from local clock"})
+            continue
+
         decision = router.route(query)
         if decision == "search":
-            if geo.is_date_time_query(query):
-                g = geo.detect()
-                print_tool("reading local clock...")
-                console.print(
-                    Text(
-                        f"Today is {g['local_time']} ({geo.describe()}).",
-                        style="green",
-                    ),
-                    soft_wrap=True,
-                )
-                history.append({"role": "user", "content": query})
-                history.append({"role": "assistant", "content": "answered from local clock"})
-                continue
             print_tool("searching web (headless browser)...")
             try:
                 results = search.search(query, max_results=5)
