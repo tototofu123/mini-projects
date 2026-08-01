@@ -38,6 +38,46 @@ JS_CLEAN = """() => {
 }"""
 
 
+_BING_ANSWER_JS = r"""() => {
+    const NOISE = ['people also ask', 'videos of', 'images of', 'deep dive',
+        'related searches', 'news about', 'see more', 'feedback'];
+    function clean(t) {
+        t = (t || '').trim();
+        t = t.replace(/^Like\s*\|?\s*Dislike\s*/, '').trim();
+        return t;
+    }
+    function isNoise(t) {
+        const low = t.toLowerCase();
+        for (const n of NOISE) { if (low.startsWith(n)) return true; }
+        return t.length < 40;
+    }
+    // 1) AI-generated answer box (.b_ans.b_top), excluding video/news boxes
+    const top = document.querySelector('.b_ans.b_top:not(.b_vidAns):not(.b_mop)');
+    if (top) {
+        const t = clean(top.innerText);
+        if (!isNoise(t)) return t;
+    }
+    // 2) any other substantive .b_ans box
+    let best = null, bestLen = 0;
+    document.querySelectorAll('.b_ans').forEach(el => {
+        const t = clean(el.innerText);
+        if (isNoise(t)) return;
+        if (t.length > bestLen) { bestLen = t.length; best = t; }
+    });
+    if (best) return best;
+    // 3) knowledge/entity answer
+    const k = document.querySelector('#b_context, .b_entityTitle');
+    if (k) { const t = clean(k.innerText); if (!isNoise(t)) return t; }
+    // 4) top organic result snippet — often contains the direct answer
+    const first = document.querySelector('#b_results > li.b_algo');
+    if (first) {
+        const t = clean(first.innerText);
+        if (!isNoise(t)) return t;
+    }
+    return '';
+}"""
+
+
 def _clean_ai(text: str) -> str:
     """Strip Bing UI noise (Like/Dislike/Feedback/news boilerplate)."""
     lines = []
@@ -78,7 +118,13 @@ class SearchClient:
         answer box instead — it's the same "AI overview" style result.
         Returns the AI answer text or None.
         """
-        q = self._refine(query)
+        # Note: the AI box disappears when minus-operators are in the query,
+        # so no "-wikipedia -dictionary" refinement here (only used for ddgs).
+        q = query
+        if any(w in q.lower() for w in PRICE_REFINERS):
+            q += " usd"
+        if "price" in q.lower():
+            q += " today"
         return asyncio.run(self._fetch_bing_ai(q))
 
     @staticmethod
@@ -102,18 +148,13 @@ class SearchClient:
                         f"https://www.bing.com/search?q={q}&setlang=en",
                         timeout=25000, wait_until="domcontentloaded")
                     await page.wait_for_timeout(4000)
-                    text = await page.evaluate("""() => {
-                        const el = document.querySelector('.b_ans');
-                        if (!el) return '';
-                        return el.innerText || '';
-                    }""")
-                    text = (text or "").strip()
+                    answer = await page.evaluate(_BING_ANSWER_JS)
                 finally:
                     await ctx.close()
                     await browser.close()
-                if len(text) < 40:
+                if not answer:
                     return None
-                return _clean_ai(text[:900])
+                return _clean_ai(answer[:900])
         except Exception:
             return None
 
@@ -136,7 +177,6 @@ class SearchClient:
             q += " usd"
         if "price" in q.lower():
             q += " today"
-        q += " -wikipedia -dictionary"
         return q
 
     def summarize(self, query: str, results: List[dict]) -> str:
