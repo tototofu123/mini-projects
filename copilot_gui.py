@@ -48,14 +48,19 @@ def print_search_results(results) -> None:
         lines.append(f"[dim]{r.get('body', '')[:150]}[/dim]")
     console.print(Panel("\n".join(lines), title="search results", border_style="cyan"))
 
-def stream_answer(server, messages) -> None:
+SYSTEM_PROMPT = (
+    "You are a concise coding assistant. Answer directly in 1-3 short paragraphs. "
+    "For code questions give working code. Think briefly, then give the answer."
+)
+
+def stream_answer(server, messages, max_tokens=512, temperature=0.7) -> None:
     """Typewriter streaming of the model answer, thinking in gray."""
     thinking_buf = ""
     content_buf = ""
     thinking_done = False
     last_was_thinking = False
     try:
-        for item in server.chat_stream(messages):
+        for item in server.chat_stream(messages, max_tokens=max_tokens, temperature=temperature):
             if item["type"] == "reasoning":
                 thinking_buf += item["delta"]
                 last_was_thinking = True
@@ -100,17 +105,19 @@ def run(server, search, router):
                 continue
             print_search_results(results)
             context = search.summarize(query, results)
-            messages = history + [
-                {"role": "system", "content":
-                    "You are a coding copilot. Use the web search results to answer "
-                    f"the user's question. Be accurate and cite sources briefly.\n\nSearch results:\n{context}"},
-                {"role": "user", "content": query},
+            messages = [{"role": "system", "content":
+                "You answer from web search results. Extract the concrete fact "
+                "(numbers, dates, versions). If results lack the answer, say so."}] + history + [
+                {"role": "user", "content":
+                    f"Question: {query}\n\n"
+                    f"Search results (use ONLY these to answer):\n{context}"},
             ]
             print_tool("answering with search results...")
-            stream_answer(server, messages)
+            stream_answer(server, messages, temperature=0.3)
         else:
             print_tool("thinking locally...")
-            messages = history + [{"role": "user", "content": query}]
+            messages = [{"role": "system", "content": SYSTEM_PROMPT}] + history + [
+                {"role": "user", "content": query}]
             stream_answer(server, messages)
 
         history.append({"role": "user", "content": query})
