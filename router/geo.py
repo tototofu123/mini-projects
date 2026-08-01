@@ -3,6 +3,7 @@
 Uses ip-api.com (no key) for city/country/timezone, falls back to the
 Windows registry timezone. Cached after first call.
 """
+import difflib
 import json
 import re
 import subprocess
@@ -108,12 +109,25 @@ def clock_context() -> str:
             f"Use this as ground truth for any date/time question.")
 
 
-_TYPO_FIX = {
-    "yesterdat": "yesterday", "yestarday": "yesterday", "yesturday": "yesterday",
-    "tomorow": "tomorrow", "tomoro": "tomorrow", "tommarow": "tomorrow",
-    "tmrw": "tomorrow", "tommorow": "tomorrow", "2morrow": "tomorrow",
-    "2day": "today", "todays": "today", "2moro": "tomorrow",
-}
+_DATE_WORDS = ["yesterday", "tomorrow", "today"]
+
+
+def _fix_typos(q: str) -> str:
+    """Fuzzy-correct date words: any close misspelling of yesterday/
+    tomorrow/today maps to the correct word."""
+    fixed = []
+    for w in q.split():
+        if w in _DATE_WORDS:
+            fixed.append(w)
+            continue
+        if "yester" in w:
+            fixed.append("yesterday")
+            continue
+        m = difflib.get_close_matches(w, _DATE_WORDS, n=1, cutoff=0.62)
+        fixed.append(m[0] if m else w)
+    return " ".join(fixed)
+
+
 _NUM = r"(?P<n>\d+|one|two|three|four|five|six|seven|eight|nine|ten|a|an)"
 
 
@@ -141,7 +155,7 @@ def clock_answer(q: str) -> str:
     Uses a small fuzzy parser (typo-tolerant). The 1B model cannot do
     date arithmetic, so this stays deterministic.
     """
-    ql = " ".join(_TYPO_FIX.get(w, w) for w in q.lower().split())
+    ql = _fix_typos(q.lower().strip())
     g = detect()
     now = datetime.fromisoformat(g["local_time"].replace(" ", "T"))
     tz = f"({g['tz_name']}, UTC{g['tz_offset']})"
