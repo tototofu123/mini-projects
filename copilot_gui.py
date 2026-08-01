@@ -98,6 +98,9 @@ def run(server, search, router, geo):
             break
         if not query:
             continue
+        if any(ord(c) < 32 and c not in "\t" for c in query):
+            console.print(Text("[ignored control key]", style="dim"), soft_wrap=True)
+            continue
         if query.lower() in ("exit", "quit"):
             break
         if len(query) < 3:
