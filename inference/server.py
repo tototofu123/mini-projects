@@ -11,7 +11,7 @@ from typing import List, Dict, Optional, Iterator
 class LocalServer:
     """Manages a llama-server process and talks to it via HTTP."""
 
-    def __init__(self, model_path: str, host: str = "127.0.0.1", port: int = 8080,
+    def __init__(self, model_path: str, host: str = "127.0.0.1", port: int = 8081,
                  n_ctx: int = 8192, n_gpu_layers: int = -1,
                  llama_server: Optional[str] = None):
         self.model_path = Path(model_path)
