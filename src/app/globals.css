@@ -1,26 +1,103 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-peach: #FFDAB9;
+  --color-lemon: #FFF700;
+  --color-chrome: #E0E0E0;
+  --color-bio-blue: #002FA7;
+  --color-sunset: #FF6B00;
+
+  --font-serif: "Clash Display", sans-serif;
+  --font-mono: "Space Grotesk", sans-serif;
+
+  --radius-extreme: 12px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #fff;
+    --foreground: #002FA7;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    @apply font-mono antialiased overflow-x-hidden;
+    cursor: url('/icons/cursor-orange.webp'), auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif font-bold uppercase tracking-tighter;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .text-shadow-neon {
+    text-shadow: 0 0 10px rgba(255, 218, 185, 0.5), 0 0 20px rgba(255, 218, 185, 0.3);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  .metallic-text {
+    background: linear-gradient(135deg, #002FA7 0%, #777 50%, #002FA7 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: metallic-shine 3s linear infinite;
+  }
+}
+
+@keyframes metallic-shine {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* Custom properties for interactive states */
+.glow-pulse {
+  animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.2);
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-chrome);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-peach);
+  border: 2px solid var(--color-chrome);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-lemon);
 }
