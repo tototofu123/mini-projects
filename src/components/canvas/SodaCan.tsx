@@ -7,7 +7,7 @@ import * as THREE from 'three';
 
 export function SodaCan({ scale = 1, flavor = 'yuzu' }) {
     const meshRef = useRef<THREE.Mesh>(null);
-    const texture = useTexture(`/products/Whisk_ceb13d88ab4638a9439432fefc8b1ccfdr.webp`);
+    const texture = useTexture(`/aura-pop/products/Whisk_ceb13d88ab4638a9439432fefc8b1ccfdr.webp`);
 
     useFrame((state) => {
         if (meshRef.current) {

@@ -32,7 +32,7 @@ export function ComparisonSlider() {
                         <p className="font-mono text-xl uppercase tracking-[0.5em]">[High Sugar Error] • [Bloat Detected]</p>
                     </div>
                     <Image
-                        src="/products/Whisk_5f39d5a0357c62fa13b4ada30f5863d8dr.webp"
+                        src="/aura-pop/products/Whisk_5f39d5a0357c62fa13b4ada30f5863d8dr.webp"
                         alt="Legacy Soda"
                         fill
                         className="object-cover opacity-20"
@@ -52,7 +52,7 @@ export function ComparisonSlider() {
                         </div>
                     </div>
                     <Image
-                        src="/products/Whisk_ceb13d88ab4638a9439432fefc8b1ccfdr.webp"
+                        src="/aura-pop/products/Whisk_ceb13d88ab4638a9439432fefc8b1ccfdr.webp"
                         alt="Pop Culture"
                         fill
                         className="object-cover opacity-60"

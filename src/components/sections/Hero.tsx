@@ -16,7 +16,7 @@ export function Hero() {
 
     return (
         <section ref={containerRef} className="relative h-[200vh] w-full items-start justify-center bg-white overflow-hidden">
-            <VideoFramePlayer frameCount={128} framePath="/frames" className="opacity-80" />
+            <VideoFramePlayer frameCount={128} framePath="/aura-pop/frames" className="opacity-80" />
 
             {/* Product Clarity refined via VideoFramePlayer */}
 
