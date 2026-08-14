@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   output: "export",
   basePath: "/aura-pop",
+  images: { unoptimized: true },
 };
 
 export default nextConfig;
