@@ -5,4 +5,4 @@
 - [x] Define the normal portfolio’s page structure and project-case-study treatment.
 - [x] Define the showcase portfolio’s artifact-based interaction model and project-specific visual treatments.
 - [x] Create the asset inventory, evidence checklist, and accessibility/performance constraints.
-- [ ] Create a private GitHub repository for the two portfolio copies and connect it to this workspace.
+- [x] Create a private GitHub repository for the two portfolio copies and connect it to this workspace.
