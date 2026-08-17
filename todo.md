@@ -1,5 +1,10 @@
 # Portfolio Duo — Working Checklist
 
+- [x] Verify local evidence and available local visual sources for the six selected projects.
+- [ ] Reuse the existing old-portfolio Is It AI Image screenshot without downloading external media. The old portfolio data references `/media/project-cnn.png`, but the image binary is not currently present in the local workspace.
+- [ ] Capture any additional project visuals only from locally running apps or local source folders.
+- [x] Build the hiring-focused normal portfolio as the primary responsive public experience.
+- [x] Verify desktop and mobile layouts, then save the finished website checkpoint.
 - [x] Use exactly six projects in both portfolio versions: HKUST Climb Society Web, HKUST Climbing App, STM32, OCR MCP, Perihel, and Is It AI Image.
 - [x] Define the shared information architecture, content model, and navigation for the normal portfolio and showcase portfolio.
 - [x] Define the normal portfolio’s page structure and project-case-study treatment.
