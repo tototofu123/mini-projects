@@ -1,5 +1,12 @@
 # Portfolio Duo — Working Checklist
 
+- [ ] Tomorrow: confirm the Constraint Ledger direction before replacing the current normal portfolio.
+- [ ] Tomorrow: rebuild the landing experience around six real constraints, six system responses, proof, and explicit limits.
+- [ ] Tomorrow: review the rebuilt normal portfolio together before creating a new checkpoint.
+- [x] Identify the generic visual and structural patterns in the current normal portfolio that do not come from Toto’s projects.
+- [x] Derive a new visual and interaction system from the six selected project artifacts, constraints, and technical workflows.
+- [ ] Validate the new direction with Toto before replacing the current normal portfolio.
+- [ ] Rebuild the normal portfolio so its primary interaction is specific to Toto’s work rather than a generic project-card grid.
 - [x] Verify local evidence and available local visual sources for the six selected projects.
 - [ ] Reuse the existing old-portfolio Is It AI Image screenshot without downloading external media. The old portfolio data references `/media/project-cnn.png`, but the image binary is not currently present in the local workspace.
 - [ ] Capture any additional project visuals only from locally running apps or local source folders.

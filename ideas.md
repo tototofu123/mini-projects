@@ -17,7 +17,54 @@
 
 **Probability:** 0.09
 
-## Chosen direction: Technical Field Notes
+## Replaced direction: Technical Field Notes
+
+Technical Field Notes produced a coherent but overly familiar editorial portfolio. Its decorative traces, hero collage, rail, and card grid were not grounded enough in the actual selected projects. It is retained as a record of the rejected approach and must not drive the rebuild.
+
+## New direction: Constraint Ledger
+
+### Design Movement
+**Technical field reports and change-control ledgers, not an editorial portfolio template.** The normal portfolio presents six constraints, six system responses, and six evidence trails. It reads as work-in-progress intelligence rather than a collection of polished cards.
+
+### Core Principles
+1. **Constraint before technology.** The problem headline arrives before the project name or stack.
+2. **Evidence over atmosphere.** Every visual relationship must correspond to a real data flow, hardware boundary, workflow, or limitation.
+3. **Unequal by design.** Projects receive visual weight based on available evidence rather than a uniform grid.
+4. **Honest blank space.** Missing visuals become explicit evidence requests, never decorative fake artifacts.
+
+### Color Philosophy
+Warm paper is kept only as a reading surface. Graphite carries all ordinary information. Signal Blue `#1E5EFF` marks an action, decision, source link, or system transition. There are no project-specific rainbow colours.
+
+### Layout Paradigm
+A vertical **constraint ledger**: large constraint statements interrupt dense case annotations. The page alternates scale and density, with a narrow annotations strip that holds stack, role, status, and source links. There is no project-card grid.
+
+### Signature Elements
+1. Constraint IDs, such as `C-01`, instead of decorative project numbers.
+2. Response arrows that name a real relationship, such as `input → route → result`.
+3. Explicit `LIMIT` panels that make scope honest and useful.
+
+### Interaction Philosophy
+Visitors reveal the response, proof, and limit of a case entry in sequence. A static reading order remains complete without interaction. Detail expansion should feel like opening a dossier, not like hovering a decorative card.
+
+### Animation
+Only case-entry separators and evidence drawers move. A line can extend between a constraint and its response; it must never draw a fake circuit. All motion is optional and reduced-motion safe.
+
+### Typography System
+Use a compact grotesk for constraints and metadata, a robust serif only for the occasional human question, and a mono face for the system-response label. Avoid oversized generic portfolio headlines.
+
+### Brand Essence
+**Six constraints, six systems, and a builder who makes the relationship between them legible.**
+
+Personality: **specific, candid, tenacious**.
+
+### Brand Voice
+Headlines state a real difficulty; body copy names the response and its limits. Examples: “When a model choice changes the answer.” “A reminder system should not become another place to forget.”
+
+### Wordmark & Logo
+The TL mark becomes a small operational stamp rather than a hero logo. It may appear beside an evidence source or case ID, not as a prominent decorative brand object.
+
+### Signature Brand Color
+**Signal Blue — `#1E5EFF`** remains the only active-system colour.
 
 ### Design Movement
 **Contemporary editorial design meets scientific field notebooks and museum-style interactive exhibits.** The normal portfolio behaves like a precise case-study publication; the showcase behaves like an explorable lab bench for the same work.
