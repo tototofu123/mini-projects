@@ -291,6 +291,7 @@ h1 em, h2 em { color: var(--blue); font-style: normal; }
 .personal-intro-label { padding: 0 1.25rem; color: var(--muted); font-size: 0.69rem; line-height: 1.55; }
 .personal-intro-label p { margin-top: 1rem; }
 .personal-intro-copy { padding: 0 clamp(1.6rem, 5.2vw, 6rem); }
+.personal-intro-copy { grid-column: 2 / 4; max-width: 62rem; }
 .personal-intro-copy h2, .practice-heading h2, .personal-now h2 { max-width: 13ch; margin: 0.85rem 0 1.7rem; font-size: clamp(2.3rem, 4.6vw, 5.5rem); font-weight: 800; letter-spacing: -0.08em; line-height: 0.88; }
 .personal-intro-copy > p { max-width: 42rem; color: var(--muted); font-size: 1rem; line-height: 1.68; }
 .personal-intro-copy blockquote { max-width: 37rem; margin: 2.2rem 0 0; padding: 1.1rem 0 0; border-top: 1px solid var(--line); color: var(--ink); font-size: 1.2rem; font-weight: 700; letter-spacing: -0.025em; line-height: 1.28; }
@@ -387,6 +388,7 @@ h1 em, h2 em { color: var(--blue); font-style: normal; }
   .personal-intro { padding: 4.2rem 1.1rem; }
   .personal-intro-label, .personal-intro-copy, .personal-intro-side { padding-right: 0; padding-left: 0; }
   .personal-intro-copy { margin-top: 1.5rem; }
+  .personal-intro-copy { grid-column: 1; }
   .personal-intro-side { margin-top: 1.7rem; }
   .practice-heading { padding: 4.2rem 1.1rem 2.4rem; border-right: 0; border-bottom: 1px solid var(--line); }
   .practice-list { grid-template-columns: 1fr; }

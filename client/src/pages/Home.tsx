@@ -138,7 +138,7 @@ export default function Home() {
       <a className="skip-link" href="#about">Skip to introduction</a>
       <header className="compact-header">
         <a className="identity" href="#top" aria-label="Toto Lai personal portfolio"><img src={markImage} alt="" /><span>Toto Lai / Personal File</span></a>
-        <nav className="portfolio-nav" aria-label="Portfolio sections"><a href="#about">Operating note</a><a href="#selected-work">Evidence</a><a href="#contact">Contact</a></nav>
+        <nav className="portfolio-nav" aria-label="Portfolio sections"><a href="#about">About</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#contact">Contact</a></nav>
         <a className="header-contact" href="mailto:tototofu0601@gmail.com">Write to me <ArrowUpRight size={15} /></a>
       </header>
 
@@ -148,31 +148,21 @@ export default function Home() {
           <div>
             <p className="opening-prefix">Lai Man To / Toto / Software builder</p>
             <h1 id="opening-title">When a system<br />can lose a person,<br /><em>I build the handoff.</em></h1>
-            <p className="compact-opening-copy">I am a software builder based in Hong Kong. I work across AI workflows, full-stack systems, hardware, and interactive web experiences—usually where an idea, decision, or person could otherwise lose context.</p>
-            <div className="personal-opening-actions"><a href="#selected-work">View selected work <ArrowRight size={16} /></a><a href="mailto:tototofu0601@gmail.com">Get in touch <ArrowUpRight size={16} /></a></div>
+            <p className="compact-opening-copy">I am a software builder based in Hong Kong. I work across AI workflows, full-stack systems, hardware, and interactive web experiences.</p>
+            <div className="personal-opening-actions"><a href="#projects">View projects <ArrowRight size={16} /></a><a href="mailto:tototofu0601@gmail.com">Get in touch <ArrowUpRight size={16} /></a></div>
           </div>
-          <div className="compact-opening-count"><span>Currently</span><strong>Building</strong><p>Useful products, AI-assisted workflows, and a small number of ideas worth finishing.</p><span className="education-chip">BEng Computer Engineering & AI / HKUST</span></div>
+          <div className="compact-opening-count"><span>Based in</span><strong>Hong Kong</strong><p>BEng Computer Engineering & AI at HKUST.</p><span className="education-chip">Open to useful software problems</span></div>
         </section>
 
         <section className="personal-intro" id="about" aria-labelledby="about-title">
-          <div className="personal-intro-label"><span className="section-label">Operating note / 01</span><p>Software builder<br />Hong Kong</p></div>
+          <div className="personal-intro-label"><span className="section-label">About / 01</span><p>Software builder<br />Hong Kong</p></div>
           <div className="personal-intro-copy"><h2 id="about-title">The point is not<br />a demo. It is a<br /><em>return path.</em></h2><p>I am interested in useful systems: products that solve an actual problem, workflows that reduce friction, and interfaces that make technology easier to use. I like working across the full path—thinking through the product, building the software, shaping the interface, and improving it from feedback.</p><blockquote>“I want to make technology that someone can use again—not just a demo that exists once.”</blockquote></div>
-          <div className="personal-intro-side"><span>Current boundaries</span><p>People → systems<br />Inputs → decisions<br />Ideas → useful action</p></div>
         </section>
 
-        <section className="practice-section" aria-labelledby="practice-title">
-          <div className="practice-heading"><span className="section-label">Boundaries I work across / 02</span><h2 id="practice-title">Three places<br />a handoff can<br /><em>break.</em></h2></div>
-          <div className="practice-list">
-            <article><span>01 / People → system</span><h3>Someone has to understand the tool.</h3><p>Applications and systems for real groups and real workflows, shaped around whether people can understand and return to them.</p></article>
-            <article><span>02 / Input → decision</span><h3>A model answer needs a visible route.</h3><p>Local AI, model workflows, reusable skills, and tooling that makes research, planning, and development more reliable.</p></article>
-            <article><span>03 / Interface → action</span><h3>A screen should lead somewhere.</h3><p>Websites, interfaces, and creative technology where visual detail and motion serve a stronger product structure.</p></article>
-          </div>
-        </section>
-
-        <section className="project-carousel-section" id="selected-work" aria-labelledby="carousel-title">
+        <section className="project-carousel-section" id="projects" aria-labelledby="carousel-title">
           <div className="carousel-heading">
-            <div><span className="section-label">Evidence ledger / 03</span><h2 id="carousel-title">Six constraints.<br /><em>Named responses.</em></h2></div>
-            <p>These records support the personal story above. Use the controls, arrow keys, or numbered entries to inspect the response, proof, and limit of one system at a time.</p>
+            <div><span className="section-label">Projects / 02</span><h2 id="carousel-title">Six systems.<br /><em>One loop.</em></h2></div>
+            <p>A short selection of the systems I have built. Use the controls, arrow keys, or numbered entries to inspect one project at a time.</p>
           </div>
 
           <div className="project-carousel" aria-roledescription="carousel" aria-label="Six project records" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)}>
@@ -201,8 +191,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="skills-carousel-section" aria-labelledby="skills-title">
-          <div className="skills-heading"><span className="section-label">Capabilities / continuous signal</span><h2 id="skills-title">Skills move<br />on a <em>different rhythm.</em></h2><p>The project loop is deliberate and inspectable. This tape is a fast, continuous index of the tools and systems behind it.</p></div>
+        <section className="skills-carousel-section" id="skills" aria-labelledby="skills-title">
+          <div className="skills-heading"><span className="section-label">Skills / 03</span><h2 id="skills-title">Skills move<br />on a <em>different rhythm.</em></h2><p>A continuous index of the tools and systems behind the work.</p></div>
           <div className="skills-window" aria-label="Skills carousel">
             <div className="skills-track">
               {[...skills, ...skills].map((skill, index) => <span key={`${skill}-${index}`} aria-hidden={index >= skills.length}>{skill}<i>✦</i></span>)}
@@ -211,13 +201,8 @@ export default function Home() {
           <p className="sr-only">Skills include {skills.join(", ")}.</p>
         </section>
 
-        <section className="personal-now" aria-labelledby="now-title">
-          <div><span className="section-label">Current file / 04</span><h2 id="now-title">Fewer ideas.<br />More reasons to<br /><em>come back.</em></h2></div>
-          <div className="now-detail"><p>I am focused on practical software, AI-assisted workflows, and making my work easier to understand. I am studying Computer Engineering and AI at HKUST.</p><dl><div><dt>Based in</dt><dd>Hong Kong</dd></div><div><dt>Learning through</dt><dd>Building, testing, and iteration</dd></div><div><dt>Looking for</dt><dd>Useful product and software problems</dd></div></dl></div>
-        </section>
-
         <section className="compact-close" id="contact" aria-labelledby="close-title">
-          <div><span className="section-label">Close the ledger</span><h2 id="close-title">The work changes.<br />The pattern<br /><em>does not.</em></h2></div>
+          <div><span className="section-label">Contact / 04</span><h2 id="close-title">Let’s build<br />something people<br /><em>can return to.</em></h2></div>
           <p>If you are working on useful software, AI tools, automation, community products, or interactive web experiences, I would be glad to connect.</p>
           <div className="close-links"><a href="mailto:tototofu0601@gmail.com"><Mail size={16} /> Start a conversation</a><a href="https://github.com/tototofu123" target="_blank" rel="noreferrer"><Github size={16} /> Inspect repositories</a><a href="/showcase">Open System Viewer <ArrowUpRight size={16} /></a></div>
         </section>

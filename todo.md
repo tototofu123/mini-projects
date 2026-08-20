@@ -1,5 +1,9 @@
 # Portfolio Duo — Working Checklist
 
+- [x] Reduce the normal route to exactly Hero, About, Projects, Skills, and Contact.
+- [x] Remove the separate boundaries and current-focus sections from the normal route.
+- [x] Keep the project carousel compact inside Projects and retain the System Viewer as a separate route.
+- [ ] Verify the five-section path is clearly shorter on desktop and mobile.
 - [x] Replace the project-led opening with Toto’s personal professional introduction and immediate contact path.
 - [x] Add a concise About, current focus, education, and working-principles section that does not frame Toto as a climber identity.
 - [x] Define the personal-first normal-route hierarchy: introduction, about, areas of practice, selected work, current focus and education, then contact.
