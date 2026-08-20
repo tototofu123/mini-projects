@@ -1,5 +1,13 @@
 # Portfolio Duo — Working Checklist
 
+- [x] Complete Constraint Ledger records C-03 through C-06 with real constraints, responses, proof, and limits.
+- [x] Build a separate interactive Showcase route that differs structurally and emotionally from the normal portfolio.
+- [x] Verify both routes in a browser on desktop and mobile, including keyboard navigation and reduced-motion behavior.
+- [x] Run type, production-build, and accessibility-quality checks; fix issues found before delivery.
+- [ ] Save and push the final production-ready dual-portfolio checkpoint.
+- [x] Reconfirm the six selected projects and their evidence boundaries before applying the Constraint Ledger redesign.
+- [ ] Replace the current landing view with the Constraint Ledger opening and first two real case entries.
+- [ ] Show Toto the rebuilt opening before completing the other four project entries.
 - [ ] Tomorrow: confirm the Constraint Ledger direction before replacing the current normal portfolio.
 - [ ] Tomorrow: rebuild the landing experience around six real constraints, six system responses, proof, and explicit limits.
 - [ ] Tomorrow: review the rebuilt normal portfolio together before creating a new checkpoint.

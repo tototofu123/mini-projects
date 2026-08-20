@@ -66,6 +66,12 @@ The TL mark becomes a small operational stamp rather than a hero logo. It may ap
 ### Signature Brand Color
 **Signal Blue — `#1E5EFF`** remains the only active-system colour.
 
+## Style Decisions
+
+- Each Constraint Ledger record must take visual weight from the evidence currently available. Evidence-rich systems can expand into route or artifact panels; proof-limited systems must display a named evidence request and visible LIMIT state.
+- The System Viewer centers one large inspectable artifact per project: an interface handoff, decision surface, hardware boundary, classification boundary, information topology, or return loop. Text panels only support that object.
+- The first screen leads with a working premise, not self-description. Signal Blue is reserved for decisions, evidence/source links, route transitions, and primary actions.
+
 ### Design Movement
 **Contemporary editorial design meets scientific field notebooks and museum-style interactive exhibits.** The normal portfolio behaves like a precise case-study publication; the showcase behaves like an explorable lab bench for the same work.
 

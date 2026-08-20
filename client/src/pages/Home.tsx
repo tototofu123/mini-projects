@@ -1,215 +1,266 @@
 /**
- * Technical Field Notes — hiring portfolio page.
- * Editorial marginalia, warm paper, graphite ink, and sparse signal blue keep
- * the focus on project evidence rather than visual effects.
+ * Constraint Ledger — a project-derived normal portfolio.
+ * The structure presents real constraints, system responses, proof, and limits;
+ * it deliberately avoids stock imagery, generic card grids, and invented diagrams.
  */
 import {
-  ArrowDownRight,
+  ArrowDown,
   ArrowUpRight,
-  Braces,
-  ChevronRight,
-  CircleDot,
-  Code2,
-  Cpu,
   Github,
   Mail,
-  MapPin,
-  TerminalSquare,
+  MoveRight,
+  Plus,
 } from "lucide-react";
+import { useEffect } from "react";
 import { projects, type Project } from "@/data/projects";
 
-const heroImage = "/manus-storage/toto-field-notes-hero_02105a91.png";
-const spectrumImage = "/manus-storage/software-builder-spectrum_ea620376.png";
 const markImage = "/manus-storage/toto-tl-signal-mark_e32fc54e.png";
 
-function ProjectDiagram({ project }: { project: Project }) {
-  const labels = project.signal.split(" ");
+type LedgerNote = {
+  code: string;
+  domain: string;
+  constraint: string;
+  response: string;
+  proofLines: string[];
+  route: string[];
+  evidenceState: "current" | "requested";
+  evidenceRequest: string;
+};
 
-  return (
-    <div className="project-diagram" aria-hidden="true" style={{ "--signal": project.accent } as React.CSSProperties}>
-      <span className="diagram-grid" />
-      <span className="diagram-node diagram-node-a" />
-      <span className="diagram-node diagram-node-b" />
-      <span className="diagram-node diagram-node-c" />
-      <span className="diagram-trace trace-one" />
-      <span className="diagram-trace trace-two" />
-      <span className="diagram-label label-one">{labels[0]}</span>
-      <span className="diagram-label label-two">{labels.slice(1).join(" ") || "SYSTEM"}</span>
-      <span className="diagram-caption">evidence route</span>
-      <span className="diagram-index">{project.number}</span>
-    </div>
-  );
-}
+const notes: Record<string, LedgerNote> = {
+  "hkust-climbing-app": {
+    code: "C-01",
+    domain: "Community operations",
+    constraint: "One community does not have one interface.",
+    response:
+      "A joined-up climbing management system spanning member-facing mobile flows, web administration, and backend services.",
+    proofLines: [
+      "Member, organiser, and administration flows are separate concerns.",
+      "The product has to carry information between them without losing context.",
+    ],
+    route: ["Member", "Mobile flow", "Admin console", "Backend"],
+    evidenceState: "current",
+    evidenceRequest: "Sanitised member and organiser flow captures, paired with a simple system-boundary diagram.",
+  },
+  "ocr-mcp": {
+    code: "C-02",
+    domain: "Local AI tooling",
+    constraint: "OCR is not one model, one document, or one correct answer.",
+    response:
+      "A local model-comparison and routing workflow that makes OCR choices inspectable instead of treating them as a black box.",
+    proofLines: [
+      "Inputs can be evaluated across multiple local OCR / vision-language approaches.",
+      "Routing and benchmarking are part of the tool—not an afterthought after a chat response.",
+    ],
+    route: ["Document", "Candidate models", "Benchmark", "Task route", "OCR result"],
+    evidenceState: "current",
+    evidenceRequest: "A reproducible comparison run, a named input set, and the routing decision for one real document.",
+  },
+  stm32: {
+    code: "C-03",
+    domain: "Embedded systems",
+    constraint: "A physical device still needs software that behaves predictably.",
+    response:
+      "STM32 firmware in C that joins physical input, device logic, and output behavior at the hardware boundary.",
+    proofLines: [
+      "The work involves C modules and the handoff between physical hardware and firmware behavior.",
+      "Debugging is constrained by the device, not only by what appears in a browser console.",
+    ],
+    route: ["Physical input", "STM32", "C firmware", "Device output"],
+    evidenceState: "requested",
+    evidenceRequest: "A labelled board image, a signal-path sketch, and one C-module excerpt tied to observed device behavior.",
+  },
+  "is-it-ai-image": {
+    code: "C-04",
+    domain: "Computer vision",
+    constraint: "A classifier can look certain and still be wrong.",
+    response:
+      "A CNN-based experiment that turns an image into a real-versus-AI classification while keeping the evaluation question visible.",
+    proofLines: [
+      "The project includes a trained classifier experiment and model artifacts.",
+      "The public case study will treat provenance, false positives, and evaluation limits as part of the work.",
+    ],
+    route: ["Image", "Preprocess", "CNN", "Classification", "Evaluate"],
+    evidenceState: "requested",
+    evidenceRequest: "The existing local CNN project visual, dataset provenance, and a small false-positive / failure-case table.",
+  },
+  "hkust-climb-soc-web": {
+    code: "C-05",
+    domain: "Public frontend",
+    constraint: "A community needs a public face that people can actually navigate.",
+    response:
+      "A responsive Next.js website that turns organisation information into an understandable public interface.",
+    proofLines: [
+      "The project is a real organisation-facing frontend rather than an isolated visual exercise.",
+      "Responsive information design and ownership boundaries are both part of the final case study.",
+    ],
+    route: ["Community need", "Content structure", "Responsive UI", "Public page"],
+    evidenceState: "requested",
+    evidenceRequest: "A public desktop/mobile capture, a content map, and a one-sentence ownership note.",
+  },
+  perihel: {
+    code: "C-06",
+    domain: "Local-first product",
+    constraint: "A useful thought should not disappear because it arrived at the wrong moment.",
+    response:
+      "A local-first desktop companion for capturing fleeting intentions and returning them when they become actionable.",
+    proofLines: [
+      "The product comes from a real personal workflow rather than a portfolio prompt.",
+      "Its public evidence will be sanitised so the system can be shown without exposing private records.",
+    ],
+    route: ["Fleeting thought", "Capture", "Local record", "Reminder", "Return"],
+    evidenceState: "requested",
+    evidenceRequest: "A sanitised capture-to-return sequence that demonstrates the local-first reminder loop without exposing a private record.",
+  },
+};
 
-function ProjectCard({ project, featured = false }: { project: Project; featured?: boolean }) {
+function CaseEntry({ project, note }: { project: Project; note: LedgerNote }) {
   return (
-    <article className={`project-card ${featured ? "project-card-featured" : ""}`}>
-      <div className="project-card-topline">
-        <span className="project-number">{project.number}</span>
-        <span className="project-discipline">{project.discipline}</span>
+    <article className={`case-entry case-${project.id} evidence-${note.evidenceState}`} id={project.id}>
+      <div className="case-stamp">
+        <span>{note.code}</span>
+        <span>{note.domain}</span>
       </div>
 
-      <ProjectDiagram project={project} />
+      <div className="case-intro">
+        <p className="case-name">{project.title}</p>
+        <h2>{note.constraint}</h2>
+      </div>
 
-      <div className="project-card-content">
-        <h3>{project.title}</h3>
-        <p>{project.summary}</p>
-
-        <div className="project-stack" aria-label={`${project.title} technology focus`}>
-          {project.stack.map((item) => (
-            <span key={item}>{item}</span>
-          ))}
+      <div className="case-body">
+        <div className="case-block response-block">
+          <span className="block-label">Response</span>
+          <p>{note.response}</p>
         </div>
 
-        <details className="evidence-details">
+        <div className="case-block route-block" aria-label={`${project.title} system route`}>
+          <span className="block-label">Working route</span>
+          <ol>
+            {note.route.map((step, index) => (
+              <li key={step}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{step}</strong>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <details className="case-evidence">
           <summary>
-            <span>Evidence and scope</span>
-            <ChevronRight size={16} strokeWidth={2.2} />
+            <span><Plus size={15} /> {note.evidenceState === "current" ? "Read the current evidence" : "Evidence request before launch"}</span>
+            <span className="summary-hint">{note.evidenceState === "current" ? "Source notes" : "Named proof needed"}</span>
           </summary>
           <div>
-            <p>
-              <strong>Evidence:</strong> {project.evidence}
-            </p>
-            <p>
-              <strong>Scope note:</strong> {project.limitation}
-            </p>
+            <p className="evidence-copy">{project.evidence}</p>
+            <ul>
+              {note.proofLines.map((line) => <li key={line}>{line}</li>)}
+            </ul>
+            <p className="evidence-request-text"><strong>Next proof:</strong> {note.evidenceRequest}</p>
           </div>
         </details>
+
+        <div className="case-limit">
+          <span className="block-label">Limit</span>
+          <p>{project.limitation}</p>
+        </div>
       </div>
     </article>
   );
 }
 
 export default function Home() {
-  const [firstProject, ...remainingProjects] = projects;
+  const ledgerCases = projects.filter((project) => project.id in notes);
+
+  useEffect(() => {
+    document.title = "Toto Lai — Constraint Ledger";
+  }, []);
 
   return (
-    <div className="portfolio-shell">
-      <aside className="side-rail">
-        <a className="rail-mark" href="#top" aria-label="Back to top">
+    <div className="ledger-shell">
+      <a className="skip-link" href="#ledger-content">Skip to portfolio records</a>
+      <header className="ledger-header">
+        <a className="identity" href="#top" aria-label="Toto Lai Constraint Ledger">
           <img src={markImage} alt="" />
-          <span>TL / FIELD NOTES</span>
+          <span>Toto Lai / Constraint Ledger</span>
         </a>
-
-        <div className="rail-context">
-          <span className="eyebrow">Normal portfolio</span>
-          <p>Software systems, examined clearly.</p>
+        <div className="header-status">
+          <span>Normal portfolio</span>
+          <span className="header-dot" />
+          <span>06 active records</span>
         </div>
+        <a className="header-contact" href="mailto:tototofu0601@gmail.com">Write to me <ArrowUpRight size={15} /></a>
+      </header>
 
-        <nav className="rail-nav" aria-label="Portfolio sections">
-          <a href="#work"><span>01</span> Work</a>
-          <a href="#practice"><span>02</span> Practice</a>
-          <a href="#contact"><span>03</span> Contact</a>
-        </nav>
-
-        <div className="rail-footnote">
-          <span className="status-dot" /> Available for a considered conversation.
-        </div>
-      </aside>
-
-      <main id="top" className="portfolio-main">
-        <header className="mobile-header">
-          <a className="rail-mark" href="#top" aria-label="Back to top">
-            <img src={markImage} alt="" />
-            <span>TL / FIELD NOTES</span>
-          </a>
-          <a href="#contact" className="mobile-contact">Contact <ArrowUpRight size={15} /></a>
-        </header>
-
-        <section className="hero-section" aria-labelledby="hero-title">
-          <div className="hero-copy">
-            <div className="hero-kicker">
-              <span className="eyebrow">Toto Lai Man To</span>
-              <span className="hero-rule" />
-              <span>Hong Kong</span>
-            </div>
-            <h1 id="hero-title">
-              Software systems
-              <em> that hold together.</em>
+      <main id="ledger-content">
+        <section className="opening" aria-labelledby="opening-title">
+          <div className="opening-side">
+            <span>Ledger / 00</span>
+            <span>Hong Kong</span>
+            <span>2026</span>
+          </div>
+          <div className="opening-copy">
+            <p className="opening-prefix">A working premise / 01</p>
+            <h1 id="opening-title">
+              The useful work<br />
+              starts where a<br />
+              handoff can<br />
+              <em>fail.</em>
             </h1>
-            <p className="hero-lede">
-              I build across full-stack products, Python AI tooling, embedded C,
-              and applied machine learning—always starting with the constraint,
-              then building until the details hold.
-            </p>
-            <div className="hero-actions">
-              <a href="#work" className="button button-primary">Read selected work <ArrowDownRight size={18} /></a>
-              <a href="https://github.com/tototofu123" target="_blank" rel="noreferrer" className="button button-quiet">GitHub <ArrowUpRight size={16} /></a>
+            <div className="opening-note">
+              <p>
+                People, models, hardware, and ideas lose context at different
+                boundaries. These six records show the systems I built to make a
+                handoff survive—and the evidence still needed when it does not.
+              </p>
+              <a href="#hkust-climbing-app">Open record C-01 <ArrowDown size={17} /></a>
             </div>
           </div>
-          <figure className="hero-image-wrap">
-            <img src={heroImage} alt="Editorial technical field notes with circuit and hardware details." />
-            <figcaption>
-              <CircleDot size={14} />
-              <span>Engineering notes / 2026</span>
-            </figcaption>
-          </figure>
-        </section>
-
-        <section className="proof-strip" aria-label="Portfolio capabilities">
-          <div><Cpu size={17} /><span>Embedded + C</span></div>
-          <div><TerminalSquare size={17} /><span>Python + AI tooling</span></div>
-          <div><Braces size={17} /><span>Full-stack products</span></div>
-          <div><Code2 size={17} /><span>Computer vision</span></div>
-        </section>
-
-        <section id="work" className="work-section" aria-labelledby="work-title">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">Selected work / six systems</span>
-              <h2 id="work-title">Different constraints.<br /><em>One way of working.</em></h2>
-            </div>
-            <p>
-              Each project is here for a different capability. The detail panels make
-              scope and evidence explicit instead of hiding it behind polish.
-            </p>
-          </div>
-
-          <div className="project-list">
-            <ProjectCard project={firstProject} featured />
-            <div className="project-grid">
-              {remainingProjects.map((project) => <ProjectCard key={project.id} project={project} />)}
-            </div>
+          <div className="opening-index" aria-label="Ledger contents">
+            <span>Contents</span>
+            <ol>
+              <li><span>C-01</span> Community operations</li>
+              <li><span>C-02</span> Local AI tooling</li>
+              <li><span>C-03—06</span> Hardware, vision, web, local-first</li>
+            </ol>
           </div>
         </section>
 
-        <section id="practice" className="practice-section" aria-labelledby="practice-title">
-          <div className="practice-image-wrap">
-            <img src={spectrumImage} alt="Editorial illustration connecting hardware, computer vision, and local transit systems." />
-            <span className="image-caption">A working range, not a collection of buzzwords.</span>
-          </div>
-          <div className="practice-copy">
-            <span className="eyebrow">Working practice</span>
-            <h2 id="practice-title">Make the decision<br /><em>visible.</em></h2>
-            <p>
-              I care about the part between idea and implementation: what a user needs,
-              what the system can realistically do, what fails, and what should be made
-              clear before anything is shipped.
-            </p>
-            <dl className="practice-list">
-              <div><dt>Start with</dt><dd>The user, physical, or data constraint.</dd></div>
-              <div><dt>Build through</dt><dd>A small system with explicit trade-offs.</dd></div>
-              <div><dt>Finish with</dt><dd>Evidence, limits, and a useful next step.</dd></div>
-            </dl>
-          </div>
+        <section className="ledger-intent" aria-label="Portfolio intent">
+          <p>THE UNIT OF WORK IS NOT A SCREEN. IT IS A CONSTRAINT, A RESPONSE, AND A RESULT THAT A PERSON CAN ACTUALLY USE.</p>
         </section>
 
-        <section id="contact" className="contact-section" aria-labelledby="contact-title">
-          <span className="eyebrow">Next note</span>
-          <h2 id="contact-title">Have a system worth<br /><em>thinking through?</em></h2>
-          <p>I’m based in Hong Kong and open to conversations about software, product, and applied AI work.</p>
-          <div className="contact-links">
-            <a href="mailto:tototofu0601@gmail.com"><Mail size={18} /> tototofu0601@gmail.com</a>
-            <a href="https://github.com/tototofu123" target="_blank" rel="noreferrer"><Github size={18} /> github.com/tototofu123</a>
-            <span><MapPin size={18} /> Hong Kong</span>
+        <section className="ledger-records" aria-labelledby="records-title">
+          <div className="records-heading">
+            <span className="section-label">Active records</span>
+            <h2 id="records-title">Six systems<br /><em>on file.</em></h2>
+            <p>The visual form follows the work. No decorative technical diagrams are used here—only system relationships that the project actually contains.</p>
           </div>
+
+          {ledgerCases.map((project) => <CaseEntry key={project.id} project={project} note={notes[project.id]} />)}
         </section>
 
-        <footer className="site-footer">
-          <span>© 2026 Toto Lai Man To</span>
-          <span>Normal portfolio / Showcase in development</span>
-        </footer>
+        <section className="ledger-close" aria-labelledby="close-title">
+          <span className="section-label">Close the ledger</span>
+          <h2 id="close-title">The work changes.<br />The pattern<br /><em>does not.</em></h2>
+          <p>
+            Sometimes the constraint is a member workflow, a physical device, a model
+            decision, a public interface, or a thought that needs to return. The work is
+            making the relationship between them hold.
+          </p>
+          <div className="close-links">
+            <a href="mailto:tototofu0601@gmail.com"><Mail size={16} /> Start a conversation</a>
+            <a href="https://github.com/tototofu123" target="_blank" rel="noreferrer"><Github size={16} /> Inspect the repositories</a>
+          </div>
+        </section>
       </main>
+
+      <footer className="ledger-footer">
+        <span>© 2026 Toto Lai Man To</span>
+        <a href="/showcase">Open System Viewer <ArrowUpRight size={15} /></a>
+        <a href="https://github.com/tototofu123" target="_blank" rel="noreferrer"><Github size={15} /> GitHub</a>
+        <a href="mailto:tototofu0601@gmail.com"><Mail size={15} /> tototofu0601@gmail.com</a>
+        <span>All six records active <MoveRight size={15} /></span>
+      </footer>
     </div>
   );
 }
