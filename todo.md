@@ -1,5 +1,9 @@
 # Portfolio Duo — Working Checklist
 
+- [x] Replace the long first-pass project reading sequence with a compact, infinite project carousel.
+- [x] Add a separately styled infinite skills carousel with a distinct interaction model.
+- [x] Keep individual project evidence reachable by keyboard and without requiring endless scrolling.
+- [x] Verify looping behavior, reduced-motion handling, mobile controls, and carousel accessibility.
 - [x] Inventory local screenshots, hardware photos, and visual artifacts for all six selected projects.
 - [x] Create only the missing project-specific visual compositions, preserving the evidence-first Constraint Ledger approach.
 - [x] Integrate visual media with useful alt text and static fallbacks across both portfolio routes.
