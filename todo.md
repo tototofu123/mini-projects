@@ -1,5 +1,10 @@
 # Portfolio Duo — Working Checklist
 
+- [x] Replace the project-led opening with Toto’s personal professional introduction and immediate contact path.
+- [x] Add a concise About, current focus, education, and working-principles section that does not frame Toto as a climber identity.
+- [x] Define the personal-first normal-route hierarchy: introduction, about, areas of practice, selected work, current focus and education, then contact.
+- [x] Keep the System Viewer as the dedicated project showcase route.
+- [x] Verify the normal route reads as a personal portfolio on desktop and mobile.
 - [x] Replace the long first-pass project reading sequence with a compact, infinite project carousel.
 - [x] Add a separately styled infinite skills carousel with a distinct interaction model.
 - [x] Keep individual project evidence reachable by keyboard and without requiring endless scrolling.

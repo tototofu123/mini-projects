@@ -135,28 +135,44 @@ export default function Home() {
 
   return (
     <div className="compact-shell">
-      <a className="skip-link" href="#project-carousel">Skip to project carousel</a>
+      <a className="skip-link" href="#about">Skip to introduction</a>
       <header className="compact-header">
-        <a className="identity" href="#top" aria-label="Toto Lai Constraint Ledger"><img src={markImage} alt="" /><span>Toto Lai / Constraint Ledger</span></a>
-        <p>06 project records / live selection</p>
+        <a className="identity" href="#top" aria-label="Toto Lai personal portfolio"><img src={markImage} alt="" /><span>Toto Lai / Personal File</span></a>
+        <nav className="portfolio-nav" aria-label="Portfolio sections"><a href="#about">Operating note</a><a href="#selected-work">Evidence</a><a href="#contact">Contact</a></nav>
         <a className="header-contact" href="mailto:tototofu0601@gmail.com">Write to me <ArrowUpRight size={15} /></a>
       </header>
 
       <main>
-        <section className="compact-opening" aria-labelledby="opening-title">
+        <section className="compact-opening personal-opening" aria-labelledby="opening-title">
           <div className="compact-opening-marker">Ledger / 00<br />Hong Kong<br />2026</div>
           <div>
-            <p className="opening-prefix">A working premise / 01</p>
-            <h1 id="opening-title">Useful work starts<br />where a handoff can<br /><em>fail.</em></h1>
-            <p className="compact-opening-copy">Six systems, one at a time. Each record names the constraint first, then lets you inspect the response, proof, and limit when you want it.</p>
+            <p className="opening-prefix">Lai Man To / Toto / Software builder</p>
+            <h1 id="opening-title">When a system<br />can lose a person,<br /><em>I build the handoff.</em></h1>
+            <p className="compact-opening-copy">I am a software builder based in Hong Kong. I work across AI workflows, full-stack systems, hardware, and interactive web experiences—usually where an idea, decision, or person could otherwise lose context.</p>
+            <div className="personal-opening-actions"><a href="#selected-work">View selected work <ArrowRight size={16} /></a><a href="mailto:tototofu0601@gmail.com">Get in touch <ArrowUpRight size={16} /></a></div>
           </div>
-          <div className="compact-opening-count"><span>Active selection</span><strong>{activeNote.code}</strong><p>{activeNote.domain}</p></div>
+          <div className="compact-opening-count"><span>Currently</span><strong>Building</strong><p>Useful products, AI-assisted workflows, and a small number of ideas worth finishing.</p><span className="education-chip">BEng Computer Engineering & AI / HKUST</span></div>
         </section>
 
-        <section className="project-carousel-section" id="project-carousel" aria-labelledby="carousel-title">
+        <section className="personal-intro" id="about" aria-labelledby="about-title">
+          <div className="personal-intro-label"><span className="section-label">Operating note / 01</span><p>Software builder<br />Hong Kong</p></div>
+          <div className="personal-intro-copy"><h2 id="about-title">The point is not<br />a demo. It is a<br /><em>return path.</em></h2><p>I am interested in useful systems: products that solve an actual problem, workflows that reduce friction, and interfaces that make technology easier to use. I like working across the full path—thinking through the product, building the software, shaping the interface, and improving it from feedback.</p><blockquote>“I want to make technology that someone can use again—not just a demo that exists once.”</blockquote></div>
+          <div className="personal-intro-side"><span>Current boundaries</span><p>People → systems<br />Inputs → decisions<br />Ideas → useful action</p></div>
+        </section>
+
+        <section className="practice-section" aria-labelledby="practice-title">
+          <div className="practice-heading"><span className="section-label">Boundaries I work across / 02</span><h2 id="practice-title">Three places<br />a handoff can<br /><em>break.</em></h2></div>
+          <div className="practice-list">
+            <article><span>01 / People → system</span><h3>Someone has to understand the tool.</h3><p>Applications and systems for real groups and real workflows, shaped around whether people can understand and return to them.</p></article>
+            <article><span>02 / Input → decision</span><h3>A model answer needs a visible route.</h3><p>Local AI, model workflows, reusable skills, and tooling that makes research, planning, and development more reliable.</p></article>
+            <article><span>03 / Interface → action</span><h3>A screen should lead somewhere.</h3><p>Websites, interfaces, and creative technology where visual detail and motion serve a stronger product structure.</p></article>
+          </div>
+        </section>
+
+        <section className="project-carousel-section" id="selected-work" aria-labelledby="carousel-title">
           <div className="carousel-heading">
-            <div><span className="section-label">Project navigator</span><h2 id="carousel-title">Six systems.<br /><em>One loop.</em></h2></div>
-            <p>Arrow keys, the controls, or the numbered records move through the set. The loop pauses whenever you ask it to.</p>
+            <div><span className="section-label">Evidence ledger / 03</span><h2 id="carousel-title">Six constraints.<br /><em>Named responses.</em></h2></div>
+            <p>These records support the personal story above. Use the controls, arrow keys, or numbered entries to inspect the response, proof, and limit of one system at a time.</p>
           </div>
 
           <div className="project-carousel" aria-roledescription="carousel" aria-label="Six project records" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)}>
@@ -172,8 +188,9 @@ export default function Home() {
               <div className="record-chrome"><span>{activeNote.code} / {activeNote.domain}</span><span>{String(activeIndex + 1).padStart(2, "0")} / {String(records.length).padStart(2, "0")}</span></div>
               <div className="record-content">
                 <div className="record-copy"><p className="record-title">{activeProject.title}</p><h3>{activeNote.constraint}</h3><p className="record-summary">{activeProject.summary}</p><ul className="record-stack">{activeProject.stack.map((item) => <li key={item}>{item}</li>)}</ul></div>
-                <figure className="record-visual"><img src={activeNote.visual} alt={activeNote.visualAlt} /><figcaption>Project visual companion / evidence-led, not a product screenshot</figcaption></figure>
+                <figure className="record-visual"><img src={activeNote.visual} alt={activeNote.visualAlt} /><figcaption>Inspectable context / project visual companion, not a product screenshot</figcaption></figure>
               </div>
+              <div className="visible-ledger-states" aria-label={`${activeProject.title} response, proof, and limit`}><div><span>Response</span><p>{activeNote.response}</p></div><div><span>Proof</span><p>{activeProject.evidence}</p></div><div><span>Limit</span><p>{activeProject.limitation}</p></div></div>
               <ProjectEvidence project={activeProject} note={activeNote} />
               <div className="carousel-controls">
                 <button onClick={() => goTo(activeIndex - 1)} aria-label="Previous project"><ArrowLeft size={18} /> Previous</button>
@@ -194,9 +211,14 @@ export default function Home() {
           <p className="sr-only">Skills include {skills.join(", ")}.</p>
         </section>
 
-        <section className="compact-close" aria-labelledby="close-title">
+        <section className="personal-now" aria-labelledby="now-title">
+          <div><span className="section-label">Current file / 04</span><h2 id="now-title">Fewer ideas.<br />More reasons to<br /><em>come back.</em></h2></div>
+          <div className="now-detail"><p>I am focused on practical software, AI-assisted workflows, and making my work easier to understand. I am studying Computer Engineering and AI at HKUST.</p><dl><div><dt>Based in</dt><dd>Hong Kong</dd></div><div><dt>Learning through</dt><dd>Building, testing, and iteration</dd></div><div><dt>Looking for</dt><dd>Useful product and software problems</dd></div></dl></div>
+        </section>
+
+        <section className="compact-close" id="contact" aria-labelledby="close-title">
           <div><span className="section-label">Close the ledger</span><h2 id="close-title">The work changes.<br />The pattern<br /><em>does not.</em></h2></div>
-          <p>Sometimes the boundary is a member workflow, a physical device, a model decision, a public interface, or a thought that needs to return. The work is making the relationship hold.</p>
+          <p>If you are working on useful software, AI tools, automation, community products, or interactive web experiences, I would be glad to connect.</p>
           <div className="close-links"><a href="mailto:tototofu0601@gmail.com"><Mail size={16} /> Start a conversation</a><a href="https://github.com/tototofu123" target="_blank" rel="noreferrer"><Github size={16} /> Inspect repositories</a><a href="/showcase">Open System Viewer <ArrowUpRight size={16} /></a></div>
         </section>
       </main>
