@@ -16,6 +16,8 @@ type Exhibit = {
   proof: string;
   limit: string;
   detail: string;
+  visual?: string;
+  visualAlt?: string;
 };
 
 const artifactNames: Record<string, string> = {
@@ -38,6 +40,8 @@ const exhibits: Exhibit[] = [
     proof: "Member-facing mobile flows, web administration, and backend services belong to the same product response.",
     limit: "Public screens must be sanitised and Toto’s personal contribution stated precisely.",
     detail: "The interesting part is not a screen. It is the connection between the people and the operational system behind it.",
+    visual: "/manus-storage/hkust-climbing-app-handoff_ae53b31a.jpg",
+    visualAlt: "Editorial systems composition showing a mobile device, organiser board, and backend module linked by blue routes.",
   },
   {
     code: "02",
@@ -49,6 +53,8 @@ const exhibits: Exhibit[] = [
     proof: "The local workflow combines model comparison, benchmarking, routing, and reproducible tool use.",
     limit: "Comparisons need a named dataset, environment, and an honest account of where they stop generalising.",
     detail: "This exhibit is about the choice before the answer: which system should handle this document, and why?",
+    visual: "/manus-storage/ocr-mcp-decision-surface_8c56e67c.jpg",
+    visualAlt: "Editorial visual of documents and translucent routing overlays arranged as an OCR comparison workbench.",
   },
   {
     code: "03",
@@ -60,6 +66,8 @@ const exhibits: Exhibit[] = [
     proof: "The project connects firmware modules, physical behavior, and hardware-software debugging.",
     limit: "Evidence should show the board, the signal path, and tested behavior without overstating performance.",
     detail: "A constraint cannot be scrolled away here. The system has to meet a physical boundary.",
+    visual: "/manus-storage/stm32-hardware-boundary_b265ee36.jpg",
+    visualAlt: "Editorial macro visual of an unbranded microcontroller board, sensor hardware, jumper wires, and blue signal trace.",
   },
   {
     code: "04",
@@ -71,6 +79,8 @@ const exhibits: Exhibit[] = [
     proof: "A CNN experiment with model artifacts and a visible project demonstration.",
     limit: "Dataset provenance, false positives, and evaluation boundaries belong beside the prediction.",
     detail: "The visual is not a magic detector. The system is a classification experiment with limits worth showing.",
+    visual: "/manus-storage/is-it-ai-image-classification_1415e23f.jpg",
+    visualAlt: "Editorial classification-study composition with natural and synthetic texture samples separated by a blue decision boundary.",
   },
   {
     code: "05",
@@ -82,6 +92,8 @@ const exhibits: Exhibit[] = [
     proof: "A responsive Next.js interface for a real organisation context and its information needs.",
     limit: "The case must distinguish Toto’s work from shared community effort and use approved public media.",
     detail: "The visible page is the outcome of an information problem, not an isolated visual exercise.",
+    visual: "/manus-storage/hkust-climb-soc-public-route_2db75c4e.jpg",
+    visualAlt: "Editorial community visual showing an indoor climbing wall and structured public-information cards with blue guide lines.",
   },
   {
     code: "06",
@@ -93,6 +105,8 @@ const exhibits: Exhibit[] = [
     proof: "A personal workflow turned into a local-first product and an intentional reminder loop.",
     limit: "The public version needs sanitised examples; real personal records must stay local.",
     detail: "Perihel begins with a human failure mode: forgetting something because the timing was wrong.",
+    visual: "/manus-storage/perihel-capture-return_91a0763a.jpg",
+    visualAlt: "Editorial local-first product visual of a note card, desktop device, and time dial connected by blue capture-to-return routes.",
   },
 ];
 
@@ -192,6 +206,12 @@ export default function Showcase() {
             <p>{active.prompt}</p>
           </div>
           <ArtifactCanvas exhibit={active} />
+          {active.visual && (
+            <figure className="showcase-project-visual">
+              <img src={active.visual} alt={active.visualAlt} loading="lazy" />
+              <figcaption>Project visual companion / not a product screenshot</figcaption>
+            </figure>
+          )}
           <p className="stage-detail">{active.detail}</p>
         </section>
 

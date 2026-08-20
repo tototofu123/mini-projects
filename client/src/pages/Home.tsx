@@ -25,6 +25,8 @@ type LedgerNote = {
   route: string[];
   evidenceState: "current" | "requested";
   evidenceRequest: string;
+  visual?: string;
+  visualAlt?: string;
 };
 
 const notes: Record<string, LedgerNote> = {
@@ -41,6 +43,8 @@ const notes: Record<string, LedgerNote> = {
     route: ["Member", "Mobile flow", "Admin console", "Backend"],
     evidenceState: "current",
     evidenceRequest: "Sanitised member and organiser flow captures, paired with a simple system-boundary diagram.",
+    visual: "/manus-storage/hkust-climbing-app-handoff_ae53b31a.jpg",
+    visualAlt: "Editorial systems composition showing a mobile device, organiser board, and backend module linked by blue routes.",
   },
   "ocr-mcp": {
     code: "C-02",
@@ -55,6 +59,8 @@ const notes: Record<string, LedgerNote> = {
     route: ["Document", "Candidate models", "Benchmark", "Task route", "OCR result"],
     evidenceState: "current",
     evidenceRequest: "A reproducible comparison run, a named input set, and the routing decision for one real document.",
+    visual: "/manus-storage/ocr-mcp-decision-surface_8c56e67c.jpg",
+    visualAlt: "Editorial visual of documents and translucent routing overlays arranged as an OCR comparison workbench.",
   },
   stm32: {
     code: "C-03",
@@ -69,6 +75,8 @@ const notes: Record<string, LedgerNote> = {
     route: ["Physical input", "STM32", "C firmware", "Device output"],
     evidenceState: "requested",
     evidenceRequest: "A labelled board image, a signal-path sketch, and one C-module excerpt tied to observed device behavior.",
+    visual: "/manus-storage/stm32-hardware-boundary_b265ee36.jpg",
+    visualAlt: "Editorial macro visual of an unbranded microcontroller board, sensor hardware, jumper wires, and blue signal trace.",
   },
   "is-it-ai-image": {
     code: "C-04",
@@ -83,6 +91,8 @@ const notes: Record<string, LedgerNote> = {
     route: ["Image", "Preprocess", "CNN", "Classification", "Evaluate"],
     evidenceState: "requested",
     evidenceRequest: "The existing local CNN project visual, dataset provenance, and a small false-positive / failure-case table.",
+    visual: "/manus-storage/is-it-ai-image-classification_1415e23f.jpg",
+    visualAlt: "Editorial classification-study composition with natural and synthetic texture samples separated by a blue decision boundary.",
   },
   "hkust-climb-soc-web": {
     code: "C-05",
@@ -97,6 +107,8 @@ const notes: Record<string, LedgerNote> = {
     route: ["Community need", "Content structure", "Responsive UI", "Public page"],
     evidenceState: "requested",
     evidenceRequest: "A public desktop/mobile capture, a content map, and a one-sentence ownership note.",
+    visual: "/manus-storage/hkust-climb-soc-public-route_2db75c4e.jpg",
+    visualAlt: "Editorial community visual showing an indoor climbing wall and structured public-information cards with blue guide lines.",
   },
   perihel: {
     code: "C-06",
@@ -111,6 +123,8 @@ const notes: Record<string, LedgerNote> = {
     route: ["Fleeting thought", "Capture", "Local record", "Reminder", "Return"],
     evidenceState: "requested",
     evidenceRequest: "A sanitised capture-to-return sequence that demonstrates the local-first reminder loop without exposing a private record.",
+    visual: "/manus-storage/perihel-capture-return_91a0763a.jpg",
+    visualAlt: "Editorial local-first product visual of a note card, desktop device, and time dial connected by blue capture-to-return routes.",
   },
 };
 
@@ -143,6 +157,12 @@ function CaseEntry({ project, note }: { project: Project; note: LedgerNote }) {
               </li>
             ))}
           </ol>
+          {note.visual && (
+            <figure className="case-visual">
+              <img src={note.visual} alt={note.visualAlt} loading="lazy" />
+              <figcaption>Visual companion — replace with a source capture when one can be published.</figcaption>
+            </figure>
+          )}
         </div>
 
         <details className="case-evidence">

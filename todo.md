@@ -1,5 +1,9 @@
 # Portfolio Duo — Working Checklist
 
+- [x] Inventory local screenshots, hardware photos, and visual artifacts for all six selected projects.
+- [x] Create only the missing project-specific visual compositions, preserving the evidence-first Constraint Ledger approach.
+- [x] Integrate visual media with useful alt text and static fallbacks across both portfolio routes.
+- [x] Re-check visual balance, mobile treatment, contrast, and media performance before checkpointing.
 - [x] Complete Constraint Ledger records C-03 through C-06 with real constraints, responses, proof, and limits.
 - [x] Build a separate interactive Showcase route that differs structurally and emotionally from the normal portfolio.
 - [x] Verify both routes in a browser on desktop and mobile, including keyboard navigation and reduced-motion behavior.
