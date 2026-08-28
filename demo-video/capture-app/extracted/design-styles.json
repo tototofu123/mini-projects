@@ -1,0 +1,79 @@
+{
+  "typography": [],
+  "spacing": {
+    "observed": [
+      6,
+      8,
+      12
+    ],
+    "baseUnit": 4
+  },
+  "radius": [],
+  "shadows": [
+    {
+      "value": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(15, 27, 45) 0px 4px 0px 0px",
+      "count": 1
+    }
+  ],
+  "buttons": [
+    {
+      "label": "Reset",
+      "background": "#FFFFFF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#0F1B2D",
+      "padding": "8px 24px",
+      "borderRadius": "9999px",
+      "border": "2px solid rgb(15, 27, 45)",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(15, 27, 45) 0px 4px 0px 0px",
+      "fontSize": "13px",
+      "fontWeight": "800",
+      "height": "39.5px"
+    }
+  ],
+  "cards": [],
+  "nav": null,
+  "chips": [
+    {
+      "label": "0",
+      "background": "#FFFFFF",
+      "color": "#000000",
+      "padding": "6px 12px",
+      "borderRadius": "9999px",
+      "border": "2px solid rgb(15, 27, 45)",
+      "boxShadow": "none",
+      "fontSize": "13px",
+      "fontWeight": "800",
+      "height": "35.5px"
+    }
+  ],
+  "statCells": [],
+  "tabs": [
+    {
+      "label": "0:26",
+      "background": "#0F1B2D",
+      "color": "#FFFFFF",
+      "padding": "6px 12px",
+      "borderRadius": "8px",
+      "border": "0px solid rgb(229, 231, 235)",
+      "boxShadow": "none",
+      "fontSize": "14px",
+      "fontWeight": "700",
+      "height": "33px"
+    },
+    {
+      "label": "0",
+      "background": "#FFFFFF",
+      "color": "#000000",
+      "padding": "6px 12px",
+      "borderRadius": "9999px",
+      "border": "2px solid rgb(15, 27, 45)",
+      "boxShadow": "none",
+      "fontSize": "13px",
+      "fontWeight": "800",
+      "height": "35.5px"
+    }
+  ],
+  "backgrounds": [],
+  "glass": []
+}

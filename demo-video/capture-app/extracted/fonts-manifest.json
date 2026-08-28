@@ -1,0 +1,71 @@
+{
+  "files": [
+    {
+      "file": "wXK0E3kTposypRydzVT08TS3JnAmtdiayqpv.ttf",
+      "family": "Baloo 2",
+      "rawFamily": "Baloo 2 ExtraBold",
+      "subfamily": "Regular",
+      "postscript": "Baloo2-ExtraBold",
+      "weight": 800,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "XRXI3I6Li01BKofiOc5wtlZ2di8HDDsmRTM.ttf",
+      "family": "Nunito",
+      "rawFamily": "Nunito ExtraBold",
+      "subfamily": "Regular",
+      "postscript": "Nunito-ExtraBold",
+      "weight": 800,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "XRXI3I6Li01BKofiOc5wtlZ2di8HDFwmRTM.ttf",
+      "family": "Nunito",
+      "rawFamily": "Nunito",
+      "subfamily": "Bold",
+      "postscript": "Nunito-Bold",
+      "weight": 700,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    }
+  ],
+  "families": [
+    {
+      "family": "Baloo 2",
+      "weights": [
+        800
+      ],
+      "variable": false,
+      "fileCount": 1,
+      "files": [
+        "wXK0E3kTposypRydzVT08TS3JnAmtdiayqpv.ttf"
+      ]
+    },
+    {
+      "family": "Nunito",
+      "weights": [
+        700,
+        800
+      ],
+      "variable": false,
+      "fileCount": 2,
+      "files": [
+        "XRXI3I6Li01BKofiOc5wtlZ2di8HDDsmRTM.ttf",
+        "XRXI3I6Li01BKofiOc5wtlZ2di8HDFwmRTM.ttf"
+      ]
+    }
+  ],
+  "unidentified": [],
+  "meta": {
+    "generatedAt": "2026-08-28T15:53:32.585Z",
+    "tool": "fontkit"
+  }
+}

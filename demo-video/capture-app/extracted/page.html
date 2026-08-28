@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<style>
+  *{font-family:Nunito;touch-action:none;user-select:none}
+  .baloo{font-family:'Baloo 2'}
+  .tablet{width:min(1180px,92vw);height:min(820px,78vh);position:relative;overflow:hidden;background:#8ECAE6;border:3px solid #0F1B2D;border-radius:32px;box-shadow:0 8px 0 #0F1B2D;display:flex;flex-direction:column}
+  .shape{position:absolute;border:1px solid #333;will-change:transform}
+  .circle{border-radius:999px}
+  .tri{clip-path:polygon(50% 0%,0% 100%,100% 100%)}
+  .square{border-radius:8px}
+</style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.relative{position:relative}.flex{display:flex}.hidden{display:none}.h-7{height:1.75rem}.h-\[64px\]{height:64px}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-7{width:1.75rem}.w-full{width:100%}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.overflow-hidden{overflow:hidden}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.border{border-width:1px}.border-2{border-width:2px}.border-\[\#0F1B2D\]{--tw-border-opacity:1;border-color:rgb(15 27 45 / var(--tw-border-opacity, 1))}.border-\[\#999\]{--tw-border-opacity:1;border-color:rgb(153 153 153 / var(--tw-border-opacity, 1))}.bg-\[\#0F1B2D\]{--tw-bg-opacity:1;background-color:rgb(15 27 45 / var(--tw-bg-opacity, 1))}.bg-\[\#8ECAE6\]{--tw-bg-opacity:1;background-color:rgb(142 202 230 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-3{padding:0.75rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.text-\[11px\]{font-size:11px}.text-\[13px\]{font-size:13px}.text-\[14px\]{font-size:14px}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.tabular-nums{--tw-numeric-spacing:tabular-nums;font-variant-numeric:var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)}.text-\[\#0F1B2D\]{--tw-text-opacity:1;color:rgb(15 27 45 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-60{opacity:0.6}.shadow-\[0_4px_0_\#0F1B2D\]{--tw-shadow:0 4px 0 #0F1B2D;--tw-shadow-colored:0 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.active\:translate-y-\[2px\]:active{--tw-translate-y:2px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.active\:shadow-\[0_2px_0_\#0F1B2D\]:active{--tw-shadow:0 2px 0 #0F1B2D;--tw-shadow-colored:0 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}@media (min-width: 640px){.sm\:inline{display:inline}.sm\:gap-3{gap:0.75rem}.sm\:px-3{padding-left:0.75rem;padding-right:0.75rem}.sm\:px-4{padding-left:1rem;padding-right:1rem}.sm\:text-\[13px\]{font-size:13px}}</style>
+<style>@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(assets/fonts/wXK0E3kTposypRydzVT08TS3JnAmtdiayqpv.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(assets/fonts/XRXI3I6Li01BKofiOc5wtlZ2di8HDFwmRTM.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(assets/fonts/XRXI3I6Li01BKofiOc5wtlZ2di8HDDsmRTM.ttf) format('truetype');
+}
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+<div class="tablet" id="tablet">
+  <div class="h-[64px] shrink-0 bg-[#8ECAE6] flex items-center justify-between px-3 sm:px-4 gap-2">
+    <div class="bg-[#0F1B2D] text-white px-3 py-1.5 rounded-lg text-[14px] font-bold tabular-nums" id="timer">0:22</div>
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex items-center gap-1.5">
+        <span class="font-bold text-[11px] sm:text-[13px] hidden sm:inline">Current</span>
+        <div class="bg-white border border-[#999] rounded-lg px-2 sm:px-3 py-1.5 flex items-center gap-2" id="current-pill">
+          <div id="cur-shape" class="w-7 h-7 flex items-center justify-center"><div class="w-full h-full" style="background: rgb(255, 214, 10); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); width: 28px; height: 28px;"></div></div>
+          <span class="font-bold text-[13px]" id="cx">X3</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <span class="font-bold text-[11px] sm:text-[13px] hidden sm:inline">Next</span>
+        <div class="bg-white border border-[#999] rounded-lg px-2 sm:px-3 py-1.5 flex items-center gap-2 opacity-60" id="next-pill">
+          <div id="next-shape" class="w-7 h-7 flex items-center justify-center"><div class="w-full h-full" style="background: rgb(65, 105, 225); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); width: 28px; height: 28px;"></div></div>
+          <span class="font-bold text-[13px]" id="nx">X1</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white border-2 border-[#0F1B2D] rounded-full px-3 py-1.5 font-extrabold text-[13px] tabular-nums" id="score">0</div>
+  </div>
+  <div class="flex-1 relative overflow-hidden" id="board">
+    <svg id="trail" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10"><path id="trail-path" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter:drop-shadow(0 1px 0 #0F1B2D) drop-shadow(0 3px 6px rgba(15,27,45,0.2))"></path></svg>
+  <div data-id="o0" class="shape circle" style="width: 80.3797px; height: 80.3797px; background: rgb(123, 97, 255); left: 545.99px; top: 23.2773px;"></div><div data-id="o1" class="shape tri" style="width: 76.4345px; height: 76.4345px; background: rgb(46, 204, 113); left: 339.457px; top: 44.5284px;"></div><div data-id="o2" class="shape square" style="width: 69.2941px; height: 69.2941px; background: rgb(255, 214, 10); left: 324.823px; top: -47.2958px;"></div><div data-id="o3" class="shape tri" style="width: 84.4654px; height: 84.4654px; background: rgb(255, 214, 10); left: 666.186px; top: -39.012px;"></div><div data-id="o4" class="shape circle" style="width: 85.1461px; height: 85.1461px; background: rgb(255, 107, 0); left: 629.983px; top: 80.7089px;"></div><div data-id="o5" class="shape tri" style="width: 72.9333px; height: 72.9333px; background: rgb(255, 214, 10); left: 890.949px; top: 658.385px;"></div><div data-id="o6" class="shape tri" style="width: 89.9909px; height: 89.9909px; background: rgb(255, 214, 10); left: 989.408px; top: 632.391px;"></div></div>
+</div>
+<div class="flex gap-2 items-center">
+  <button id="reset" class="bg-white text-[#0F1B2D] px-6 py-2 rounded-full font-extrabold text-[13px] border-2 border-[#0F1B2D] shadow-[0_4px_0_#0F1B2D] active:translate-y-[2px] active:shadow-[0_2px_0_#0F1B2D]">Reset</button>
+  <span id="status" class="text-white text-[11px] font-bold">Tap circle • Slice triangle • Double-tap square</span>
+</div>
+<script>
+const board = document.getElementById('board');
+const colors = ['#FF3B30','#4169E1','#2ECC71','#FFD60A','#7B61FF','#FF6B00'];
+const colorNames = {'#FF3B30':'red','#4169E1':'blue','#2ECC71':'green','#FFD60A':'yellow','#7B61FF':'purple','#FF6B00':'orange'};
+const shapes = ['circle','tri','square'];
+let objects = [];
+let nextId=0;
+let score=0;
+let state = {current:null, next:null, logs:[], timer:30};
+let active=null;
+let timerInt=null, spawnInt=null;
+let lastTap = {id:null, t:0};
+
+function rand(a){ return a[Math.floor(Math.random()*a.length)]; }
+function randomTarget(){
+  return {color: rand(colors), shape: rand(shapes), need: 1+Math.floor(Math.random()*3)};
+}
+function isDifferent(a,b){
+  return a.color!==b.color || a.shape!==b.shape;
+}
+function newRound(){
+  if(!state.current){
+    state.current = randomTarget();
+  } else {
+    state.current = state.next;
+  }
+  let nxt;
+  do { nxt = randomTarget(); } while(!isDifferent(state.current, nxt));
+  state.next = nxt;
+  state.current.done=0;
+  renderPills();
+}
+function shapeToEl(shape, color, w){
+  if(shape==='circle') return `<div class="w-full h-full rounded-full" style="background:${color}"></div>`;
+  if(shape==='tri') return `<div class="w-full h-full" style="background:${color};clip-path:polygon(50% 0%,0% 100%,100% 100%)"></div>`;
+  return `<div class="w-full h-full rounded-[8px]" style="background:${color}"></div>`;
+}
+function renderPills(){
+  const cur = state.current, nxt = state.next;
+  const curEl = document.getElementById('cur-shape');
+  const nxtEl = document.getElementById('next-shape');
+  function setEl(el, target){
+    el.className='w-7 h-7 flex items-center justify-center';
+    el.innerHTML = shapeToEl(target.shape, target.color, 28);
+    // for tri/square need inner div sizing
+    el.firstChild.style.width='28px'; el.firstChild.style.height='28px';
+  }
+  if(cur){ setEl(curEl, cur); document.getElementById('cx').textContent='X'+(cur.need-cur.done); }
+  if(nxt){ setEl(nxtEl, nxt); document.getElementById('nx').textContent='X'+nxt.need; }
+  document.getElementById('score').textContent=score;
+}
+function randomSpeed(){ return 14 + Math.random()*14; }
+function spawnOne(forceTarget=false){
+  const rect=board.getBoundingClientRect();
+  if(!rect.width) return;
+  let type, color;
+  if(forceTarget){
+    type=state.current.shape; color=state.current.color;
+  } else {
+    if(Math.random()<0.32){
+      type=state.current.shape; color=state.current.color;
+    } else { type=rand(shapes); color=rand(colors); }
+  }
+  const w=62 + Math.random()*28;
+  const maxX=Math.max(0, rect.width - w);
+  const x=Math.random()*maxX;
+  const y=rect.height+20;
+  const o={id:'o'+nextId++, x, y, w, type, color, speed:randomSpeed(), done:false, el:null, tapCount:0, lastTap:0};
+  const el=document.createElement('div');
+  el.dataset.id=o.id;
+  el.className='shape '+(type==='circle'?'circle':type==='tri'?'tri':'square');
+  el.style.width=w+'px'; el.style.height=w+'px';
+  el.style.background=color;
+  el.style.left=x+'px'; el.style.top=y+'px';
+  board.appendChild(el);
+  o.el=el;
+  objects.push(o);
+  return o;
+}
+function spawnLoop(){
+  if(objects.filter(o=>!o.done).length >= 7) return;
+  // keep board diverse: ensure at least one tri always visible
+  const tris = objects.filter(o=> !o.done && o.type==='tri');
+  if(tris.length===0){
+    const w=64+Math.random()*24;
+    const rect=board.getBoundingClientRect();
+    const x=Math.random()*Math.max(0, rect.width - w);
+    const y=rect.height+20;
+    const o={id:'o'+nextId++, x, y, w, type:'tri', color:rand(colors), speed:randomSpeed(), done:false, el:null, tapCount:0, lastTap:0};
+    const el=document.createElement('div'); el.dataset.id=o.id; el.className='shape tri'; el.style.width=w+'px'; el.style.height=w+'px'; el.style.background=o.color; el.style.left=x+'px'; el.style.top=y+'px'; board.appendChild(el); o.el=el; objects.push(o);
+    return;
+  }
+  spawnOne();
+  const need = state.current;
+  const targets = objects.filter(o=> !o.done && o.type===need.shape && o.color===need.color);
+  if(targets.length===0 && Math.random()<0.7) spawnOne(true);
+}
+function animate(){
+  const dt=16/1000;
+  for(let i=objects.length-1;i>=0;i--){
+    const o=objects[i];
+    if(o.done) continue;
+    o.y -= o.speed*dt;
+    if(o.el) o.el.style.top=o.y+'px';
+    if(o.y < -110){ if(o.el) o.el.remove(); objects.splice(i,1); }
+  }
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+function initBurst(){
+  // ensure one of each shape visible so tri not missing
+  const must = [{type:'circle',color:rand(colors)},{type:'tri',color:rand(colors)},{type:'square',color:rand(colors)}];
+  must.forEach(m=>{
+    const w=64+Math.random()*22;
+    const rect=board.getBoundingClientRect();
+    const x=Math.random()*Math.max(0, rect.width - w);
+    const y=Math.random()*(board.clientHeight*0.55);
+    const o={id:'o'+nextId++, x, y, w, type:m.type, color:m.color, speed:randomSpeed(), done:false, el:null, tapCount:0, lastTap:0};
+    const el=document.createElement('div');
+    el.dataset.id=o.id; el.className='shape '+(m.type==='circle'?'circle':m.type==='tri'?'tri':'square');
+    el.style.width=w+'px'; el.style.height=w+'px'; el.style.background=m.color; el.style.left=x+'px'; el.style.top=y+'px';
+    board.appendChild(el); o.el=el; objects.push(o);
+  });
+  for(let i=0;i<2;i++){ const o=spawnOne(i<1); if(o){ o.y = Math.random()*(board.clientHeight*0.55); if(o.el) o.el.style.top=o.y+'px'; } }
+}
+function startTimer(){
+  clearInterval(timerInt);
+  timerInt=setInterval(()=>{
+    state.timer--;
+    if(state.timer<0) state.timer=0;
+    document.getElementById('timer').textContent=`0:${String(state.timer).padStart(2,'0')}`;
+    if(state.timer===0){ clearInterval(timerInt); clearInterval(spawnInt); document.getElementById('status').textContent='Time up! Final: '+score; }
+  },1000);
+}
+board.addEventListener('pointerdown', e=>{
+  e.preventDefault();
+  const rect=board.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const y=e.clientY-rect.top;
+  active={startX:x,startY:y,startT:performance.now(),path:[{x,y,t:performance.now(),p:e.pressure||0.5}],pressures:[e.pressure||0.5],hit:null,hitDist:0};
+  let best=null,bestD=1e9;
+  objects.forEach(o=>{
+    if(o.done) return;
+    const cx=o.x+o.w/2, cy=o.y+o.w/2;
+    const d=Math.hypot(x-cx,y-cy);
+    if(d < o.w/2 + 18 && d < bestD){bestD=d; best=o;}
+  });
+  if(best){
+    active.hit=best; active.hitDist=bestD;
+    // feedback pressed
+    best.el.style.transform='scale(0.92)';
+  }
+  const ripple=document.createElement('div');
+  ripple.style.position='absolute'; ripple.style.left=(x-14)+'px'; ripple.style.top=(y-14)+'px';
+  ripple.style.width='28px'; ripple.style.height='28px'; ripple.style.borderRadius='999px'; ripple.style.border='2px solid #0F1B2D'; ripple.style.opacity='0.9'; ripple.style.pointerEvents='none';
+  ripple.style.transition='transform 260ms ease-out, opacity 260ms';
+  board.appendChild(ripple);
+  requestAnimationFrame(()=>{ ripple.style.transform='scale(1.8)'; ripple.style.opacity='0'; });
+  setTimeout(()=>ripple.remove(),300);
+  board.setPointerCapture(e.pointerId);
+});
+let trailPathEl=document.getElementById('trail-path');
+board.addEventListener('pointermove', e=>{
+  if(!active) return;
+  const rect=board.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const y=e.clientY-rect.top;
+  active.path.push({x,y,t:performance.now(),p:e.pressure||0.5});
+  active.pressures.push(e.pressure||0.5);
+  // draw slicing trail (Fruit Ninja style)
+  if(active.path.length>1){
+    let d=`M ${active.path[0].x} ${active.path[0].y}`;
+    for(let i=1;i<active.path.length;i++) d+=` L ${active.path[i].x} ${active.path[i].y}`;
+    trailPathEl.setAttribute('d', d);
+    trailPathEl.style.opacity='0.95';
+  }
+});
+function pathHitsShape(path, shape){
+  // does any segment of path intersect shape rect (expanded by 8px)
+  const rx=shape.x-8, ry=shape.y-8, rw=shape.w+16, rh=shape.w+16;
+  // check if start or end inside rect
+  for(const p of path){ if(p.x>=rx && p.x<=rx+rw && p.y>=ry && p.y<=ry+rh) return true; }
+  // check segment intersection with rect edges
+  for(let i=1;i<path.length;i++){
+    const a=path[i-1], b=path[i];
+    // simple: if segment bbox overlaps rect
+    const minX=Math.min(a.x,b.x), maxX=Math.max(a.x,b.x), minY=Math.min(a.y,b.y), maxY=Math.max(a.y,b.y);
+    if(maxX>=rx && minX<=rx+rw && maxY>=ry && minY<=ry+rh){
+      // quick check: if segment crosses, treat as hit
+      return true;
+    }
+  }
+  return false;
+}
+board.addEventListener('pointerup', e=>{
+  if(!active) return;
+  const rect=board.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const y=e.clientY-rect.top;
+  // clear trail
+  setTimeout(()=>{ if(trailPathEl) trailPathEl.setAttribute('d',''); },280);
+  trailPathEl.style.opacity='0';
+  const pathLen=active.path.reduce((a,pt,i)=> i===0?0:a+Math.hypot(pt.x-active.path[i-1].x,pt.y-active.path[i-1].y),0);
+  const isSwipe=pathLen>36;
+  const dwell=performance.now()-active.startT;
+  let correct=false;
+  let action='';
+  let slicedTri=null;
+  if(isSwipe){
+    // find tri that the swipe path actually crossed (Fruit Ninja)
+    for(const o of objects){
+      if(o.done || o.type!=='tri') continue;
+      if(pathHitsShape(active.path, o)){ slicedTri=o; break; }
+    }
+  }
+  if(active.hit){
+    const o=active.hit;
+    if(o.type==='circle' && !isSwipe){
+      action='tap';
+      if(o.type===state.current.shape && o.color===state.current.color) correct=true;
+    } else if(o.type==='tri' && slicedTri){
+      // sliced tri is the one the blade crossed, not necessarily the down-hit
+      action='slice';
+      // prefer the sliced one as actual target
+      active.hit = slicedTri;
+      if(slicedTri.type===state.current.shape && slicedTri.color===state.current.color) correct=true;
+    } else if(slicedTri && !active.hit){
+      // swipe crossed a tri even if down was miss — count it
+      action='slice';
+      active.hit = slicedTri;
+      if(slicedTri.type===state.current.shape && slicedTri.color===state.current.color) correct=true;
+    } else if(o.type==='square'){
+      // double tap within 400ms on same square
+      const now=performance.now();
+      if(o.lastTap && (now - o.lastTap < 420) && o.tapCount===1){
+        // second tap
+        action='double';
+        o.tapCount=2;
+        if(o.type===state.current.shape && o.color===state.current.color) correct=true;
+        o.lastTap=0;
+      } else {
+        // first tap
+        o.tapCount=1;
+        o.lastTap=now;
+        // visual first tap feedback
+        o.el.style.transform='scale(0.88)';
+        setTimeout(()=>{ if(o.el) o.el.style.transform=''; },120);
+        // show hint
+        const hint=document.createElement('div');
+        hint.textContent='tap again!'; hint.style.position='absolute'; hint.style.left=(o.x+o.w/2-32)+'px'; hint.style.top=(o.y-18)+'px';
+        hint.style.background='white'; hint.style.border='1px solid #0F1B2D'; hint.style.borderRadius='999px'; hint.style.padding='2px 6px'; hint.style.fontSize='10px'; hint.style.fontWeight='800';
+        board.appendChild(hint);
+        setTimeout(()=>hint.remove(),600);
+        // do not clear yet
+        setTimeout(()=>{ if(o.tapCount===1){ o.tapCount=0; } },420);
+        document.getElementById('status').textContent='Tap again quickly!';
+        active=null;
+        return;
+      }
+    }
+  }
+  // log
+  state.logs.push({phase: state.current.shape+'/'+state.current.color, hit: active.hit?.id||'miss', action, correct, t:Math.round(performance.now())});
+  if(correct){
+    const o=active.hit;
+    o.done=true;
+    o.el.style.transition='transform 180ms ease-out, opacity 180ms';
+    o.el.style.transform='scale(1.32)'; o.el.style.opacity='0';
+    const plus=document.createElement('div');
+    plus.textContent='+1'; plus.style.position='absolute'; plus.style.left=(o.x+o.w/2-12)+'px'; plus.style.top=(o.y-6)+'px';
+    plus.style.background='#00D492'; plus.style.color='white'; plus.style.fontWeight='800'; plus.style.fontSize='12px'; plus.style.padding='2px 6px'; plus.style.borderRadius='999px'; plus.style.border='2px solid #0F1B2D';
+    plus.style.transition='transform 380ms ease-out, opacity 380ms';
+    board.appendChild(plus);
+    requestAnimationFrame(()=>{ plus.style.transform='translateY(-32px)'; plus.style.opacity='0'; });
+    setTimeout(()=>plus.remove(),400);
+    setTimeout(()=>{ if(o.el) o.el.remove(); const idx=objects.indexOf(o); if(idx!==-1) objects.splice(idx,1); },180);
+    if(navigator.vibrate) navigator.vibrate(30);
+    score++;
+    state.current.done++;
+    document.getElementById('status').textContent='✓ +1';
+    setTimeout(()=>document.getElementById('status').textContent='Tap circle • Slice tri • Double-tap square',700);
+    if(state.current.done>=state.current.need){
+      newRound();
+      const el=document.createElement('div');
+      el.textContent=`→ ${colorNames[state.current.color]} ${state.current.shape} X${state.current.need}`;
+      el.style.position='absolute'; el.style.left='50%'; el.style.top='50%'; el.style.transform='translate(-50%,-50%)';
+      el.style.background='#FFD60A'; el.style.border='2px solid #0F1B2D'; el.style.borderRadius='999px'; el.style.padding='8px 14px'; el.style.fontWeight='800'; el.style.fontSize='12px';
+      board.appendChild(el);
+      setTimeout(()=>el.remove(),900);
+    }
+  } else {
+    document.getElementById('status').textContent=active.hit ? '✗ Wrong' : 'miss';
+    if(active.hit){
+      active.hit.el.style.transform=''; 
+      active.hit.el.style.transition='transform 80ms';
+      active.hit.el.style.transform='translateX(-5px)';
+      setTimeout(()=>active.hit.el.style.transform='translateX(5px)',90);
+      setTimeout(()=>{ if(active.hit.el) active.hit.el.style.transform=''; },180);
+      if(active.hit.type==='square') active.hit.tapCount=0;
+      else active.hit.el.style.filter='';
+      if(navigator.vibrate) navigator.vibrate([12,28,12]);
+    }
+    setTimeout(()=>document.getElementById('status').textContent='Tap circle • Slice tri • Double-tap square',700);
+  }
+  active=null;
+  renderPills();
+  document.getElementById('score').textContent=score;
+  if(score>=0 && state.timer>0 && state.current.done<state.current.need){
+    // keep targets visible
+    const need = state.current;
+    const has = objects.filter(o=> !o.done && o.type===need.shape && o.color===need.color).length;
+    if(has===0) spawnOne(true);
+  }
+});
+document.getElementById('reset').onclick=()=>{
+  objects.forEach(o=>{ if(o.el) o.el.remove(); });
+  objects=[]; score=0; state={current:null, next:null, logs:[], timer:30};
+  newRound();
+  document.getElementById('score').textContent='0';
+  document.getElementById('status').textContent='Tap circle • Slice tri • Double-tap square';
+  clearInterval(spawnInt); spawnInt=setInterval(spawnLoop, 1200);
+  initBurst(); renderPills(); startTimer();
+};
+// init
+newRound();
+initBurst();
+spawnInt=setInterval(spawnLoop, 1200);
+renderPills();
+startTimer();
+</script>
+
+
+
+</body>
+</html>
