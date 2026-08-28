@@ -40,6 +40,15 @@
   </div>
   <div class="flex-1 relative overflow-hidden" id="board">
     <svg id="trail" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10"><path id="trail-path" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter:drop-shadow(0 1px 0 #0F1B2D) drop-shadow(0 3px 6px rgba(15,27,45,0.2))"/></svg>
+    <div id="gameOver" class="absolute inset-0 bg-[#8ECAE6]/90 backdrop-blur-[2px] hidden flex-col items-center justify-center gap-3 z-20 p-6 text-center">
+      <div class="bg-white border-[3px] border-[#0F1B2D] rounded-[24px] px-8 py-6 shadow-[0_6px_0_#0F1B2D] flex flex-col items-center gap-2 min-w-[320px]">
+        <div class="text-[12px] font-extrabold tracking-[1.5px] text-[#64748B]">TIME UP</div>
+        <div class="baloo text-[42px] font-extrabold leading-none" id="finalScore">Score 0</div>
+        <div class="text-[12px] font-bold text-[#334155]">High score <span id="highScore" class="font-extrabold text-[#0F1B2D]">0</span> <span id="newBadge" class="hidden bg-[#FFD60A] border border-[#0F1B2D] rounded-full px-2 py-0.5 text-[10px] font-extrabold ml-1">NEW!</span></div>
+        <button id="playAgain" class="mt-2 bg-[#FFD60A] border-2 border-[#0F1B2D] rounded-full px-6 py-2.5 font-extrabold text-[14px] shadow-[0_4px_0_#0F1B2D] active:translate-y-[2px] active:shadow-[0_2px_0_#0F1B2D]">Play again</button>
+        <div class="text-[10px] font-bold text-[#94A3B8]">Highest stored in cache & cookie</div>
+      </div>
+    </div>
   </div>
 </div>
 <div class="flex gap-2 items-center">
@@ -57,7 +66,42 @@ let score=0;
 let state = {current:null, next:null, logs:[], timer:30};
 let active=null;
 let timerInt=null, spawnInt=null;
+let gameOver=false;
 let lastTap = {id:null, t:0};
+function getHighScore(){
+  try{
+    const ls = parseInt(localStorage.getItem('splashHighScore')||'0',10);
+    const m = document.cookie.match(/(?:^|; )splashHighScore=([^;]*)/);
+    const ck = m ? parseInt(decodeURIComponent(m[1]),10) : 0;
+    return Math.max(ls,ck,0);
+  }catch(e){ return 0; }
+}
+function setHighScore(v){
+  try{ localStorage.setItem('splashHighScore', String(v)); }catch(e){}
+  try{ document.cookie = `splashHighScore=${encodeURIComponent(v)}; max-age=31536000; path=/`; }catch(e){}
+}
+function showGameOver(){
+  gameOver=true;
+  clearInterval(timerInt); clearInterval(spawnInt);
+  // freeze: keep board as is, no more y updates (animate checks gameOver)
+  const high = getHighScore();
+  const isNew = score > high;
+  if(isNew) setHighScore(score);
+  const finalHigh = isNew ? score : high;
+  document.getElementById('finalScore').textContent = `Score ${score}`;
+  document.getElementById('highScore').textContent = finalHigh;
+  document.getElementById('newBadge').classList.toggle('hidden', !isNew);
+  document.getElementById('gameOver').classList.remove('hidden');
+  document.getElementById('gameOver').classList.add('flex');
+  // freeze bg
+  document.getElementById('board').style.filter='grayscale(0.15) brightness(0.98)';
+}
+function hideGameOver(){
+  gameOver=false;
+  document.getElementById('gameOver').classList.add('hidden');
+  document.getElementById('gameOver').classList.remove('flex');
+  document.getElementById('board').style.filter='';
+}
 
 function rand(a){ return a[Math.floor(Math.random()*a.length)]; }
 function randomTarget(){
@@ -144,6 +188,7 @@ function spawnLoop(){
   if(targets.length===0 && Math.random()<0.7) spawnOne(true);
 }
 function animate(){
+  if(gameOver){ requestAnimationFrame(animate); return; }
   const dt=16/1000;
   for(let i=objects.length-1;i>=0;i--){
     const o=objects[i];
@@ -177,10 +222,11 @@ function startTimer(){
     state.timer--;
     if(state.timer<0) state.timer=0;
     document.getElementById('timer').textContent=`0:${String(state.timer).padStart(2,'0')}`;
-    if(state.timer===0){ clearInterval(timerInt); clearInterval(spawnInt); document.getElementById('status').textContent='Time up! Final: '+score; }
+    if(state.timer===0){ showGameOver(); document.getElementById('status').textContent='Time up! Final: '+score; }
   },1000);
 }
 board.addEventListener('pointerdown', e=>{
+  if(gameOver) return;
   e.preventDefault();
   const rect=board.getBoundingClientRect();
   const x=e.clientX-rect.left;
@@ -361,6 +407,7 @@ board.addEventListener('pointerup', e=>{
   }
 });
 document.getElementById('reset').onclick=()=>{
+  hideGameOver();
   objects.forEach(o=>{ if(o.el) o.el.remove(); });
   objects=[]; score=0; state={current:null, next:null, logs:[], timer:30};
   newRound();
@@ -368,6 +415,9 @@ document.getElementById('reset').onclick=()=>{
   document.getElementById('status').textContent='Tap circle • Slice tri • Double-tap square';
   clearInterval(spawnInt); spawnInt=setInterval(spawnLoop, 1200);
   initBurst(); renderPills(); startTimer();
+};
+document.getElementById('playAgain').onclick=()=>{
+  document.getElementById('reset').click();
 };
 // init
 newRound();
