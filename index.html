@@ -40,6 +40,31 @@
   </div>
   <div class="flex-1 relative overflow-hidden" id="board">
     <svg id="trail" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10"><path id="trail-path" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter:drop-shadow(0 1px 0 #0F1B2D) drop-shadow(0 3px 6px rgba(15,27,45,0.2))"/></svg>
+    <div id="startScreen" class="absolute inset-0 bg-[#8ECAE6] flex flex-col items-center justify-center gap-4 z-20 p-6">
+      <div class="bg-white border-[3px] border-[#0F1B2D] rounded-[24px] p-5 shadow-[0_6px_0_#0F1B2D] w-full max-w-[520px] flex flex-col gap-4">
+        <div class="text-center">
+          <div class="baloo text-[22px] font-extrabold">Choose speed</div>
+          <div class="text-[11px] font-bold text-[#64748B]">Preview how fast objects float — for 2-6y start with Easy</div>
+        </div>
+        <div class="flex gap-2 justify-center">
+          <button data-speed="easy" class="speed-btn bg-[#E6F7FF] border-2 border-[#0F1B2D] rounded-full px-4 py-2 font-extrabold text-[12px]">Easy</button>
+          <button data-speed="medium" class="speed-btn bg-[#FFD60A] border-2 border-[#0F1B2D] rounded-full px-4 py-2 font-extrabold text-[12px] shadow-[0_3px_0_#0F1B2D]">Medium</button>
+          <button data-speed="hard" class="speed-btn bg-[#FFE4E6] border-2 border-[#0F1B2D] rounded-full px-4 py-2 font-extrabold text-[12px]">Hard</button>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-[10px] font-extrabold">Slow</span>
+          <input id="speedSlider" type="range" min="0.5" max="2.0" step="0.1" value="1.0" class="flex-1 accent-[#0F1B2D]">
+          <span class="text-[10px] font-extrabold">Fast</span>
+          <span id="speedVal" class="bg-[#0F1B2D] text-white px-2 py-1 rounded-full text-[11px] font-bold">1.0x</span>
+        </div>
+        <div id="preview" class="h-[96px] bg-[#F8FAFC] border-2 border-[#0F1B2D] rounded-[16px] relative overflow-hidden">
+          <div id="preview-dot" class="absolute w-[48px] h-[48px] rounded-full bg-[#FF3B30] border-2 border-[#0F1B2D] left-[calc(50%-24px)]"></div>
+          <div class="absolute bottom-1 left-2 text-[9px] font-bold text-[#64748B]">preview</div>
+        </div>
+        <button id="startBtn" class="bg-[#00D492] border-2 border-[#0F1B2D] rounded-full py-3 font-extrabold text-[16px] shadow-[0_4px_0_#0F1B2D] active:translate-y-[2px] active:shadow-[0_2px_0_#0F1B2D]">Start — 30s</button>
+        <div class="text-[10px] text-center font-bold text-[#94A3B8]">Objects float up • Tap circle • Slice tri • Double-tap square</div>
+      </div>
+    </div>
     <div id="gameOver" class="absolute inset-0 bg-[#8ECAE6]/90 backdrop-blur-[2px] hidden flex-col items-center justify-center gap-3 z-20 p-6 text-center">
       <div class="bg-white border-[3px] border-[#0F1B2D] rounded-[24px] px-8 py-6 shadow-[0_6px_0_#0F1B2D] flex flex-col items-center gap-2 min-w-[320px]">
         <div class="text-[12px] font-extrabold tracking-[1.5px] text-[#64748B]">TIME UP</div>
@@ -67,6 +92,31 @@ let state = {current:null, next:null, logs:[], timer:30};
 let active=null;
 let timerInt=null, spawnInt=null;
 let gameOver=false;
+let speedMul=1.0;
+let previewAnim=null;
+function updatePreview(){
+  const dot=document.getElementById('preview-dot');
+  if(!dot) return;
+  if(previewAnim && previewAnim.kill) try{ previewAnim.kill(); }catch(e){}
+  previewAnim=null;
+  const preview=document.getElementById('preview');
+  const h=preview.clientHeight;
+  dot.style.top=(h-10)+'px';
+  dot.style.transform='translateY(0)';
+  // fallback without gsap (gsap not loaded in this build)
+  let y=0;
+  const step=()=>{
+    const sc=document.getElementById('startScreen');
+    if(!sc || sc.classList.contains('hidden')) return;
+    y-= 1.6 * speedMul;
+    if(y < - (h-24)) y=0;
+    dot.style.transform=`translateY(${y}px)`;
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+  const sv=document.getElementById('speedVal');
+  if(sv) sv.textContent = speedMul.toFixed(1)+'x';
+}
 let lastTap = {id:null, t:0};
 function getHighScore(){
   try{
@@ -141,7 +191,7 @@ function renderPills(){
   if(nxt){ setEl(nxtEl, nxt); document.getElementById('nx').textContent='X'+nxt.need; }
   document.getElementById('score').textContent=score;
 }
-function randomSpeed(){ return 14 + Math.random()*14; }
+function randomSpeed(){ return (14 + Math.random()*14) * speedMul; }
 function spawnOne(forceTarget=false){
   const rect=board.getBoundingClientRect();
   if(!rect.width) return;
@@ -227,6 +277,8 @@ function startTimer(){
 }
 board.addEventListener('pointerdown', e=>{
   if(gameOver) return;
+  if(e.target.closest('#startScreen') || e.target.closest('#gameOver')) return;
+  if(!state.current) return;
   e.preventDefault();
   const rect=board.getBoundingClientRect();
   const x=e.clientX-rect.left;
@@ -288,6 +340,8 @@ function pathHitsShape(path, shape){
 }
 board.addEventListener('pointerup', e=>{
   if(!active) return;
+  if(e.target.closest('#startScreen') || e.target.closest('#gameOver')) { active=null; return; }
+  if(!state.current){ active=null; return; }
   const rect=board.getBoundingClientRect();
   const x=e.clientX-rect.left;
   const y=e.clientY-rect.top;
@@ -354,7 +408,7 @@ board.addEventListener('pointerup', e=>{
     }
   }
   // log
-  state.logs.push({phase: state.current.shape+'/'+state.current.color, hit: active.hit?.id||'miss', action, correct, t:Math.round(performance.now())});
+  state.logs.push({phase: (state.current?.shape||'none')+'/'+(state.current?.color||'none'), hit: active.hit?.id||'miss', action, correct, t:Math.round(performance.now())});
   if(correct){
     const o=active.hit;
     o.done=true;
@@ -410,21 +464,61 @@ document.getElementById('reset').onclick=()=>{
   hideGameOver();
   objects.forEach(o=>{ if(o.el) o.el.remove(); });
   objects=[]; score=0; state={current:null, next:null, logs:[], timer:30};
-  newRound();
   document.getElementById('score').textContent='0';
+  document.getElementById('timer').textContent='0:30';
   document.getElementById('status').textContent='Tap circle • Slice tri • Double-tap square';
-  clearInterval(spawnInt); spawnInt=setInterval(spawnLoop, 1200);
-  initBurst(); renderPills(); startTimer();
+  clearInterval(spawnInt); clearInterval(timerInt);
+  // show start screen for speed preview again
+  document.getElementById('startScreen').classList.remove('hidden');
+  document.getElementById('startScreen').classList.add('flex');
+  updatePreview();
+  renderPills();
 };
 document.getElementById('playAgain').onclick=()=>{
   document.getElementById('reset').click();
 };
-// init
-newRound();
-initBurst();
-spawnInt=setInterval(spawnLoop, 1200);
+// start screen logic
+function setSpeed(mul, btn){
+  speedMul=mul;
+  document.querySelectorAll('.speed-btn').forEach(b=>{
+    b.classList.remove('bg-[#FFD60A]','shadow-[0_3px_0_#0F1B2D]');
+    b.classList.add('bg-[#E6F7FF]');
+  });
+  if(btn){ btn.classList.remove('bg-[#E6F7FF]','bg-[#FFE4E6]'); btn.classList.add('bg-[#FFD60A]','shadow-[0_3px_0_#0F1B2D]'); }
+  document.getElementById('speedSlider').value=String(mul);
+  updatePreview();
+}
+document.querySelectorAll('.speed-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const v=btn.dataset.speed;
+    if(v==='easy') setSpeed(0.6, btn);
+    if(v==='medium') setSpeed(1.0, btn);
+    if(v==='hard') setSpeed(1.7, btn);
+  });
+});
+document.getElementById('speedSlider').addEventListener('input', e=>{
+  const v=parseFloat(e.target.value);
+  speedMul=v;
+  document.querySelectorAll('.speed-btn').forEach(b=>{ b.classList.remove('bg-[#FFD60A]','shadow-[0_3px_0_#0F1B2D]'); b.classList.add('bg-[#E6F7FF]'); });
+  updatePreview();
+});
+document.getElementById('startBtn').addEventListener('click', ()=>{
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('flex');
+  if(previewAnim && previewAnim.kill) previewAnim.kill();
+  // start game
+  newRound();
+  initBurst();
+  spawnInt=setInterval(spawnLoop, 1200);
+  renderPills();
+  startTimer();
+});
+document.getElementById('playAgain').addEventListener('click', ()=>{ /* handled by reset */ });
+// init preview
+updatePreview();
+// show start screen, game not started yet
 renderPills();
-startTimer();
+// do not auto-start; wait for Start click
 </script>
 </body>
 </html>
