@@ -1,6 +1,6 @@
 # Oracle Cloud — HKUST Climbing Society
 
-Personal Oracle Cloud Always Free tier setup for the climbing society's LLM and infrastructure.
+Personal Oracle Cloud Always Free tier setup for the a combination of VM, LLM and infrastructure.
 
 ## Resources (Always Free, permanent)
 
