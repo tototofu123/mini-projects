@@ -31,6 +31,16 @@ body {
   overflow-x: hidden;
 }
 
+/* Prevent font glyph clipping across Syne and Space Grotesk */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.25;
+  padding-bottom: 0.08em;
+  overflow: visible;
+}
+
+p, span, li, button, a {
+  overflow: visible;
+}
 /* Selection highlight */
 ::selection {
   background-color: #F97316;

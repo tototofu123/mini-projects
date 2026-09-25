@@ -43,11 +43,15 @@ This document records all third-party code, assets, fonts, icons, shader referen
 | Asset Path | Source | Attribution |
 |---|---|---|
 | `/public/images/projects/robot-car.mp4` & `.jpeg` | Original engineering footage | Toto Lai (1st Place Combat Bot competition at HKUST). |
+| `/public/images/projects/climbing-app-route.png` & `home.png` | `hkust-climbing-society` repo showcase | Toto Lai (Lead Developer, HKUST Climbing Society full-stack app). |
+| `/public/images/projects/boulderwall-vector.webp` | `hkust-climbing-society` vector assets | Toto Lai & HKUST Climbing Society hold mapping assets. |
 | `/public/images/projects/climbing-*` | Original climbing media | HKUST Sport Climbing Society & Toto Lai athlete archives. |
 | `/public/images/projects/rag-chatbot.png` & `ai-newsletter.png` | Original project screenshots | Toto Lai (RAG agent & international student support workflows). |
 | `/public/images/projects/connect4-*.png` | Original game interface screenshots | Toto Lai (Minimax AI Connect4 with alpha-beta pruning). |
-
----
+| `src/sections/ProductionAI/ProductionAISection.tsx` SVG Flowchart | Original procedural SVG design | Toto Lai's HKT 200-node workflow architecture visualization. |
+| `src/sections/ClimbingTech/ClimbingTechSection.tsx` Kinematics SVG | Original procedural SVG design | Inverse kinematics stickman & coordinate beta search visualization. |
+| `src/sections/PhysicalSystems/PhysicalSystemsSection.tsx` Circuit SVG | Original procedural SVG design | Optoisolated H-Bridge & Arduino BLE hardware block diagram. |
+| `src/components/Transitions/SectionBridge.tsx` | Original telemetry bridge design | Animated gradient signals and pulse beacons linking all sections. |
 
 ## 5. Web-Sourced Code Snippets & Shaders
 

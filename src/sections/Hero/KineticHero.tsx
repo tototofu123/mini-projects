@@ -12,8 +12,46 @@ export const KineticHero: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const PROJECT_THUMBS = [
+    {
+      title: 'HKT AI Email Triage',
+      category: 'Enterprise AI',
+      targetId: 'ai',
+      img: '/images/projects/rag-chatbot.png',
+      badge: '~200 Nodes'
+    },
+    {
+      title: '1st Place Combat Bot',
+      category: 'Robotics & Hardware',
+      targetId: 'robotics',
+      img: '/images/projects/robot-car.jpeg',
+      badge: '1st / 20+ Teams'
+    },
+    {
+      title: 'HKUST Climbing App',
+      category: 'Full-Stack App',
+      targetId: 'climbing',
+      img: '/images/projects/climbing-app-route.png',
+      badge: '200+ Members'
+    },
+    {
+      title: 'Bouldering Kinematics',
+      category: 'Kinetic AI',
+      targetId: 'climbing',
+      img: '/images/projects/climbing-boulder.webp',
+      badge: 'RL + IK Engine'
+    },
+    {
+      title: 'Connect4 Strategic AI',
+      category: 'Game Intelligence',
+      targetId: 'lab',
+      img: '/images/projects/connect4-ai.png',
+      badge: '10k states/sec'
+    }
+  ];
+
   return (
-    <section id="hero" className="relative min-h-screen w-full flex flex-col justify-between pt-24 pb-12 px-6 sm:px-10 lg:px-16 telemetry-grid overflow-hidden">
+    <section id="hero" className="relative min-h-screen w-full flex flex-col justify-between pt-24 pb-12 px-6 sm:px-10 lg:px-16 telemetry-grid overflow-visible">
       {/* Background radial gradient accent */}
       <div 
         className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full blur-[140px] opacity-25 transition-colors duration-700"
@@ -86,7 +124,7 @@ export const KineticHero: React.FC = () => {
 
           {/* Heading */}
           <div className="space-y-2">
-            <h1 className="font-syne text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-100 leading-tight">
+            <h1 className="font-syne text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-100 leading-tight pb-1">
               {mode === 'systems' ? (
                 <>
                   Applied AI &amp; <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-emerald-400">Low-Latency Systems</span>
@@ -97,7 +135,7 @@ export const KineticHero: React.FC = () => {
                 </>
               )}
             </h1>
-            <p className="font-space text-lg sm:text-xl text-slate-400 max-w-2xl leading-relaxed">
+            <p className="font-space text-lg sm:text-xl text-slate-300 max-w-2xl leading-relaxed">
               {mode === 'systems' ? (
                 <span>
                   Engineering enterprise multi-agent workflows at <strong>HKT</strong>, sub-120MB local speech engines in <strong>Rust</strong>, and hardware-coupled automation connecting physical reality to scalable intelligence.
@@ -114,36 +152,36 @@ export const KineticHero: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
             {mode === 'systems' ? (
               <>
-                <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-900/50 backdrop-blur-sm">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500">Production AI</div>
+                <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">Production AI</div>
                   <div className="text-sm font-semibold text-sky-400 mt-1 font-space">200-Node Pipeline</div>
                   <div className="text-xs text-slate-400 mt-0.5">HKT Email Triage</div>
                 </div>
-                <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-900/50 backdrop-blur-sm">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500">Robotics Champion</div>
+                <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">Robotics Champion</div>
                   <div className="text-sm font-semibold text-emerald-400 mt-1 font-space">1st Place Overall</div>
                   <div className="text-xs text-slate-400 mt-0.5">Combat Bot 20+ Teams</div>
                 </div>
-                <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-900/50 backdrop-blur-sm col-span-2 sm:col-span-1">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500">Systems &amp; Rust</div>
+                <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm col-span-2 sm:col-span-1">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">Systems &amp; Rust</div>
                   <div className="text-sm font-semibold text-slate-200 mt-1 font-space">&lt;120MB On-Device</div>
                   <div className="text-xs text-slate-400 mt-0.5">Parakeet Int8 Dictation</div>
                 </div>
               </>
             ) : (
               <>
-                <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-900/50 backdrop-blur-sm">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500">National Team</div>
+                <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">National Team</div>
                   <div className="text-sm font-semibold text-orange-400 mt-1 font-space">Hong Kong Team</div>
                   <div className="text-xs text-slate-400 mt-0.5">Speed &amp; Ice Climbing</div>
                 </div>
-                <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-900/50 backdrop-blur-sm">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500">Asian Champs</div>
+                <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">Asian Champs</div>
                   <div className="text-sm font-semibold text-amber-400 mt-1 font-space">14th in Asia</div>
                   <div className="text-xs text-slate-400 mt-0.5">World Ranked 55th</div>
                 </div>
-                <div className="p-3.5 rounded-lg border border-slate-800 bg-slate-900/50 backdrop-blur-sm col-span-2 sm:col-span-1">
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500">Team Captain</div>
+                <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm col-span-2 sm:col-span-1">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-semibold">Team Captain</div>
                   <div className="text-sm font-semibold text-slate-200 mt-1 font-space">200+ Members</div>
                   <div className="text-xs text-slate-400 mt-0.5">+25% Growth &amp; 5 Sponsors</div>
                 </div>
@@ -155,7 +193,7 @@ export const KineticHero: React.FC = () => {
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <a
               href="#ai"
-              className="px-5 py-2.5 rounded-md bg-orange-500 hover:bg-orange-600 text-slate-950 font-space font-semibold text-sm transition-all duration-200 shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_25px_rgba(249,115,22,0.5)] flex items-center gap-2"
+              className="px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-slate-950 font-space font-semibold text-sm transition-all duration-200 shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_25px_rgba(249,115,22,0.5)] flex items-center gap-2"
             >
               <span>Explore Production AI</span>
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -165,7 +203,7 @@ export const KineticHero: React.FC = () => {
 
             <a
               href="#robotics"
-              className="px-4 py-2.5 rounded-md border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-space text-sm font-medium transition-colors duration-200 flex items-center gap-2"
+              className="px-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-slate-200 font-space text-sm font-medium transition-colors duration-200 flex items-center gap-2"
             >
               <svg className="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="3"/>
@@ -176,21 +214,21 @@ export const KineticHero: React.FC = () => {
 
             <button
               onClick={handleCopyEmail}
-              className="px-3.5 py-2.5 rounded-md border border-slate-800 bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200 text-xs font-mono transition-colors duration-200 flex items-center gap-2"
+              className="px-3.5 py-2.5 rounded-xl border border-slate-800 bg-slate-900/60 hover:bg-slate-800 text-slate-300 hover:text-slate-100 text-xs font-mono transition-colors duration-200 flex items-center gap-2"
               title="Copy email to clipboard"
             >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg className="w-3.5 h-3.5 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
               </svg>
-              <span>{copied ? 'COPIED!' : 'COPY EMAIL'}</span>
+              <span>{copied ? 'COPIED TO CLIPBOARD' : 'COPY EMAIL'}</span>
             </button>
           </div>
         </div>
 
         {/* Right Column: Dynamic Portrait Frame & Hardware Frame */}
         <div className="lg:col-span-5 flex flex-col items-center justify-center">
-          <div className="relative w-full max-w-[360px] aspect-[4/5] rounded-2xl border border-slate-800 bg-slate-900/70 p-3 shadow-2xl overflow-hidden group">
+          <div className="relative w-full max-w-[370px] aspect-[4/5] rounded-2xl border border-slate-800 bg-slate-900/70 p-3 shadow-2xl overflow-hidden group">
             
             {/* Top Frame Status Label */}
             <div className="flex items-center justify-between pb-2 border-b border-slate-800/80 text-[11px] font-mono text-slate-400">
@@ -214,14 +252,14 @@ export const KineticHero: React.FC = () => {
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/10 to-slate-950/80" />
 
               {/* Bottom Badge Over Photo */}
-              <div className="absolute bottom-3 left-3 right-3 p-2.5 rounded-lg bg-slate-900/85 backdrop-blur-md border border-slate-800/90 text-xs">
+              <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-slate-900/90 backdrop-blur-md border border-slate-800 text-xs">
                 <div className="flex items-center justify-between font-mono">
                   <span className="text-slate-400 text-[10px]">VERIFIED_ID</span>
                   <span className={`text-[10px] font-bold ${mode === 'systems' ? 'text-sky-400' : 'text-orange-400'}`}>
                     {mode === 'systems' ? 'CPEG // AI_DEV' : 'HK_NATIONAL_ATHLETE'}
                   </span>
                 </div>
-                <div className="font-space font-semibold text-slate-200 mt-0.5 truncate">
+                <div className="font-space font-semibold text-slate-100 mt-1 truncate">
                   {mode === 'systems' ? 'Lai Man To (Toto) — Systems Builder' : 'Toto Lai — Ice & Speed Climbing'}
                 </div>
               </div>
@@ -237,16 +275,59 @@ export const KineticHero: React.FC = () => {
 
       </div>
 
+      {/* ============================================================= */}
+      {/* DIRECT VISUAL WORK INDEX (REAL PICTURE THUMBNAILS CAROUSEL) */}
+      {/* ============================================================= */}
+      <div className="relative z-10 w-full pt-8 pb-4">
+        <div className="flex items-center justify-between text-xs font-mono text-slate-500 mb-3 px-1">
+          <span className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-orange-400" />
+            <span>AUTHENTIC ARTIFACT DIRECTORY // SELECT TO JUMP</span>
+          </span>
+          <span className="hidden sm:inline text-[11px] text-slate-600">5 PRODUCTION REPOSITORIES</span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          {PROJECT_THUMBS.map((proj, idx) => (
+            <a
+              key={idx}
+              href={`#${proj.targetId}`}
+              className="group relative rounded-xl border border-slate-800 bg-[#111827] overflow-hidden hover:border-slate-700 transition-all duration-200 block shadow-lg"
+            >
+              <div className="relative aspect-[16/10] bg-slate-950 overflow-hidden">
+                <img
+                  src={proj.img}
+                  alt={proj.title}
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300 opacity-80 group-hover:opacity-100"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent pointer-events-none" />
+                <span className="absolute top-2 right-2 text-[9px] font-mono px-1.5 py-0.5 rounded bg-black/80 text-orange-300 border border-orange-500/30">
+                  {proj.badge}
+                </span>
+              </div>
+              
+              <div className="p-2.5">
+                <div className="font-mono text-[10px] text-slate-500 uppercase">{proj.category}</div>
+                <div className="font-space text-xs font-bold text-slate-200 group-hover:text-orange-400 transition-colors truncate mt-0.5">
+                  {proj.title}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
       {/* Bottom Telemetry Bar */}
-      <div className="relative z-10 w-full pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-slate-500">
+      <div className="relative z-10 w-full pt-4 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-slate-400">
         <div className="flex items-center gap-4">
-          <span>GITHUB: <a href="https://github.com/tototofu123" target="_blank" rel="noopener noreferrer" className="text-slate-300 hover:text-orange-400 underline decoration-slate-700 underline-offset-4">@tototofu123</a></span>
+          <span>GITHUB: <a href="https://github.com/tototofu123" target="_blank" rel="noopener noreferrer" className="text-slate-200 hover:text-orange-400 underline decoration-slate-700 underline-offset-4">@tototofu123</a></span>
           <span>REPOS: 44+</span>
           <span className="hidden sm:inline">COMMITS: 1,200+</span>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-slate-600">[LATENCY: 0ms // NO-LAG COMPILED]</span>
+          <span className="text-slate-500">[LATENCY: 0ms // COMPILED REACT]</span>
           <a href="#ai" className="text-orange-400 hover:text-orange-300 flex items-center gap-1">
             <span>SCROLL DOWN</span>
             <svg className="w-3.5 h-3.5 animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -258,3 +339,5 @@ export const KineticHero: React.FC = () => {
     </section>
   );
 };
+
+export default KineticHero;

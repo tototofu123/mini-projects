@@ -9,6 +9,7 @@ import { PhysicalSystemsSection } from './sections/PhysicalSystems/PhysicalSyste
 import { ClimbingTechSection } from './sections/ClimbingTech/ClimbingTechSection';
 import { EngineeringLabSection } from './sections/EngineeringLab/EngineeringLabSection';
 import { CommandFooterSection } from './sections/CommandFooter/CommandFooterSection';
+import { SectionBridge } from './components/Transitions/SectionBridge';
 import './index.css';
 
 export function App() {
@@ -27,10 +28,50 @@ export function App() {
           
           <main className="site-main w-full flex flex-col">
             <KineticHero />
+            
+            <SectionBridge 
+              variant="hero-to-ai" 
+              fromLabel="Kinetic Dual-State" 
+              toLabel="Applied AI & Agents" 
+              codeSnippet="TELEMETRY // MULTI-AGENT SWARM"
+            />
+
             <ProductionAISection />
+            
+            <SectionBridge 
+              variant="ai-to-robotics" 
+              fromLabel="Cloud & Edge Swarm" 
+              toLabel="Physical Actuators" 
+              codeSnippet="BUS // BLE 4.2 / I2C / SPI"
+            />
+
             <PhysicalSystemsSection />
+            
+            <SectionBridge 
+              variant="robotics-to-climbing" 
+              fromLabel="Mechanical Ground" 
+              toLabel="High-Angle Topo" 
+              codeSnippet="ELEVATION // SPEED & ICE CLIMB"
+            />
+
             <ClimbingTechSection />
+            
+            <SectionBridge 
+              variant="climbing-to-lab" 
+              fromLabel="Kinetic Dynamics" 
+              toLabel="Post-Mortem Lab" 
+              codeSnippet="STATE // SYSTEMATIC EVALUATION"
+            />
+
             <EngineeringLabSection />
+            
+            <SectionBridge 
+              variant="lab-to-footer" 
+              fromLabel="Analytical Post-Mortem" 
+              toLabel="Command Dispatch" 
+              codeSnippet="STATUS // DISPATCH_AUTHORIZED"
+            />
+
             <CommandFooterSection />
           </main>
 
