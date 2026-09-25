@@ -6,9 +6,10 @@ import { useEffect, useState } from 'react';
 
 const sections = [
   { id: 'hero', label: 'HOME' },
-  { id: 'about', label: 'ABOUT' },
-  { id: 'projects', label: 'PROJECTS' },
-  { id: 'skills', label: 'SKILLS' },
+  { id: 'ai', label: 'APPLIED AI' },
+  { id: 'robotics', label: 'ROBOTICS' },
+  { id: 'climbing', label: 'CLIMBING' },
+  { id: 'lab', label: 'THE LAB' },
   { id: 'contact', label: 'CONTACT' },
 ];
 

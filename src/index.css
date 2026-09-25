@@ -15,24 +15,55 @@
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
   width: 100%;
   overflow-x: hidden;
 }
 
 body {
-  font-family: 'Amarante', 'Limelight', 'DM Sans', serif;
-  background-color: #0F172A;
-  color: #F1F5F9;
+  font-family: 'Space Grotesk', 'DM Sans', sans-serif;
+  background-color: #0B0F19;
+  color: #F8FAFC;
   overflow-x: hidden;
 }
 
 /* Selection highlight */
 ::selection {
   background-color: #F97316;
-  color: #0F172A;
+  color: #0B0F19;
 }
 
+/* Zero-Lag GPU Composite Layer */
+.gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+/* Subtle Telemetry Grid Background (Pure CSS - zero runtime overhead) */
+.telemetry-grid {
+  background-image: 
+    linear-gradient(to right, rgba(30, 41, 59, 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 41, 59, 0.35) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Radial Spotlight for cards */
+.spotlight-surface {
+  position: relative;
+  background: #111827;
+  border: 1px solid #1E293B;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.spotlight-surface:hover {
+  border-color: #334155;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

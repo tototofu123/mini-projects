@@ -4,10 +4,11 @@ type NavItem = { id: string; label: string; isLogo?: boolean }
 
 export const Header: React.FC = () => {
   const navItems: NavItem[] = [
-    { id: 'about', label: 'About' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'logo', label: 't', isLogo: true },
-    { id: 'skills', label: 'Skills' },
+    { id: 'ai', label: 'Applied AI' },
+    { id: 'robotics', label: 'Robotics' },
+    { id: 'hero', label: 't.tofu', isLogo: true },
+    { id: 'climbing', label: 'Climbing' },
+    { id: 'lab', label: 'Lab' },
     { id: 'contact', label: 'Contact' },
   ]
 
@@ -92,8 +93,8 @@ export const Header: React.FC = () => {
 
   // Scroll spy
   useEffect(() => {
-    const sectionIds = ['about', 'projects', 'skills', 'contact']
-    const navIndexBySection = [0, 1, 3, 4]
+    const sectionIds = ['ai', 'robotics', 'climbing', 'lab', 'contact']
+    const navIndexBySection = [0, 1, 3, 4, 5]
 
     let ticking = false
 
