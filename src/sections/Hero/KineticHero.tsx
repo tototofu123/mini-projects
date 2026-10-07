@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { assetUrl } from '../../utils/assetUrl';
 
 type Mode = 'systems' | 'kinetic';
 
@@ -17,35 +18,35 @@ export const KineticHero: React.FC = () => {
       title: 'HKT AI Email Triage',
       category: 'Enterprise AI',
       targetId: 'ai',
-      img: '/images/projects/rag-chatbot.png',
+      img: assetUrl('/images/projects/rag-chatbot.png'),
       badge: '~200 Nodes'
     },
     {
       title: '1st Place Combat Bot',
       category: 'Robotics & Hardware',
       targetId: 'robotics',
-      img: '/images/projects/robot-car.jpeg',
+      img: assetUrl('/images/projects/robot-car.jpeg'),
       badge: '1st / 20+ Teams'
     },
     {
       title: 'HKUST Climbing App',
       category: 'Full-Stack App',
       targetId: 'climbing',
-      img: '/images/projects/climbing-app-route.png',
+      img: assetUrl('/images/projects/climbing-app-route.png'),
       badge: '200+ Members'
     },
     {
       title: 'Bouldering Kinematics',
       category: 'Kinetic AI',
       targetId: 'climbing',
-      img: '/images/projects/climbing-boulder.webp',
+      img: assetUrl('/images/projects/climbing-boulder.webp'),
       badge: 'RL + IK Engine'
     },
     {
       title: 'Connect4 Strategic AI',
       category: 'Game Intelligence',
       targetId: 'lab',
-      img: '/images/projects/connect4-ai.png',
+      img: assetUrl('/images/projects/connect4-ai.png'),
       badge: '10k states/sec'
     }
   ];
@@ -242,7 +243,7 @@ export const KineticHero: React.FC = () => {
             {/* Portrait Image Container */}
             <div className="relative w-full h-[calc(100%-2.25rem)] mt-2 rounded-xl overflow-hidden bg-slate-950 flex items-center justify-center">
               <img
-                src={mode === 'systems' ? '/images/hero-formal.png' : '/images/hero-sporty.png'}
+                src={mode === 'systems' ? assetUrl('/images/hero-formal.png') : assetUrl('/images/hero-sporty.png')}
                 alt={mode === 'systems' ? 'Toto Lai - Systems Engineer' : 'Toto Lai - Kinetic Athlete'}
                 className="w-full h-full object-cover object-top transition-opacity duration-300 filter contrast-105"
                 loading="eager"

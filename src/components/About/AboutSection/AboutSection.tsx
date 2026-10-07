@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { assetUrl } from '../../../utils/assetUrl'
 
 export const AboutSection: React.FC = () => {
   return (
@@ -26,7 +27,7 @@ export const AboutSection: React.FC = () => {
           </div>
         </div>
         <div className="about-right-asset">
-          <img src="/images/profile.jpg" alt="Toto Lai" />
+          <img src={assetUrl('/images/profile.jpg')} alt="Toto Lai" />
         </div>
       </div>
     </motion.section>

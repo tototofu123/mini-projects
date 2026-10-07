@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { assetUrl } from '../../utils/assetUrl';
 
 export const ClimbingTechSection: React.FC = () => {
   const [selectedHoldIndex, setSelectedHoldIndex] = useState<number>(2);
@@ -94,7 +95,7 @@ export const ClimbingTechSection: React.FC = () => {
           {/* Real Photo Thumbnail */}
           <div className="relative w-full h-44 rounded-xl overflow-hidden border border-slate-800 mb-5 bg-slate-950">
             <img 
-              src="/images/projects/climbing-boulder.webp" 
+              src={assetUrl('/images/projects/climbing-boulder.webp')} 
               alt="Toto Lai Climbing Action"
               className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
@@ -322,7 +323,7 @@ export const ClimbingTechSection: React.FC = () => {
           {/* Real App Screenshot Showcase */}
           <div className="relative w-full h-44 rounded-xl overflow-hidden border border-slate-800 mb-5 bg-slate-950">
             <img 
-              src="/images/projects/climbing-app-route.png" 
+              src={assetUrl('/images/projects/climbing-app-route.png')} 
               alt="HKUST Climbing Society Mobile Route View"
               className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
               loading="lazy"

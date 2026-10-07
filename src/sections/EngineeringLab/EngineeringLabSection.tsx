@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { assetUrl } from '../../utils/assetUrl';
 
 // ============================================================================
 // DATA STRUCTURES & DEFINITIONS
@@ -987,7 +988,7 @@ export const EngineeringLabSection: React.FC = () => {
               {/* Image Container with Fallback */}
               <div className="relative rounded-lg overflow-hidden border border-slate-800 bg-[#0B0F19] aspect-[16/10] mb-4 group">
                 <img
-                  src="/images/projects/connect4-ai.png"
+                  src={assetUrl('/images/projects/connect4-ai.png')}
                   alt="Connect4 Strategic AI Engine and Minimax Alpha-Beta Evaluation Board"
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   onError={(e) => {

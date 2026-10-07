@@ -1,5 +1,6 @@
 import { useState, useRef, type FC } from 'react';
 import { motion } from 'framer-motion';
+import { assetUrl } from '../../utils/assetUrl';
 
 export const PhysicalSystemsSection: FC = () => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -128,8 +129,8 @@ export const PhysicalSystemsSection: FC = () => {
                 >
                   <video
                     ref={videoRef}
-                    src="/images/projects/robot-car.mp4"
-                    poster="/images/projects/robot-car.jpeg"
+                    src={assetUrl('/images/projects/robot-car.mp4')}
+                    poster={assetUrl('/images/projects/robot-car.jpeg')}
                     preload="none"
                     muted
                     loop

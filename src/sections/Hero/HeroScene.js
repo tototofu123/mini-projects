@@ -18,6 +18,7 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import gsap from 'gsap';
 import { HolographicMaterial } from '../../three/materials/HolographicMaterial.js';
 import { GlitchPass } from '../../three/shaders/GlitchPass.js';
+import { assetUrl } from '../../utils/assetUrl';
 
 export class HeroScene {
   constructor(container) {
@@ -308,7 +309,7 @@ export class HeroScene {
 
     // Load the real photo
     const loader = new THREE.TextureLoader();
-    const photoTex = loader.load('/images/hero-real.jpeg');
+    const photoTex = loader.load(assetUrl('/images/hero-real.jpeg'));
     photoTex.colorSpace = THREE.SRGBColorSpace;
 
     // Holographic material
@@ -331,7 +332,7 @@ export class HeroScene {
     // Store photo textures for mode switching
     this.photoTextures = {
       real: photoTex,
-      formal: loader.load('/images/hero-formal.png'),
+      formal: loader.load(assetUrl('/images/hero-formal.png')),
       ascii: this.createAsciiTexture(photoTex),
       pixel: this.createPixelTexture(photoTex),
       hologram: photoTex // uses same texture but with different material params

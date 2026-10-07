@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { assetUrl } from '../../utils/assetUrl';
 
 interface WorkflowStage {
   id: number;
@@ -461,7 +462,7 @@ export const ProductionAISection: React.FC = () => {
               <div className="rounded-xl overflow-hidden border border-slate-800 mt-3 group-hover:border-slate-700 transition-colors">
                 <div className="relative aspect-[16/9] bg-slate-950">
                   <img
-                    src="/images/projects/rag-chatbot.png"
+                    src={assetUrl('/images/projects/rag-chatbot.png')}
                     alt="RAG and Tourism Agent Interface"
                     className="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-opacity"
                     loading="lazy"
@@ -542,7 +543,7 @@ export const ProductionAISection: React.FC = () => {
               <div className="rounded-xl overflow-hidden border border-slate-800 mt-3 group-hover:border-slate-700 transition-colors">
                 <div className="relative aspect-[16/9] bg-slate-950">
                   <img
-                    src="/images/projects/ai-newsletter.png"
+                    src={assetUrl('/images/projects/ai-newsletter.png')}
                     alt="Perihel System Overview"
                     className="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-opacity"
                     loading="lazy"

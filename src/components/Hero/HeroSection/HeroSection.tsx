@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { assetUrl } from '../../../utils/assetUrl'
 
 export const HeroSection: React.FC = () => {
   return (
@@ -7,7 +8,7 @@ export const HeroSection: React.FC = () => {
       <div className="hero-content-wrapper">
         {/* Left: Hero image with dark overlay for contrast */}
         <div className="hero-image-left">
-          <img src="/images/hero-bg.jpg" alt="Hero background" />
+          <img src={assetUrl('/images/hero-bg.jpg')} alt="Hero background" />
           <div className="hero-image-overlay" />
         </div>
 
