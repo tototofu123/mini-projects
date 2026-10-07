@@ -4,7 +4,7 @@ export const setupSectionHeaderEffects = (headerRef: RefObject<HTMLDivElement | 
   const element = headerRef.current
   if (!element) return () => {}
 
-  let intervalId: NodeJS.Timeout
+  let intervalId: ReturnType<typeof setInterval>
 
   const handleMouseEnter = () => {
     // Faulty neon light glitch effect

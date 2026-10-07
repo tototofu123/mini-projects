@@ -11,7 +11,7 @@ export const setupAvatarEffects = ({
   onBaseImageChange,
   onMaskImageChange,
 }: AvatarEffectsProps) => {
-  let idleTimeout: NodeJS.Timeout
+  let idleTimeout: ReturnType<typeof setTimeout>
 
   const handleMouseMove = (e: MouseEvent) => {
     const container = containerRef.current
