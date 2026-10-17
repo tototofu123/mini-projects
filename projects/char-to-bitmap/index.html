@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Character to Bitmap</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <header>
+        <h1>Character to Bitmap</h1>
+        <p>Type a character and get a binary matrix representation</p>
+    </header>
+
+    <div class="card">
+        <div class="input-row">
+            <input type="text" id="char-input" maxlength="1" placeholder="A" autocomplete="off" spellcheck="false" />
+            <label>Enter one character<br><span style="font-size:0.75rem">Font: Noto Serif SC, 32px</span></label>
+            <button class="btn" onclick="process()">Generate</button>
+        </div>
+        <div class="format-row">
+            <label><input type="radio" name="fmt" value="c" checked onchange="setFormat()"> C</label>
+            <label><input type="radio" name="fmt" value="cpp" onchange="setFormat()"> C++</label>
+            <label><input type="radio" name="fmt" value="py" onchange="setFormat()"> Python</label>
+            <label><input type="radio" name="fmt" value="js" onchange="setFormat()"> JS</label>
+            <label><input type="radio" name="fmt" value="ascii" onchange="setFormat()"> ASCII</label>
+            <label><input type="radio" name="fmt" value="md" onchange="setFormat()"> Markdown</label>
+        </div>
+
+        <div id="output-area">
+            <div class="empty-hint">Enter a character above and click Generate ↑</div>
+        </div>
+    </div>
+
+    <!-- Hidden render canvas -->
+    <canvas id="render-canvas" width="32" height="32" style="display:none"></canvas>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
