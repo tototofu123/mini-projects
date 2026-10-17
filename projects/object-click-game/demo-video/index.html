@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=1920, height=1080"/>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#0F1B2D}
+body{font-family:Nunito,sans-serif}
+.baloo{font-family:'Baloo 2'}
+.clip{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="24" data-width="1920" data-height="1080">
+
+  <!-- BG sky -->
+  <div class="clip" data-start="0" data-duration="24" style="background: linear-gradient(to bottom, #B1E6FF 0%, #87D6FF 55%, #E0F6FF 100%)"></div>
+
+  <!-- Title -->
+  <div id="title" class="clip flex flex-col items-center justify-center" data-start="0" data-duration="3.5">
+    <div class="bg-white border-[4px] border-[#0F1B2D] rounded-[32px] px-12 py-8 shadow-[0_8px_0_#0F1B2D] flex flex-col items-center gap-3">
+      <div class="baloo text-[64px] font-extrabold text-[#0F1B2D] leading-none">OBJECT CLICK GAME</div>
+      <div class="text-[18px] font-bold text-[#64748B] tracking-[1.2px]">Floating • Tap circle • Slice triangle • Double-tap square</div>
+      <div class="bg-[#FFD60A] border-2 border-[#0F1B2D] rounded-full px-5 py-2 text-[14px] font-extrabold">iPad 11" • 30s • +1 per clear</div>
+    </div>
+    <div class="mt-6 bg-[#0F1B2D] text-white px-6 py-3 rounded-full text-[16px] font-bold">Sky #8ECAE6 + Sharp #FF3B30/#2ECC71/#7B61FF</div>
+  </div>
+
+  <!-- Tablet mock - using iframe capture of game -->
+  <div id="tablet-wrap" class="clip flex items-center justify-center" data-start="3.2" data-duration="20.8">
+    <div id="tablet" style="width:1180px;height:820px;background:#8ECAE6;border:3px solid #0F1B2D;border-radius:32px;box-shadow:0 8px 0 #0F1B2D;overflow:hidden;position:relative;display:flex;flex-direction:column;transform:scale(0.92);">
+      <div style="height:64px;background:#8ECAE6;display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex-shrink:0">
+        <div style="background:#0F1B2D;color:white;padding:6px 12px;border-radius:10px;font-weight:800;font-size:14px">0:27</div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <span style="font-weight:700;font-size:13px">Current</span>
+          <div style="background:white;border:1px solid #999;border-radius:10px;padding:6px 12px;display:flex;gap:8px;align-items:center"><div style="width:28px;height:28px;background:#FF3B30;border-radius:999px;border:1px solid #0F1B2D"></div><span style="font-weight:800">X2</span></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <span style="font-weight:700;font-size:13px">Next</span>
+          <div style="background:white;border:1px solid #999;border-radius:10px;padding:6px 12px;display:flex;gap:8px;align-items:center"><div style="width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:24px solid #2ECC71"></div><span style="font-weight:800">X3</span></div>
+        </div>
+        <div style="background:white;border:2px solid #0F1B2D;border-radius:999px;padding:6px 12px;font-weight:800">0</div>
+      </div>
+      <div style="flex:1;position:relative;overflow:hidden;background:#8ECAE6" id="board-mock">
+        <!-- floating shapes -->
+        <div class="shape circle" style="left:80px;top:140px;width:70px;height:70px;background:#2ECC71;position:absolute;border:1px solid #333;clip-path:none;border-radius:999px"></div>
+        <div class="shape circle" style="left:180px;top:150px;width:80px;height:80px;background:#FF3B30;position:absolute;border:1px solid #333;border-radius:999px"></div>
+        <div class="shape tri" style="left:300px;top:150px;width:60px;height:60px;background:#4169E1;position:absolute;border:1px solid #333;clip-path:polygon(50% 0%,0% 100%,100% 100%)"></div>
+        <div class="shape circle" style="left:420px;top:110px;width:80px;height:80px;background:#4169E1;position:absolute;border:1px solid #333;border-radius:999px"></div>
+        <div class="shape circle" style="left:900px;top:170px;width:80px;height:80px;background:#4169E1;position:absolute;border:1px solid #333;border-radius:999px"></div>
+        <div class="shape square" style="left:560px;top:320px;width:70px;height:70px;background:#FFD60A;position:absolute;border:1px solid #333;border-radius:8px"></div>
+        <div class="shape tri" style="left:120px;top:520px;width:70px;height:70px;background:#2ECC71;position:absolute;border:1px solid #333;clip-path:polygon(50% 0%,0% 100%,100% 100%)"></div>
+        <div id="slice-line" style="position:absolute;left:110px;top:555px;width:80px;height:3px;background:#0F1B2D;transform:rotate(-8deg);opacity:0.9"></div>
+        <div style="position:absolute;left:780px;top:90px;font-weight:800;font-size:14px">Tap! ✋</div>
+        <div style="position:absolute;left:120px;top:595px;font-weight:800;font-size:14px">swipe!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Callouts -->
+  <div id="c1" class="clip" data-start="6.5" data-duration="2.5" style="display:flex;align-items:center;justify-content:center">
+    <div style="background:white;border:3px solid #0F1B2D;border-radius:999px;padding:10px 20px;font-weight:800;font-size:18px;box-shadow:0 4px 0 #0F1B2D">Tap red circle → +1</div>
+  </div>
+  <div id="c2" class="clip" data-start="10.5" data-duration="2.8" style="display:flex;align-items:center;justify-content:center">
+    <div style="background:#FFD60A;border:3px solid #0F1B2D;border-radius:999px;padding:10px 20px;font-weight:800;font-size:18px;box-shadow:0 4px 0 #0F1B2D">Slice triangle → white blade trail</div>
+  </div>
+  <div id="c3" class="clip" data-start="14.8" data-duration="2.7" style="display:flex;align-items:center;justify-content:center">
+    <div style="background:white;border:3px solid #0F1B2D;border-radius:999px;padding:10px 20px;font-weight:800;font-size:18px;box-shadow:0 4px 0 #0F1B2D">Double-tap yellow square quickly</div>
+  </div>
+
+  <!-- Switch -->
+  <div id="switch" class="clip flex items-center justify-center" data-start="17.8" data-duration="1.8">
+    <div style="background:#FFD60A;border:3px solid #0F1B2D;border-radius:999px;padding:12px 24px;font-weight:800;font-size:20px;box-shadow:0 4px 0 #0F1B2D">→ Now green triangles X3</div>
+  </div>
+
+  <!-- Outro -->
+  <div id="outro" class="clip flex flex-col items-center justify-center gap-4" data-start="20.5" data-duration="3.5">
+    <div style="background:white;border:3px solid #0F1B2D;border-radius:24px;padding:16px 32px;display:flex;gap:16px;align-items:center;box-shadow:0 6px 0 #0F1B2D">
+      <div style="background:#0F1B2D;color:white;border-radius:999px;padding:8px 16px;font-weight:800">Score 12</div>
+      <div style="font-weight:800">30s • Random Current 1-3 → Next different</div>
+      <div style="background:#00D492;color:white;border-radius:999px;padding:6px 12px;font-weight:800">On-device logs</div>
+    </div>
+    <div style="background:#0F1B2D;color:white;border-radius:999px;padding:10px 22px;font-weight:800;font-size:14px">https://tototofu123.github.io/object-click-game/ • private repo</div>
+    <div style="font-size:12px;font-weight:700;color:#0F1B2D;background:rgba(255,255,255,0.9);padding:6px 12px;border-radius:999px">Pencil kids-game-tablet.pen + HTML app.html — iPad ready</div>
+  </div>
+
+</div>
+
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+// title in
+tl.from("#title", {scale:0.9, opacity:0, duration:0.6, ease:"back.out(1.2)"}, 0);
+tl.from("#tablet", {y:80, opacity:0, duration:0.7, ease:"power3.out"}, 3.2);
+tl.from("#tablet .shape", {scale:0, opacity:0, duration:0.4, stagger:0.06, ease:"back.out(1.4)"}, 3.6);
+// floating (deterministic, seek-safe)
+tl.to("#tablet .shape", {y:"-=18", duration:1.2, yoyo:true, repeat:3, ease:"sine.inOut", stagger:0.08}, 4.2);
+tl.from("#slice-line", {scaleX:0, opacity:0, duration:0.35, ease:"power2.out"}, 10.5);
+tl.from("#c1", {y:20, opacity:0, duration:0.35}, 6.5);
+tl.from("#c2", {y:20, opacity:0, duration:0.35}, 10.5);
+tl.from("#c3", {y:20, opacity:0, duration:0.35}, 14.8);
+tl.from("#switch", {scale:0.8, opacity:0, duration:0.4, ease:"back.out(1.2)"}, 17.8);
+tl.from("#outro", {y:30, opacity:0, duration:0.5, ease:"power3.out"}, 20.5);
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

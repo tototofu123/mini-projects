@@ -1,0 +1,5 @@
+[div] 0:22
+[span] Current
+[span] Next
+[button] Reset
+[span] Tap circle • Slice triangle • Double-tap square
