@@ -1,0 +1,45 @@
+# Portfolio Duo — Working Checklist
+
+- [x] Reduce the normal route to exactly Hero, About, Projects, Skills, and Contact.
+- [x] Remove the separate boundaries and current-focus sections from the normal route.
+- [x] Keep the project carousel compact inside Projects and retain the System Viewer as a separate route.
+- [ ] Verify the five-section path is clearly shorter on desktop and mobile.
+- [x] Replace the project-led opening with Toto’s personal professional introduction and immediate contact path.
+- [x] Add a concise About, current focus, education, and working-principles section that does not frame Toto as a climber identity.
+- [x] Define the personal-first normal-route hierarchy: introduction, about, areas of practice, selected work, current focus and education, then contact.
+- [x] Keep the System Viewer as the dedicated project showcase route.
+- [x] Verify the normal route reads as a personal portfolio on desktop and mobile.
+- [x] Replace the long first-pass project reading sequence with a compact, infinite project carousel.
+- [x] Add a separately styled infinite skills carousel with a distinct interaction model.
+- [x] Keep individual project evidence reachable by keyboard and without requiring endless scrolling.
+- [x] Verify looping behavior, reduced-motion handling, mobile controls, and carousel accessibility.
+- [x] Inventory local screenshots, hardware photos, and visual artifacts for all six selected projects.
+- [x] Create only the missing project-specific visual compositions, preserving the evidence-first Constraint Ledger approach.
+- [x] Integrate visual media with useful alt text and static fallbacks across both portfolio routes.
+- [x] Re-check visual balance, mobile treatment, contrast, and media performance before checkpointing.
+- [x] Complete Constraint Ledger records C-03 through C-06 with real constraints, responses, proof, and limits.
+- [x] Build a separate interactive Showcase route that differs structurally and emotionally from the normal portfolio.
+- [x] Verify both routes in a browser on desktop and mobile, including keyboard navigation and reduced-motion behavior.
+- [x] Run type, production-build, and accessibility-quality checks; fix issues found before delivery.
+- [ ] Save and push the final production-ready dual-portfolio checkpoint.
+- [x] Reconfirm the six selected projects and their evidence boundaries before applying the Constraint Ledger redesign.
+- [ ] Replace the current landing view with the Constraint Ledger opening and first two real case entries.
+- [ ] Show Toto the rebuilt opening before completing the other four project entries.
+- [ ] Tomorrow: confirm the Constraint Ledger direction before replacing the current normal portfolio.
+- [ ] Tomorrow: rebuild the landing experience around six real constraints, six system responses, proof, and explicit limits.
+- [ ] Tomorrow: review the rebuilt normal portfolio together before creating a new checkpoint.
+- [x] Identify the generic visual and structural patterns in the current normal portfolio that do not come from Toto’s projects.
+- [x] Derive a new visual and interaction system from the six selected project artifacts, constraints, and technical workflows.
+- [ ] Validate the new direction with Toto before replacing the current normal portfolio.
+- [ ] Rebuild the normal portfolio so its primary interaction is specific to Toto’s work rather than a generic project-card grid.
+- [x] Verify local evidence and available local visual sources for the six selected projects.
+- [ ] Reuse the existing old-portfolio Is It AI Image screenshot without downloading external media. The old portfolio data references `/media/project-cnn.png`, but the image binary is not currently present in the local workspace.
+- [ ] Capture any additional project visuals only from locally running apps or local source folders.
+- [x] Build the hiring-focused normal portfolio as the primary responsive public experience.
+- [x] Verify desktop and mobile layouts, then save the finished website checkpoint.
+- [x] Use exactly six projects in both portfolio versions: HKUST Climb Society Web, HKUST Climbing App, STM32, OCR MCP, Perihel, and Is It AI Image.
+- [x] Define the shared information architecture, content model, and navigation for the normal portfolio and showcase portfolio.
+- [x] Define the normal portfolio’s page structure and project-case-study treatment.
+- [x] Define the showcase portfolio’s artifact-based interaction model and project-specific visual treatments.
+- [x] Create the asset inventory, evidence checklist, and accessibility/performance constraints.
+- [x] Create a private GitHub repository for the two portfolio copies and connect it to this workspace.
