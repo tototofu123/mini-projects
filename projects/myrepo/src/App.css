@@ -1,0 +1,427 @@
+/* ── @property for animatable angle ─────────────────────────────────── */
+@property --glow-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* ── Reset & tokens ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0f0f;
+  --surface: #161616;
+  --surface-2: #1c1c1c;
+  --border: #222;
+  --text: #e8e8e8;
+  --muted: #888;
+  --faint: #444;
+  --accent: #a8ff78;
+  --font: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --radius: 4px;
+  --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  --glow-1: #a8ff78;
+  --glow-2: #00e5ff;
+}
+
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+a { color: var(--accent); text-decoration: none; transition: opacity var(--transition); }
+a:hover { opacity: 0.75; }
+
+/* ── Top nav ────────────────────────────────────────────────────────── */
+.top-nav {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px;
+}
+.top-nav a { color: var(--muted); font-weight: 500; padding: 4px 2px; border-bottom: 2px solid transparent; transition: color var(--transition), border-color var(--transition); }
+.top-nav a:hover { color: var(--text); opacity: 1; }
+.top-nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+.nav-sep { color: var(--faint); }
+
+/* ── App container ──────────────────────────────────────────────────── */
+.app-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.header h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+.accent { color: var(--accent); }
+.subtitle { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+.subtitle a { color: var(--muted); border-bottom: 1px solid var(--faint); }
+
+/* ── Search ──────────────────────────────────────────────────────────── */
+.search-container { max-width: 480px; margin: 0 auto; }
+.search-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 14px;
+  padding: 10px 16px;
+  outline: none;
+  transition: border-color var(--transition);
+}
+.search-input::placeholder { color: var(--muted); }
+.search-input:focus { border-color: var(--accent); }
+
+/* ── Repo grid ───────────────────────────────────────────────────────── */
+.repo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+  gap: 16px;
+}
+
+/* ── Glow card base ─────────────────────────────────────────────────── */
+/*
+  ::before  = sharp 1px border layer  (z-index -1)
+  ::after   = blurred halo            (z-index -2)
+  Both invisible at rest, spin+fade-in on :hover.
+*/
+
+/* ── Repo card ───────────────────────────────────────────────────────── */
+.repo-card {
+  position: relative;
+  background: var(--surface);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition);
+  overflow: visible;
+  isolation: isolate;
+}
+
+.repo-card .card-main,
+.repo-card .card-details {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+.repo-card .card-main { border-radius: var(--radius) var(--radius) 0 0; }
+.repo-card .card-details { border-radius: 0 0 var(--radius) var(--radius); }
+
+.repo-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: calc(var(--radius) + 1px);
+  background: conic-gradient(
+    from var(--glow-angle),
+    transparent 0deg,
+    var(--glow-1) 60deg,
+    var(--glow-2) 120deg,
+    transparent 180deg,
+    transparent 360deg
+  );
+  z-index: -1;
+  animation: glow-spin 3s linear infinite;
+  animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.repo-card::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--radius) + 2px);
+  background: conic-gradient(
+    from var(--glow-angle),
+    transparent 0deg,
+    var(--glow-1) 60deg,
+    var(--glow-2) 120deg,
+    transparent 180deg,
+    transparent 360deg
+  );
+  z-index: -2;
+  filter: blur(6px);
+  animation: glow-spin 3s linear infinite;
+  animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.repo-card:hover::before,
+.repo-card:hover::after {
+  animation-play-state: running;
+  opacity: 1;
+}
+
+.repo-card:active .card-main,
+.repo-card:active .card-details {
+  background: #242424;
+}
+
+.repo-card.expanded::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+/* ── Blog card ───────────────────────────────────────────────────────── */
+/*
+  Blog card uses overflow:visible (unlike repo card which also does).
+  The image is clipped by .blog-card-img-wrap which has its own overflow:hidden.
+  Content (.blog-card-body) sits at z-index:1 to stay above the glow layers.
+  The ::before border and ::after halo are both free to bleed outside the card.
+*/
+.blog-card {
+  position: relative;
+  display: block;
+  background: transparent; /* card bg is handled by children so glow can bleed out */
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text);
+  isolation: isolate;
+  transition: background var(--transition);
+  overflow: visible; /* must be visible — overflow:hidden kills the halo */
+}
+
+/* Hero image thumbnail — clips the image to the card corners */
+.blog-card-img-wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 3 / 1;
+  overflow: hidden;
+  background: var(--surface-2);
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.blog-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.blog-card:hover .blog-card-img {
+  transform: scale(1.03);
+}
+
+/* Card text body — own background so glow doesn’t tint content */
+.blog-card-body {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 16px 20px 20px;
+}
+
+/* Sharp border ring — wider conic arc for blog cards */
+.blog-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: calc(var(--radius) + 1px);
+  background: conic-gradient(
+    from var(--glow-angle),
+    transparent 0deg,
+    var(--glow-1) 80deg,
+    var(--glow-2) 160deg,
+    transparent 220deg,
+    transparent 360deg
+  );
+  z-index: 0;
+  animation: glow-spin 3s linear infinite;
+  animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+/* Blurred halo — larger bleed + stronger blur for blog cards */
+.blog-card::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: calc(var(--radius) + 6px);
+  background: conic-gradient(
+    from var(--glow-angle),
+    transparent 0deg,
+    var(--glow-1) 80deg,
+    var(--glow-2) 160deg,
+    transparent 220deg,
+    transparent 360deg
+  );
+  z-index: -1;
+  filter: blur(12px);
+  animation: glow-spin 3s linear infinite;
+  animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.blog-card:hover::before,
+.blog-card:hover::after {
+  animation-play-state: running;
+  opacity: 1;
+}
+
+.blog-card:active .blog-card-body {
+  background: #242424;
+}
+
+/* ── Glow keyframe ───────────────────────────────────────────────────── */
+@keyframes glow-spin {
+  to { --glow-angle: 360deg; }
+}
+
+/* ── Card inner content ──────────────────────────────────────────────── */
+.card-main { padding: 18px 20px 16px; }
+.card-top h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.website-row { margin-bottom: 8px; }
+.website-link { font-size: 12px; color: var(--muted); border-bottom: 1px dashed var(--faint); }
+.website-link:hover { color: var(--accent); opacity: 1; }
+.description { font-size: 13px; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
+.topics { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.topic-tag { font-size: 11px; color: var(--muted); background: var(--surface-2); border: 1px solid var(--border); padding: 2px 7px; border-radius: 4px; }
+.card-footer { display: flex; align-items: center; gap: 12px; }
+.language { font-size: 12px; color: var(--faint); font-family: var(--mono); }
+
+/* ── Expanded details ────────────────────────────────────────────────── */
+.card-details { padding: 0 20px 20px; border-top: 1px solid var(--border); overflow: hidden; }
+.detail-loader { padding: 20px 0; font-size: 13px; color: var(--muted); }
+.detail-section { margin-top: 20px; }
+.detail-section h4 { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+.lang-stats { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 10px; }
+.lang-item { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.lang-name { color: var(--text); }
+.lang-pct { color: var(--muted); font-family: var(--mono); }
+.lang-bar { display: flex; height: 4px; border-radius: 2px; overflow: hidden; background: var(--border); }
+.lang-segment { background: var(--accent); }
+.tree-list { list-style: none; padding: 0; }
+.tree-list li { font-size: 12px; color: var(--muted); font-family: var(--mono); padding: 3px 0; }
+.tree-list li.folder { color: var(--text); }
+.readme-section .readme-content { font-size: 13px; color: var(--muted); line-height: 1.6; max-height: 300px; overflow-y: auto; }
+.readme-content h1, .readme-content h2, .readme-content h3 { color: var(--text); margin: 12px 0 6px; font-size: 14px; }
+.readme-content p { margin-bottom: 8px; }
+.readme-content code { font-family: var(--mono); background: var(--surface-2); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: var(--accent); }
+.github-button {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 16px; font-size: 13px; font-weight: 500;
+  color: var(--bg); background: var(--accent);
+  padding: 8px 16px; border-radius: 4px;
+  transition: opacity var(--transition);
+}
+.github-button:hover { opacity: 0.85; }
+
+/* ── Blog page ───────────────────────────────────────────────────────── */
+.blog-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 24px 100px;
+}
+.blog-header { margin-bottom: 48px; }
+.blog-header h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+.blog-list { display: flex; flex-direction: column; gap: 12px; }
+
+.blog-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.blog-style-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.blog-date { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+.blog-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 6px; letter-spacing: -0.01em; }
+.blog-summary { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; max-width: 60ch; }
+.blog-read { font-size: 13px; color: var(--accent); }
+
+/* ── Post reader ─────────────────────────────────────────────────────── */
+.post-reader {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 24px 100px;
+}
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 40px;
+  transition: color var(--transition);
+}
+.back-btn:hover { color: var(--accent); }
+.post-body {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text);
+}
+.post-body h1 { font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 700; letter-spacing: -0.02em; margin: 0 0 24px; }
+.post-body h2 { font-size: 1.2rem; font-weight: 600; margin: 40px 0 12px; color: var(--text); }
+.post-body h3 { font-size: 1rem; font-weight: 600; margin: 28px 0 8px; color: var(--muted); }
+.post-body p { margin-bottom: 16px; max-width: 68ch; }
+.post-body a { color: var(--accent); border-bottom: 1px solid transparent; transition: border-color var(--transition); }
+.post-body a:hover { border-bottom-color: var(--accent); opacity: 1; }
+.post-body code { font-family: var(--mono); background: var(--surface-2); padding: 2px 6px; border-radius: 3px; font-size: 13px; color: var(--accent); }
+.post-body pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; overflow-x: auto; margin-bottom: 20px; }
+.post-body pre code { background: none; padding: 0; font-size: 13px; }
+.post-body img { max-width: 100%; border-radius: var(--radius); margin: 20px 0; }
+.post-body blockquote { border-left: 2px solid var(--accent); padding-left: 16px; color: var(--muted); margin: 20px 0; }
+.post-body ul, .post-body ol { padding-left: 20px; margin-bottom: 16px; }
+.post-body li { margin-bottom: 6px; }
+.post-body hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+/* details/summary for the long-read expand */
+.post-body details { margin: 24px 0; }
+.post-body summary { cursor: pointer; color: var(--muted); font-size: 13px; list-style: none; }
+.post-body summary::-webkit-details-marker { display: none; }
+
+/* ── Shared ──────────────────────────────────────────────────────────── */
+.loader { text-align: center; padding: 60px 0; font-size: 14px; color: var(--muted); }
+.error { text-align: center; padding: 40px 0; color: #ff6b6b; font-size: 14px; }
+.no-results { text-align: center; padding: 60px 0; font-size: 14px; color: var(--muted); }
+.footer { text-align: center; margin-top: 64px; font-size: 12px; color: var(--faint); }
+.scroll-top {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); width: 40px; height: 40px; border-radius: 50%;
+  font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: border-color var(--transition);
+}
+.scroll-top:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── Reduced motion fallback ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .repo-card::before, .repo-card::after,
+  .blog-card::before, .blog-card::after {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+  .repo-card:hover { box-shadow: 0 0 0 1px var(--accent); }
+  .blog-card:hover { box-shadow: 0 0 0 1px var(--accent); }
+  .blog-card-img { transition: none; }
+}
+
+@media (max-width: 640px) {
+  .app-container, .blog-page, .post-reader { padding: 28px 16px 60px; }
+  .repo-grid { grid-template-columns: 1fr; }
+}

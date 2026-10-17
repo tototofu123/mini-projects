@@ -1,0 +1,186 @@
+name: Queue Blog Post
+
+# Triggers when 'blog-post' label is added to an issue.
+# Validates format, calculates the estimated publish date from queue
+# position, then comments with the exact scheduled date/time (HKT).
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  queue:
+    if: github.event.label.name == 'blog-post'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate issue format
+        id: validate
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          if [ -z "$ISSUE_TITLE" ]; then
+            echo "VALID=false" >> $GITHUB_OUTPUT
+            echo "REASON=Issue title is empty." >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          if [ ${#ISSUE_BODY} -lt 50 ]; then
+            echo "VALID=false" >> $GITHUB_OUTPUT
+            echo "REASON=Issue body is too short (minimum 50 characters of content)." >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "VALID=true" >> $GITHUB_OUTPUT
+
+      - name: Comment validation failure and exit
+        if: steps.validate.outputs.VALID == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `❌ **Blog post validation failed**\n\n${process.env.REASON}\n\nFix the issue and re-add the \`blog-post\` label to retry.`
+            });
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              name: 'blog-post'
+            }).catch(() => {});
+        env:
+          REASON: ${{ steps.validate.outputs.REASON }}
+
+      - name: Calculate queue position and estimated publish date
+        if: steps.validate.outputs.VALID == 'true'
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // HKT = UTC+8
+            const now = new Date(Date.now() + 8 * 3600 * 1000);
+            const todayHKT = now.toISOString().slice(0, 10);
+            const dayOfWeek = now.getUTCDay(); // 0=Sun, 6=Sat
+
+            // Read index.json to count posts already published today
+            let posts = [];
+            try {
+              posts = JSON.parse(fs.readFileSync('public/posts/index.json', 'utf8'));
+            } catch {}
+
+            function isoDate(d) {
+              try { return new Date(d).toISOString().slice(0, 10); } catch { return ''; }
+            }
+            const publishedToday = posts.filter(p => isoDate(p.date) === todayHKT).length;
+
+            // Count already-queued issues (not including this one yet)
+            const { data: queuedIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'blog-queued',
+              state: 'open',
+              per_page: 100
+            });
+            // Sort oldest first so position is meaningful
+            queuedIssues.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+            const queueDepth = queuedIssues.length; // before adding this issue
+
+            // ── Estimate publish date ──────────────────────────────────────
+            // Walk forward day by day from today, filling slots (1 weekday,
+            // 2 on weekend if total projected queue >= 3), until we place
+            // this issue's position in the queue.
+            //
+            // "slotsRemaining" tracks how many of today's slots are still free.
+            const projectedTotal = queueDepth + 1; // including this issue
+            function slotsForDay(jsDay, totalQueueOnThatDay) {
+              // jsDay: 0=Sun,6=Sat
+              const isWknd = jsDay === 0 || jsDay === 6;
+              return isWknd && totalQueueOnThatDay >= 3 ? 2 : 1;
+            }
+
+            let slotsUsedToday = publishedToday;
+            let todaySlots = slotsForDay(dayOfWeek, projectedTotal);
+            let positionLeft = queueDepth + 1; // this issue is at position queueDepth+1
+            let cursor = new Date(now); // starts at today HKT midnight conceptually
+            let estimatedDate = null;
+
+            for (let d = 0; d < 365; d++) {
+              const dow = cursor.getUTCDay();
+              const slots = d === 0
+                ? todaySlots - slotsUsedToday   // today: remaining slots only
+                : slotsForDay(dow, Math.max(0, positionLeft)); // future days
+              const available = Math.max(0, slots);
+              if (positionLeft <= available) {
+                estimatedDate = new Date(cursor);
+                break;
+              }
+              positionLeft -= available;
+              cursor = new Date(cursor.getTime() + 24 * 3600 * 1000);
+            }
+
+            // Format date as "Mon 23 Jun 2026"
+            function formatDate(d) {
+              return d.toLocaleDateString('en-GB', {
+                weekday: 'short', day: 'numeric', month: 'short', year: 'numeric',
+                timeZone: 'UTC'
+              });
+            }
+
+            const estimatedDisplay = estimatedDate ? formatDate(estimatedDate) : 'TBD';
+            const isToday = estimatedDate
+              ? estimatedDate.toISOString().slice(0, 10) === todayHKT
+              : false;
+
+            core.setOutput('queue_depth', String(queueDepth));
+            core.setOutput('estimated_date', estimatedDisplay);
+            core.setOutput('is_today', String(isToday));
+
+      - name: Add blog-queued label
+        if: steps.validate.outputs.VALID == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'blog-queued',
+              color: 'e4e669',
+              description: 'Blog post queued for scheduled publishing'
+            }).catch(() => {});
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['blog-queued']
+            });
+
+      - name: Comment — confirmed with estimated publish date
+        if: steps.validate.outputs.VALID == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const isToday = process.env.IS_TODAY === 'true';
+            const date = process.env.ESTIMATED_DATE;
+            const when = isToday
+              ? `today, **${date}**`
+              : `**${date}**`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `✅ **Validated and queued.**\n\nThis post is scheduled to publish on ${when} at **12:00 HKT**.`
+            });
+        env:
+          IS_TODAY: ${{ steps.check.outputs.is_today }}
+          ESTIMATED_DATE: ${{ steps.check.outputs.estimated_date }}

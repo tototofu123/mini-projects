@@ -1,0 +1,11 @@
+# DEPRECATED — replaced by queue-post.yml + publish-scheduled.yml
+# Kept as a no-op to avoid breaking any existing references.
+# Safe to delete once the new pipeline is confirmed working.
+name: '[DEPRECATED] Create Blog Post from Issue'
+on:
+  workflow_dispatch:
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'This workflow is deprecated. Use queue-post.yml instead.'
