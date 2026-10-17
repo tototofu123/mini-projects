@@ -1,0 +1,16 @@
+# Database Login/Logout System
+
+Design and implement a complete login/logout database system for a company.
+Requirements:
+1. SQLite database with tables: users, sessions, audit_log
+2. Python script implementing: register, login, logout, session validation
+3. Password policy: 8+ chars, 1 uppercase, 1 number
+4. Max 3 active sessions per user
+5. Sessions expire after 24 hours
+6. Log ALL login attempts to audit_log
+7. CLI menu demonstrating all features
+8. matplotlib visualization: bar chart of active sessions per user, line chart of login frequency
+
+Use bcrypt for password hashing.
+Output COMPLETE runnable Python code.
+Output ONLY the code.

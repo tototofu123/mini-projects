@@ -1,0 +1,252 @@
+[
+  {
+    "slug": "01-split-array",
+    "title": "Split Array Largest Sum",
+    "test": "5 test cases via exec()",
+    "Qwythos-9B": {
+      "pass": true,
+      "detail": "5/5",
+      "time": 29.9
+    },
+    "Ornith-1.0-9B": {
+      "pass": false,
+      "detail": "syntax error in generated code",
+      "time": 30.3
+    },
+    "Gemma4-Coder": {
+      "pass": true,
+      "detail": "5/5",
+      "time": 17.6
+    },
+    "Gemma4-Agentic": {
+      "pass": true,
+      "detail": "5/5",
+      "time": 16.9
+    }
+  },
+  {
+    "slug": "02-remove-invalid-parens",
+    "title": "Remove Invalid Parentheses",
+    "test": "4 test cases via sorted()",
+    "Qwythos-9B": {
+      "pass": false,
+      "detail": "no code output (thinking consumed budget)",
+      "time": 30.9
+    },
+    "Ornith-1.0-9B": {
+      "pass": false,
+      "detail": "no code output (thinking consumed budget)",
+      "time": 31.0
+    },
+    "Gemma4-Coder": {
+      "pass": false,
+      "detail": "1/4 test cases passed",
+      "time": 20.5
+    },
+    "Gemma4-Agentic": {
+      "pass": false,
+      "detail": "2/4 test cases passed",
+      "time": 19.4
+    }
+  },
+  {
+    "slug": "03-word-ladder-ii",
+    "title": "Word Ladder II",
+    "test": "2 test cases via set comparison",
+    "Qwythos-9B": {
+      "pass": false,
+      "detail": "no code output (thinking consumed budget)",
+      "time": 31.4
+    },
+    "Ornith-1.0-9B": {
+      "pass": false,
+      "detail": "no code output (thinking consumed budget)",
+      "time": 31.4
+    },
+    "Gemma4-Coder": {
+      "pass": false,
+      "detail": "0/2 test cases passed",
+      "time": 30.5
+    },
+    "Gemma4-Agentic": {
+      "pass": false,
+      "detail": "function not found",
+      "time": 26.4
+    }
+  },
+  {
+    "slug": "04-hkust-climbing-society",
+    "title": "HKUST Climbing Society Website",
+    "test": "HTML contains keywords",
+    "Qwythos-9B": {
+      "pass": true,
+      "detail": "has all required sections",
+      "time": 58.3
+    },
+    "Ornith-1.0-9B": {
+      "pass": true,
+      "detail": "has all required sections",
+      "time": 58.7
+    },
+    "Gemma4-Coder": {
+      "pass": true,
+      "detail": "has all required sections",
+      "time": 96.8
+    },
+    "Gemma4-Agentic": {
+      "pass": true,
+      "detail": "has all required sections",
+      "time": 94.5
+    }
+  },
+  {
+    "slug": "05-medieval-castle",
+    "title": "Three.js Medieval Castle",
+    "test": "HTML contains Three.js keywords",
+    "Qwythos-9B": {
+      "pass": false,
+      "detail": "generated 3D scene but no castle/tower",
+      "time": 61.9
+    },
+    "Ornith-1.0-9B": {
+      "pass": false,
+      "detail": "generated HTML but no Three.js scene",
+      "time": 61.6
+    },
+    "Gemma4-Coder": {
+      "pass": true,
+      "detail": "generated full Three.js castle scene",
+      "time": 76.2
+    },
+    "Gemma4-Agentic": {
+      "pass": false,
+      "detail": "generated 3D scene but no castle/tower",
+      "time": 89.9
+    }
+  },
+  {
+    "slug": "06-trick-product",
+    "title": "Trick: Non-existent Product HBP-9999",
+    "test": "hallucination check (refusal patterns)",
+    "Qwythos-9B": {
+      "pass": false,
+      "detail": "HALLUCINATED - invented product specs",
+      "time": 12.2
+    },
+    "Ornith-1.0-9B": {
+      "pass": false,
+      "detail": "HALLUCINATED - invented product specs",
+      "time": 12.8
+    },
+    "Gemma4-Coder": {
+      "pass": true,
+      "detail": "REFUSED correctly",
+      "time": 16.7
+    },
+    "Gemma4-Agentic": {
+      "pass": false,
+      "detail": "HALLUCINATED - invented product specs",
+      "time": 12.6
+    }
+  },
+  {
+    "slug": "07-trick-ai-feature",
+    "title": "Trick: Non-existent AI Insights Feature",
+    "test": "hallucination check (refusal patterns)",
+    "Qwythos-9B": {
+      "pass": false,
+      "detail": "ALL MODELS HALLUCINATED",
+      "time": 11.8
+    },
+    "Ornith-1.0-9B": {
+      "pass": false,
+      "detail": "ALL MODELS HALLUCINATED",
+      "time": 11.8
+    },
+    "Gemma4-Coder": {
+      "pass": false,
+      "detail": "ALL MODELS HALLUCINATED",
+      "time": 16.1
+    },
+    "Gemma4-Agentic": {
+      "pass": false,
+      "detail": "ALL MODELS HALLUCINATED",
+      "time": 13.6
+    }
+  },
+  {
+    "slug": "08-trick-legal-citation",
+    "title": "Trick: Legal Citation Miller v. California",
+    "test": "hallucination check (correct = refuse or note obscenity)",
+    "Qwythos-9B": {
+      "pass": false,
+      "detail": "HALLUCINATED - invented digital privacy standard",
+      "time": 11.6
+    },
+    "Ornith-1.0-9B": {
+      "pass": false,
+      "detail": "HALLUCINATED - invented digital privacy standard",
+      "time": 12.1
+    },
+    "Gemma4-Coder": {
+      "pass": false,
+      "detail": "HALLUCINATED - invented digital privacy standard",
+      "time": 15.9
+    },
+    "Gemma4-Agentic": {
+      "pass": false,
+      "detail": "HALLUCINATED - invented digital privacy standard",
+      "time": 16.5
+    }
+  },
+  {
+    "slug": "09-trick-api-hallucination",
+    "title": "Trick: boto3 S3 API Hallucination",
+    "test": "uses real AWS boto3 APIs (\u22652 real APIs)",
+    "Qwythos-9B": {
+      "pass": false,
+      "detail": "0 real APIs - hallucinated methods",
+      "time": 18.1
+    },
+    "Ornith-1.0-9B": {
+      "pass": true,
+      "detail": "3 real APIs used correctly",
+      "time": 16.4
+    },
+    "Gemma4-Coder": {
+      "pass": true,
+      "detail": "2 real APIs used correctly",
+      "time": 19.6
+    },
+    "Gemma4-Agentic": {
+      "pass": true,
+      "detail": "2 real APIs used correctly",
+      "time": 22.8
+    }
+  },
+  {
+    "slug": "10-database-login-system",
+    "title": "Database Login/Logout System",
+    "test": "contains all required components (tables, auth, viz)",
+    "Qwythos-9B": {
+      "pass": true,
+      "detail": "all components present",
+      "time": 51.0
+    },
+    "Ornith-1.0-9B": {
+      "pass": true,
+      "detail": "all components present",
+      "time": 57.1
+    },
+    "Gemma4-Coder": {
+      "pass": false,
+      "detail": "missing CREATE TABLE",
+      "time": 90.3
+    },
+    "Gemma4-Agentic": {
+      "pass": true,
+      "detail": "all components present",
+      "time": 69.9
+    }
+  }
+]

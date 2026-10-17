@@ -1,0 +1,7 @@
+To give you the right steps, I need to know which analytics platform your team uses (e.g., Salesforce, Tableau, HubSpot, a custom dashboard, etc.). Each platform's AI Insights Generator is different.
+
+If you can tell me the name of the software, I can walk you through it.
+
+
+
+Exiting...

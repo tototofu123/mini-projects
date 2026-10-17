@@ -1,0 +1,152 @@
+Requirements:
+1. Central keep/tower with battlements (crenellations on top)
+2. Four corner towers connected by curtain walls
+3. Gatehouse with archway
+4. Drawbridge over a moat (animated or static)
+5. Ground plane with green color
+6. Sky gradient background
+7. OrbitControls for orbit/zoom/pan
+8. Ambient + directional sun lighting with shadows
+9. Camera starts at 45 degrees above
+
+Load Three.js from CDN (ES modu ... (truncated)
+
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medieval Castle - Qwythos</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+        import { OrbitControls } from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87CEEB);
+        scene.fog = new THREE.Fog(0x87CEEB, 200, 600);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.set(0, 100, 180);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        // Controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxPolarAngle = Math.PI / 2.2;
+        controls.minPolarAngle = Math.PI / 4.5;
+        controls.target.set(0, 0, 0);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        scene.add(ambientLight);
+
+        const sunLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        sunLight.position.set(150, 200, 100);
+        sunLight.castShadow = true;
+        sunLight.shadow.mapSize.width = 2048;
+        sunLight.shadow.mapSize.height = 2048;
+        sunLight.shadow.camera.near = 10;
+        sunLight.shadow.camera.far = 500;
+        sunLight.shadow.camera.left = -150;
+        sunLight.shadow.camera.right = 150;
+        sunLight.shadow.camera.top = 150;
+        sunLight.shadow.camera.bottom = -150;
+        scene.add(sunLight);
+
+        // Ground plane (green)
+        const groundGeo = new THREE.PlaneGeometry(600, 600);
+        const groundMat = new THREE.MeshStandardMaterial({ color: 0x2d5a27, roughness: 1 });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Materials
+        const stoneMat = new THREE.MeshStandardMaterial({ color: 0x8b7355, roughness: 0.9 });
+        const woodMat = new THREE.MeshStandardMaterial({ color: 0x6b4423, roughness: 0.8 });
+        const woodDarkMat = new THREE.MeshStandardMaterial({ color: 0x3e2714, roughness: 0.8 });
+        const woodLightMat = new THREE.MeshStandardMaterial({ color: 0xdeb887, roughness: 0.7 });
+        const woodDark2Mat = new THREE.MeshStandardMaterial({ color: 0x2a1a0a, roughness: 0.8 });
+        const woodLight2Mat = new THREE.MeshStandardMaterial({ color: 0xc4a484, roughness: 0.7 });
+        const woodDark3Mat = new THREE.MeshStandardMaterial({ color: 0x1a0f05, roughness: 0.8 });
+        const woodLight3Mat = new THREE.MeshStandardMaterial({ color: 0xa88868, roughness: 0.7 });
+        const woodDark4Mat = new THREE.MeshStandardMaterial({ color: 0x0f0803, roughness: 0.8 });
+        const woodLight4Mat = new THREE.MeshStandardMaterial({ color: 0x886848, roughness: 0.7 });
+        const woodDark5Mat = new THREE.MeshStandardMaterial({ color: 0x050301, roughness: 0.8 });
+        const woodLight5Mat = new THREE.MeshStandardMaterial({ color: 0x684828, roughness: 0.7 });
+        const woodDark6Mat = new THREE.MeshStandardMaterial({ color: 0x010101, roughness: 0.8 });
+        const woodLight6Mat = new THREE.MeshStandardMaterial({ color: 0x482808, roughness: 0.7 });
+        const woodDark7Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight7Mat = new THREE.MeshStandardMaterial({ color: 0x280800, roughness: 0.7 });
+        const woodDark8Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight8Mat = new THREE.MeshStandardMaterial({ color: 0x080000, roughness: 0.7 });
+        const woodDark9Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight9Mat = new THREE.MeshStandardMaterial({ color: 0x000008, roughness: 0.7 });
+        const woodDark10Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight10Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark11Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight11Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark12Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight12Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark13Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight13Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark14Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight14Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark15Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight15Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark16Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight16Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark17Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight17Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark18Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight18Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark19Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight19Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark20Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight20Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark21Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight21Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark22Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight22Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark23Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight23Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark24Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight24Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark25Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight25Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark26Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight26Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark27Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight27Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark28Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight28Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark29Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight29Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark30Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight30Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark31Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight31Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark32Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight32Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.7 });
+        const woodDark33Mat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.8 });
+        const woodLight3
+
+
+Exiting...

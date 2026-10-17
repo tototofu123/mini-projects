@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medieval Castle Scene</title>
+    <style>
+        body { margin: 0; background: #87ceeb; overflow: hidden; }
+        canvas { display: block; width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+<script type="importmap">
+{
+  "dependencies": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/dist/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/dist/three.js"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/orbitcontrols.js';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x87ceeb);
+scene.fog = new THREE.Fog(0x87ceeb, 100, 1000);
+
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+camera.position.set(20, 20, 20);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = renderer.shadowMap.PCFSSShadowMap;
+renderer.shadowMap.shadowr10 = 1024;
+renderer.shadowMap.shadowr2 = 1024;
+renderer.shadowMap.shadowr3 = 1024;
+renderer.shadowMap.shadowr4 = 1024;
+renderer.shadowMap.shadowr5 = 1024;
+renderer.shadowMap.shadowr6 = 1024;
+renderer.shadowMap.shadowr7 = 1024;
+renderer.shadowMap.shadowr8 = 1024;
+renderer.shadowMap.shadowr9 = 1024;
+renderer.shadowMap.shadowr10 = 1024;
+renderer.shadowMap.shadowr11 = 1024;
+renderer.shadowMap.shadowr12 = 1024;
+renderer.shadowMap.shadowr13 = 1024;
+renderer.shadowMap.shadowr14 = 1024;
+renderer.shadowMap.shadowr15 = 1024;
+renderer.shadowMap.shadowr16 = 1024;
+renderer.shadowMap.shadowr17 = 1024;
+renderer.shadowMap.shadowr18 = 1024;
+renderer.shadowMap.shadowr19 = 1024;
+renderer.shadowMap.shadowr20 = 1024;
+renderer.shadowMap.shadowr21 = 1024;
+renderer.shadowMap.shadowr22 = 1024;
+renderer.shadowMap.shadowr23 = 1024;
+renderer.shadowMap.shadowr24 = 1024;
+renderer.shadowMap.shadowr25 = 1024;
+renderer.shadowMap.shadowr26 = 1024;
+renderer.shadowMap.shadowr27 = 1024;
+renderer.shadowMap.shadowr28 = 1024;
+renderer.shadowMap.shadowr29 = 1024;
+renderer.shadowMap.shadowr30 = 1024;
+renderer.shadowMap.shadowr31 = 1024;
+renderer.shadowMap.shadowr32 = 1024;
+renderer.shadowMap.shadowr33 = 1024;
+renderer.shadowMap.shadowr34 = 1024;
+renderer.shadowMap.shadowr35 = 1024;
+renderer.shadowMap.shadowr36 = 1024;
+renderer.shadowMap.shadowr37 = 1024;
+renderer.shadowMap.shadowr38 = 1024;
+renderer.shadowMap.shadowr39 = 1024;
+renderer.shadowMap.shadowr40 = 1024;
+renderer.shadowMap.shadowr41 = 1024;
+renderer.shadowMap.shadowr42 = 1024;
+renderer.shadowMap.shadowr43 = 1024;
+renderer.shadowMap.shadowr44 = 1024;
+renderer.shadowMap.shadowr45 = 1024;
+renderer.shadowMap.shadowr46 = 1024;
+renderer.shadowMap.shadowr47 = 1024;
+renderer.shadowMap.shadowr48 = 1024;
+renderer.shadowMap.shadowr49 = 1024;
+renderer.shadowMap.shadowr50 = 1024;
+renderer.shadowMap.shadowr51 = 1024;
+renderer.shadowMap.shadowr52 = 1024;
+renderer.shadowMap.shadowr53 = 1024;
+renderer.shadowMap.shadowr54 = 1024;
+renderer.shadowMap.shadowr55 = 1024;
+renderer.shadowMap.shadowr56 = 1024;
+renderer.shadowMap.shadowr57 = 1024;
+renderer.shadowMap.shadowr58 = 1024;
+renderer.shadowMap.shadowr59 = 1024;
+renderer.shadowMap.shadowr60 = 1024;
+renderer.shadowMap.shadowr61 = 1024;
+renderer.shadowMap.shadowr62 = 1024;
+renderer.shadowMap.shadowr63 = 1024;
+renderer.shadowMap.shadowr64 = 1024;
+renderer.shadowMap.shadowr65 = 1024;
+renderer.shadowMap.shadowr66 = 1024;
+renderer.shadowMap.shadowr67 = 1024;
+renderer.shadowMap.shadowr68 = 1024;
+renderer.shadowMap.shadowr69 = 1024;
+renderer.shadowMap.shadowr70 = 1024;
+renderer.shadowMap.shadowr71 = 1024;
+renderer.shadowMap.shadowr72 = 1024;
+renderer.shadowMap.shadowr73 = 1024;
+renderer.shadowMap.shadowr74 = 1024;
+renderer.shadowMap.shadowr75 = 1024;
+renderer.shadowMap.shadowr76 = 1024;
+renderer.shadowMap.shadowr77 = 1024;
+renderer.shadowMap.shadowr78 = 1024;
+renderer.shadowMap.shadowr79 = 1024;
+renderer.shadowMap.shadowr80 = 1024;
+renderer.shadowMap.shadowr81 = 1024;
+renderer.shadowMap.shadowr82 = 1024;
+renderer.shadowMap.shadowr83 = 1024;
+renderer.shadowMap.shadowr84 = 1024;
+renderer.shadowMap.shadowr85 = 1024;
+renderer.shadowMap.shadowr86 = 1024;
+renderer.shadowMap.shadowr87 = 1024;
+renderer.shadowMap.shadowr88 = 1024;
+renderer.shadowMap.shadowr89 = 1024;
+renderer.shadowMap.shadowr90 = 1024;
+renderer.shadowMap.shadowr91 = 1024;
+renderer.shadowMap.shadowr92 = 1024;
+renderer.shadowMap.shadowr93 = 1024;
+renderer.shadowMap.shadowr94 = 1024;
+renderer.shadowMap.shadowr95 = 1024;
+renderer.shadowMap.shadowr96 = 1024;
+renderer.shadowMap.shadowr97 = 1024;
+renderer.shadowMap.shadowr98 = 1024;
+renderer.shadowMap.shadowr99 = 1024;
+renderer.shadowMap.shadowr100 = 1024;
+renderer.shadowMap.shadowr101 = 1024;
+renderer.shadowMap.shadowr102 = 1024;
+renderer.shadowMap.shadowr103 = 1024;
+renderer.shadowMap.shadowr104 = 1024;
+renderer.shadowMap.shadowr105 = 1024;
+renderer.shadowMap.shadowr106 = 1024;
+renderer.shadowMap.shadowr107 = 1024;
+renderer.shadowMap.shadowr108 = 1024;
+renderer.shadowMap.shadowr109 = 1024;
+renderer.shadowMap.shadowr110 = 1024;
+renderer.shadowMap.shadowr111 = 1024;
+renderer.shadowMap.shadowr112 = 1024;
+renderer.shadowMap.shadowr113 = 1024;
+renderer.shadowMap.shadowr114 = 1024;
+renderer.shadowMap.shadowr115 = 1024;
+renderer.shadowMap.shadowr116 = 1024;
+renderer.shadowMap.shadowr117 = 1024;
+renderer.shadowMap.shadowr118 = 1024;
+renderer.shadowMap.shadowr119 = 1024;
+renderer.shadowMap.shadowr120 = 1024;
+renderer.shadowMap.shadowr121 = 1024;
+renderer.shadowMap.shadowr122 = 1024;
+renderer.shadowMap.shadowr123 = 1024;
+renderer.shadowMap.shadowr124 = 1024;
+renderer.shadowMap.shadowr125 = 1024;
+renderer.shadowMap.shadowr126 = 1024;
+renderer.shadowMap.shadowr127 = 1024;
+renderer.shadowMap.shadowr128 = 1024;
+renderer.shadowMap.shadowr129 = 1024;
+renderer.shadowMap.shadowr130 = 1024;
+renderer.shadowMap.shadowr131 = 1024;
+renderer.shadowMap.shadowr132 = 1024;
+renderer.shadowMap.shadowr133 = 1024;
+renderer.shadowMap.shadowr134 = 1024;
+renderer.shadowMap.shadowr135 = 1024;
+renderer.shadowMap.shadowr136 = 1024;
+renderer.shadowMap.shadowr137 = 1024;
+renderer.shadowMap.shadowr138 = 1024;
+renderer.shadowMap.shadowr139 = 1024;
+renderer.shadowMap.shadowr140 = 1024;
+renderer.shadowMap.shadowr141 = 1024;
+renderer.shadowMap.shadowr142 = 1024;
+renderer.shadowMap.shadowr143 = 1024;
+renderer.shadowMap.shadowr144 = 1024;
+renderer.shadowMap.shadowr145 = 1024;
+renderer.shadowMap.shadowr146 = 1024;
+renderer.shadowMap.shadowr147 = 1024;
+renderer.shadowMap.shadowr148 = 1024;
+renderer.shadowMap.shadowr149 = 1024;
+renderer.shadowMap.shadowr150 = 1024;
+renderer.shadowMap.shadowr151 = 1024;
+renderer.shadowMap.shadowr152 = 1024;
+renderer.shadowMap.shadowr153 = 1024;
+renderer.shadowMap.shadowr154 = 1024;
+renderer.shadowMap.shadowr155 = 1024;
+renderer.shadowMap.shadowr156 = 1024;
+renderer.shadowMap.shadowr157 = 1024;
+renderer.shadowMap.shadowr158 = 1024;
+renderer.shadowMap.shadowr159 = 1024;
+renderer.shadowMap.shadowr160 = 1024;
+renderer.shadowMap.shadowr161 = 1024;
+renderer.shadowMap.shadowr162 = 1024;
+renderer.shadowMap.shadowr163 = 1024;
+renderer.shadowMap.shadowr164 = 1024;
+renderer.shadowMap.shadowr165 = 1024;
+renderer.shadowMap.shadowr166 = 1024;
+renderer.shadowMap.shadowr167 = 1024;
+renderer.shadowMap.shadowr168 = 1024;
+renderer.shadowMap.shadowr169 = 1024;
+renderer.shadowMap.shadowr170 = 1024;
+renderer.shadowMap.shadowr171 = 1024;
+renderer.shadowMap.shadowr172 = 1024;
+renderer.shadowMap.shadowr173 = 1024;
+renderer.shadowMap.shadowr174 = 1024;
+renderer.shadowMap.shadowr175 = 1024;
+renderer.shadowMap.shadowr176 = 1024;
+renderer.shadowMap.shadowr177 = 1024;
+renderer.shadowMap.shadowr178 = 1024;
+renderer.shadowMap.shadowr179 = 1024;
+renderer.shadowMap.shadowr180 = 1024;
+renderer.shadowMap.shadowr181 = 1024;
+renderer.shadowMap.shadowr182 = 1024;
+renderer.shadowMap.shadowr183 = 1024;
+renderer.shadowMap.shadowr184 = 1024;
+renderer.shadowMap.shadowr185 = 1024;
+renderer.shadowMap.shadowr186 = 1024;
+renderer.shadowMap.shadowr187 = 1024;
+renderer.shadowMap.shadowr188 = 1024;
+renderer.shadowMap.shadowr189 = 1024;
+renderer.shadowMap.shadowr190 = 102
+
+
+Exiting...

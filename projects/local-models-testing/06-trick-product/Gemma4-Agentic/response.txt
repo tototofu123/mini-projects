@@ -1,0 +1,4 @@
+<|tool_call>call:google_search{queries:<|"|>HBP-9999 brake pad set spec sheet pricing vehicle compatibility<|"|>,"HBP-9999 brake pad material composition temperature range warranty<|"|>,"HBP-9999 brake pad manufacturer catalog<|"|>}}<tool_call|>
+
+
+Exiting...
