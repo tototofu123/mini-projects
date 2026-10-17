@@ -1,0 +1,361 @@
+
+        :root {
+            --board-surface: #C78F55;
+            --board-grid: #6B3F1F;
+            --pawn-p1: #2563EB;
+            --pawn-p2: #DC2626;
+            --wall-solid: #111827;
+            --wall-ghost: rgba(17, 24, 39, 0.45);
+            --background: #E9E1D5;
+            --text-primary: #1B1713;
+            --panel-bg: #F8F1E7;
+            --highlight: #FDE047;
+            --cell-size: clamp(34px, 7.2vw, 48px);
+            --wall-gap: clamp(8px, 1.8vw, 12px);
+            --board-padding: clamp(12px, 3vw, 24px);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-primary);
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+            padding: 20px 12px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin: 0 0 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            font-size: clamp(1.5rem, 4.8vw, 2.4rem);
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            align-items: center;
+            width: min(100%, 740px);
+        }
+
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px 20px;
+            background: var(--panel-bg);
+            border-radius: 8px;
+            border: 2px solid #BA9269;
+            box-sizing: border-box;
+        }
+
+        .player-info.active {
+            border-color: var(--wall-solid);
+        }
+
+        .wall-bank {
+            display: flex;
+            gap: 4px;
+        }
+
+        .bank-wall {
+            width: 8px;
+            height: 34px;
+            background-color: var(--wall-solid);
+            border-radius: 2px;
+            cursor: grab;
+        }
+
+        .bank-wall.dragging {
+            opacity: 0.5;
+        }
+
+        .board {
+            background-color: var(--board-surface);
+            padding: var(--board-padding);
+            border-radius: 8px;
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(9, var(--cell-size));
+            grid-template-rows: repeat(9, var(--cell-size));
+            gap: var(--wall-gap);
+            border: 3px solid #5B3216;
+            box-sizing: border-box;
+        }
+
+        .board-stage {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .wall-toolbox {
+            background: var(--panel-bg);
+            border: 2px solid #BA9269;
+            border-radius: 8px;
+            padding: 10px 8px;
+            width: 68px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            box-sizing: border-box;
+        }
+
+        .wall-tool-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+        }
+
+        .wall-tool {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            border: 2px solid #5B3216;
+            background: #E6CCAF;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wall-tool.active {
+            box-shadow: 0 0 0 3px #FDE047;
+        }
+
+        .wall-tool:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
+        .wall-tool-piece {
+            background: var(--wall-solid);
+            border-radius: 3px;
+            transition: transform 120ms ease;
+        }
+
+        .wall-tool-piece.horizontal {
+            width: 30px;
+            height: 8px;
+        }
+
+        .wall-tool-piece.vertical {
+            width: 8px;
+            height: 30px;
+        }
+
+        #wall-tool-count {
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .cell {
+            background-color: var(--board-grid);
+            border-radius: 4px;
+            width: var(--cell-size);
+            height: var(--cell-size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 120ms ease;
+        }
+
+        .cell.highlight {
+            background-color: #89542D;
+            box-shadow: inset 0 0 0 3px var(--highlight);
+        }
+
+        .cell.highlight::after {
+            content: '';
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--highlight);
+            opacity: 0.95;
+            position: absolute;
+        }
+
+        .cell.preview-affected {
+            box-shadow: inset 0 0 0 3px #34D399;
+        }
+
+        .cell.preview-affected::before {
+            content: '';
+            position: absolute;
+            inset: 7px;
+            border-radius: 3px;
+            background: rgba(52, 211, 153, 0.22);
+            pointer-events: none;
+        }
+
+        .cell:hover {
+            background-color: #7A4925;
+        }
+
+        .pawn {
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            transition: transform 0.1s ease;
+            border: 3px solid #F8F1E7;
+            box-sizing: border-box;
+        }
+
+        .pawn-1 { background-color: var(--pawn-p1); }
+        .pawn-2 { background-color: var(--pawn-p2); }
+
+        /* Walls */
+        .wall {
+            position: absolute;
+            background-color: var(--wall-solid);
+            border-radius: 4px;
+            z-index: 10;
+        }
+
+        .wall.horizontal {
+            height: var(--wall-gap);
+            width: calc(var(--cell-size) * 2 + var(--wall-gap));
+        }
+
+        .wall.vertical {
+            width: var(--wall-gap);
+            height: calc(var(--cell-size) * 2 + var(--wall-gap));
+        }
+
+        .ghost-wall {
+            position: absolute;
+            background-color: var(--wall-ghost);
+            pointer-events: none;
+            z-index: 5;
+            display: none;
+            box-shadow: inset 0 0 0 2px #F8F1E7, 0 0 0 1px #111827;
+            opacity: 0.95;
+        }
+
+        .ghost-wall.invalid {
+            background-color: rgba(220, 38, 38, 0.65) !important;
+            box-shadow: inset 0 0 0 2px #F8F1E7, 0 0 0 1px #B91C1C;
+        }
+
+        .cursor-wall {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.92;
+            display: none;
+            transform: translate(-50%, -50%);
+            background: var(--wall-solid);
+            border-radius: 4px;
+            box-shadow: 0 0 0 2px #F8F1E7, 0 0 0 4px #111827;
+        }
+
+        .cursor-wall.horizontal {
+            width: calc(var(--cell-size) * 2 + var(--wall-gap));
+            height: var(--wall-gap);
+        }
+
+        .cursor-wall.vertical {
+            width: var(--wall-gap);
+            height: calc(var(--cell-size) * 2 + var(--wall-gap));
+        }
+
+        body.wall-tool-active {
+            cursor: crosshair;
+        }
+
+        .board.drag-active {
+            box-shadow: 0 0 0 4px #FDE047;
+        }
+
+        .board.drag-active .cell {
+            cursor: crosshair;
+        }
+
+        .controls {
+            margin-top: 16px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            background-color: var(--wall-solid);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:focus-visible {
+            outline: none;
+            border-color: var(--highlight);
+        }
+
+        #turn-indicator {
+            font-size: clamp(1rem, 3.4vw, 1.25rem);
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        #wall-mode-indicator {
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 640px) {
+            .player-info {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+
+            .bank-wall {
+                width: 7px;
+                height: 28px;
+            }
+
+            .controls {
+                width: 100%;
+            }
+
+            button {
+                flex: 1;
+                min-width: 145px;
+                padding: 10px 12px;
+            }
+
+            .board-stage {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .wall-toolbox {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 8px 12px;
+            }
+        }
+
+        .turn-1 { color: var(--pawn-p1); }
+        .turn-2 { color: var(--pawn-p2); }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quoridor Rustic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>QUORIDOR</h1>
+    
+    <div id="turn-indicator" class="turn-1">Player 1's Turn</div>
+    <div id="wall-mode-indicator">Wall: Horizontal (Press R to rotate)</div>
+
+    <div class="game-container">
+        <!-- Player 2 Info (Top) -->
+        <div id="p2-panel" class="player-info">
+            <span>Player 2 (Red)</span>
+            <div id="p2-walls" class="wall-bank"></div>
+        </div>
+
+        <div class="board-stage">
+            <div id="board" class="board">
+                <!-- Cells generated via JS -->
+            </div>
+
+            <aside class="wall-toolbox">
+                <span class="wall-tool-label">Wall Tool</span>
+                <button id="wall-tool" class="wall-tool" type="button" title="Pick up a wall to place">
+                    <span id="wall-tool-piece" class="wall-tool-piece horizontal"></span>
+                </button>
+                <span id="wall-tool-count">10 left</span>
+            </aside>
+        </div>
+
+        <!-- Player 1 Info (Bottom) -->
+        <div id="p1-panel" class="player-info active">
+            <span>Player 1 (Blue)</span>
+            <div id="p1-walls" class="wall-bank"></div>
+        </div>
+    </div>
+
+    <div id="cursor-wall" class="cursor-wall horizontal"></div>
+
+    <div class="controls">
+        <button onclick="toggleWallOrientation()">Rotate Wall (R)</button>
+        <button onclick="resetGame()">Reset Game</button>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

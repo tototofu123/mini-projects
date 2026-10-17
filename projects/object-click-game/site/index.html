@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Splash Sort — Mix</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *{font-family:Nunito;touch-action:none;user-select:none}
+  .baloo{font-family:'Baloo 2'}
+  .tablet{width:min(1180px,92vw);height:min(820px,78vh);position:relative;overflow:hidden;background:#8ECAE6;border:3px solid #0F1B2D;border-radius:32px;box-shadow:0 8px 0 #0F1B2D;display:flex;flex-direction:column}
+  .shape{position:absolute;border:1px solid #333;will-change:transform}
+  .circle{border-radius:999px}
+  .tri{clip-path:polygon(50% 0%,0% 100%,100% 100%)}
+  .square{border-radius:8px}
+</style>
+</head>
+<body class="bg-[#0F1B2D] min-h-screen flex flex-col items-center p-3 gap-3">
+<div class="tablet" id="tablet">
+  <div class="h-[64px] shrink-0 bg-[#8ECAE6] flex items-center justify-between px-3 sm:px-4 gap-2">
+    <div class="bg-[#0F1B2D] text-white px-3 py-1.5 rounded-lg text-[14px] font-bold tabular-nums" id="timer">0:30</div>
+    <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex items-center gap-1.5">
+        <span class="font-bold text-[11px] sm:text-[13px] hidden sm:inline">Current</span>
+        <div class="bg-white border border-[#999] rounded-lg px-2 sm:px-3 py-1.5 flex items-center gap-2" id="current-pill">
+          <div id="cur-shape" class="w-7 h-7"></div>
+          <span class="font-bold text-[13px]" id="cx">X2</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <span class="font-bold text-[11px] sm:text-[13px] hidden sm:inline">Next</span>
+        <div class="bg-white border border-[#999] rounded-lg px-2 sm:px-3 py-1.5 flex items-center gap-2 opacity-60" id="next-pill">
+          <div id="next-shape" class="w-7 h-7"></div>
+          <span class="font-bold text-[13px]" id="nx">X1</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white border-2 border-[#0F1B2D] rounded-full px-3 py-1.5 font-extrabold text-[13px] tabular-nums" id="score">0</div>
+  </div>
+  <div class="flex-1 relative overflow-hidden" id="board">
+    <svg id="trail" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10"><path id="trail-path" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" style="filter:drop-shadow(0 1px 0 #0F1B2D) drop-shadow(0 3px 6px rgba(15,27,45,0.2))"/></svg>
+    <div id="startScreen" class="absolute inset-0 bg-[#8ECAE6] flex flex-col items-center justify-center gap-4 z-20 p-6">
+      <div class="bg-white border-[3px] border-[#0F1B2D] rounded-[24px] p-5 shadow-[0_6px_0_#0F1B2D] w-full max-w-[520px] flex flex-col gap-4">
+        <div class="text-center">
+          <div class="baloo text-[22px] font-extrabold">Choose speed</div>
+          <div class="text-[11px] font-bold text-[#64748B]">Preview how fast objects float — for 2-6y start with Easy</div>
+        </div>
+        <div class="flex gap-2 justify-center">
+          <button data-speed="easy" class="speed-btn bg-[#E6F7FF] border-2 border-[#0F1B2D] rounded-full px-4 py-2 font-extrabold text-[12px]">Easy</button>
+          <button data-speed="medium" class="speed-btn bg-[#FFD60A] border-2 border-[#0F1B2D] rounded-full px-4 py-2 font-extrabold text-[12px] shadow-[0_3px_0_#0F1B2D]">Medium</button>
+          <button data-speed="hard" class="speed-btn bg-[#FFE4E6] border-2 border-[#0F1B2D] rounded-full px-4 py-2 font-extrabold text-[12px]">Hard</button>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-[10px] font-extrabold">Slow</span>
+          <input id="speedSlider" type="range" min="0.5" max="2.0" step="0.1" value="1.0" class="flex-1 accent-[#0F1B2D]">
+          <span class="text-[10px] font-extrabold">Fast</span>
+          <span id="speedVal" class="bg-[#0F1B2D] text-white px-2 py-1 rounded-full text-[11px] font-bold">1.0x</span>
+        </div>
+        <div id="preview" class="h-[96px] bg-[#F8FAFC] border-2 border-[#0F1B2D] rounded-[16px] relative overflow-hidden">
+          <div id="preview-dot" class="absolute w-[48px] h-[48px] rounded-full bg-[#FF3B30] border-2 border-[#0F1B2D] left-[calc(50%-24px)]"></div>
+          <div class="absolute bottom-1 left-2 text-[9px] font-bold text-[#64748B]">preview</div>
+        </div>
+        <button id="startBtn" class="bg-[#00D492] border-2 border-[#0F1B2D] rounded-full py-3 font-extrabold text-[16px] shadow-[0_4px_0_#0F1B2D] active:translate-y-[2px] active:shadow-[0_2px_0_#0F1B2D]">Start — 30s</button>
+        <div class="text-[10px] text-center font-bold text-[#94A3B8]">Objects float up • Tap circle • Slice tri • Double-tap square</div>
+      </div>
+    </div>
+    <div id="gameOver" class="absolute inset-0 bg-[#8ECAE6]/90 backdrop-blur-[2px] hidden flex-col items-center justify-center gap-3 z-20 p-6 text-center">
+      <div class="bg-white border-[3px] border-[#0F1B2D] rounded-[24px] px-8 py-6 shadow-[0_6px_0_#0F1B2D] flex flex-col items-center gap-2 min-w-[320px]">
+        <div class="text-[12px] font-extrabold tracking-[1.5px] text-[#64748B]">TIME UP</div>
+        <div class="baloo text-[42px] font-extrabold leading-none" id="finalScore">Score 0</div>
+        <div class="text-[12px] font-bold text-[#334155]">High score <span id="highScore" class="font-extrabold text-[#0F1B2D]">0</span> <span id="newBadge" class="hidden bg-[#FFD60A] border border-[#0F1B2D] rounded-full px-2 py-0.5 text-[10px] font-extrabold ml-1">NEW!</span></div>
+        <button id="playAgain" class="mt-2 bg-[#FFD60A] border-2 border-[#0F1B2D] rounded-full px-6 py-2.5 font-extrabold text-[14px] shadow-[0_4px_0_#0F1B2D] active:translate-y-[2px] active:shadow-[0_2px_0_#0F1B2D]">Play again</button>
+        <div class="text-[10px] font-bold text-[#94A3B8]">Highest stored in cache & cookie</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex gap-2 items-center">
+  <button id="reset" class="bg-white text-[#0F1B2D] px-6 py-2 rounded-full font-extrabold text-[13px] border-2 border-[#0F1B2D] shadow-[0_4px_0_#0F1B2D] active:translate-y-[2px] active:shadow-[0_2px_0_#0F1B2D]">Reset</button>
+  <span id="status" class="text-white text-[11px] font-bold">Tap circle • Slice triangle • Double-tap square</span>
+</div>
+<script>
+const board = document.getElementById('board');
+const colors = ['#FF3B30','#4169E1','#2ECC71','#FFD60A','#7B61FF','#FF6B00'];
+const colorNames = {'#FF3B30':'red','#4169E1':'blue','#2ECC71':'green','#FFD60A':'yellow','#7B61FF':'purple','#FF6B00':'orange'};
+const shapes = ['circle','tri','square'];
+let objects = [];
+let nextId=0;
+let score=0;
+let state = {current:null, next:null, logs:[], timer:30};
+let active=null;
+let timerInt=null, spawnInt=null;
+let gameOver=false;
+let speedMul=1.0;
+let previewAnim=null;
+function updatePreview(){
+  const dot=document.getElementById('preview-dot');
+  if(!dot) return;
+  if(previewAnim && previewAnim.kill) try{ previewAnim.kill(); }catch(e){}
+  previewAnim=null;
+  const preview=document.getElementById('preview');
+  const h=preview.clientHeight;
+  dot.style.top=(h-10)+'px';
+  dot.style.transform='translateY(0)';
+  // fallback without gsap (gsap not loaded in this build)
+  let y=0;
+  const step=()=>{
+    const sc=document.getElementById('startScreen');
+    if(!sc || sc.classList.contains('hidden')) return;
+    y-= 1.6 * speedMul;
+    if(y < - (h-24)) y=0;
+    dot.style.transform=`translateY(${y}px)`;
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+  const sv=document.getElementById('speedVal');
+  if(sv) sv.textContent = speedMul.toFixed(1)+'x';
+}
+let lastTap = {id:null, t:0};
+function getHighScore(){
+  try{
+    const ls = parseInt(localStorage.getItem('splashHighScore')||'0',10);
+    const m = document.cookie.match(/(?:^|; )splashHighScore=([^;]*)/);
+    const ck = m ? parseInt(decodeURIComponent(m[1]),10) : 0;
+    return Math.max(ls,ck,0);
+  }catch(e){ return 0; }
+}
+function setHighScore(v){
+  try{ localStorage.setItem('splashHighScore', String(v)); }catch(e){}
+  try{ document.cookie = `splashHighScore=${encodeURIComponent(v)}; max-age=31536000; path=/`; }catch(e){}
+}
+function showGameOver(){
+  gameOver=true;
+  clearInterval(timerInt); clearInterval(spawnInt);
+  // freeze: keep board as is, no more y updates (animate checks gameOver)
+  const high = getHighScore();
+  const isNew = score > high;
+  if(isNew) setHighScore(score);
+  const finalHigh = isNew ? score : high;
+  document.getElementById('finalScore').textContent = `Score ${score}`;
+  document.getElementById('highScore').textContent = finalHigh;
+  document.getElementById('newBadge').classList.toggle('hidden', !isNew);
+  document.getElementById('gameOver').classList.remove('hidden');
+  document.getElementById('gameOver').classList.add('flex');
+  // freeze bg
+  document.getElementById('board').style.filter='grayscale(0.15) brightness(0.98)';
+}
+function hideGameOver(){
+  gameOver=false;
+  document.getElementById('gameOver').classList.add('hidden');
+  document.getElementById('gameOver').classList.remove('flex');
+  document.getElementById('board').style.filter='';
+}
+
+function rand(a){ return a[Math.floor(Math.random()*a.length)]; }
+function randomTarget(){
+  return {color: rand(colors), shape: rand(shapes), need: 1+Math.floor(Math.random()*3)};
+}
+function isDifferent(a,b){
+  return a.color!==b.color || a.shape!==b.shape;
+}
+function newRound(){
+  if(!state.current){
+    state.current = randomTarget();
+  } else {
+    state.current = state.next;
+  }
+  let nxt;
+  do { nxt = randomTarget(); } while(!isDifferent(state.current, nxt));
+  state.next = nxt;
+  state.current.done=0;
+  renderPills();
+}
+function shapeToEl(shape, color, w){
+  if(shape==='circle') return `<div class="w-full h-full rounded-full" style="background:${color}"></div>`;
+  if(shape==='tri') return `<div class="w-full h-full" style="background:${color};clip-path:polygon(50% 0%,0% 100%,100% 100%)"></div>`;
+  return `<div class="w-full h-full rounded-[8px]" style="background:${color}"></div>`;
+}
+function renderPills(){
+  const cur = state.current, nxt = state.next;
+  const curEl = document.getElementById('cur-shape');
+  const nxtEl = document.getElementById('next-shape');
+  function setEl(el, target){
+    el.className='w-7 h-7 flex items-center justify-center';
+    el.innerHTML = shapeToEl(target.shape, target.color, 28);
+    // for tri/square need inner div sizing
+    el.firstChild.style.width='28px'; el.firstChild.style.height='28px';
+  }
+  if(cur){ setEl(curEl, cur); document.getElementById('cx').textContent='X'+(cur.need-cur.done); }
+  if(nxt){ setEl(nxtEl, nxt); document.getElementById('nx').textContent='X'+nxt.need; }
+  document.getElementById('score').textContent=score;
+}
+function randomSpeed(){ return (14 + Math.random()*14) * speedMul; }
+function spawnOne(forceTarget=false){
+  const rect=board.getBoundingClientRect();
+  if(!rect.width) return;
+  let type, color;
+  if(forceTarget){
+    type=state.current.shape; color=state.current.color;
+  } else {
+    if(Math.random()<0.32){
+      type=state.current.shape; color=state.current.color;
+    } else { type=rand(shapes); color=rand(colors); }
+  }
+  const w=62 + Math.random()*28;
+  const maxX=Math.max(0, rect.width - w);
+  const x=Math.random()*maxX;
+  const y=rect.height+20;
+  const o={id:'o'+nextId++, x, y, w, type, color, speed:randomSpeed(), done:false, el:null, tapCount:0, lastTap:0};
+  const el=document.createElement('div');
+  el.dataset.id=o.id;
+  el.className='shape '+(type==='circle'?'circle':type==='tri'?'tri':'square');
+  el.style.width=w+'px'; el.style.height=w+'px';
+  el.style.background=color;
+  el.style.left=x+'px'; el.style.top=y+'px';
+  board.appendChild(el);
+  o.el=el;
+  objects.push(o);
+  return o;
+}
+function spawnLoop(){
+  if(objects.filter(o=>!o.done).length >= 7) return;
+  // keep board diverse: ensure at least one tri always visible
+  const tris = objects.filter(o=> !o.done && o.type==='tri');
+  if(tris.length===0){
+    const w=64+Math.random()*24;
+    const rect=board.getBoundingClientRect();
+    const x=Math.random()*Math.max(0, rect.width - w);
+    const y=rect.height+20;
+    const o={id:'o'+nextId++, x, y, w, type:'tri', color:rand(colors), speed:randomSpeed(), done:false, el:null, tapCount:0, lastTap:0};
+    const el=document.createElement('div'); el.dataset.id=o.id; el.className='shape tri'; el.style.width=w+'px'; el.style.height=w+'px'; el.style.background=o.color; el.style.left=x+'px'; el.style.top=y+'px'; board.appendChild(el); o.el=el; objects.push(o);
+    return;
+  }
+  spawnOne();
+  const need = state.current;
+  const targets = objects.filter(o=> !o.done && o.type===need.shape && o.color===need.color);
+  if(targets.length===0 && Math.random()<0.7) spawnOne(true);
+}
+function animate(){
+  if(gameOver){ requestAnimationFrame(animate); return; }
+  const dt=16/1000;
+  for(let i=objects.length-1;i>=0;i--){
+    const o=objects[i];
+    if(o.done) continue;
+    o.y -= o.speed*dt;
+    if(o.el) o.el.style.top=o.y+'px';
+    if(o.y < -110){ if(o.el) o.el.remove(); objects.splice(i,1); }
+  }
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+function initBurst(){
+  // ensure one of each shape visible so tri not missing
+  const must = [{type:'circle',color:rand(colors)},{type:'tri',color:rand(colors)},{type:'square',color:rand(colors)}];
+  must.forEach(m=>{
+    const w=64+Math.random()*22;
+    const rect=board.getBoundingClientRect();
+    const x=Math.random()*Math.max(0, rect.width - w);
+    const y=Math.random()*(board.clientHeight*0.55);
+    const o={id:'o'+nextId++, x, y, w, type:m.type, color:m.color, speed:randomSpeed(), done:false, el:null, tapCount:0, lastTap:0};
+    const el=document.createElement('div');
+    el.dataset.id=o.id; el.className='shape '+(m.type==='circle'?'circle':m.type==='tri'?'tri':'square');
+    el.style.width=w+'px'; el.style.height=w+'px'; el.style.background=m.color; el.style.left=x+'px'; el.style.top=y+'px';
+    board.appendChild(el); o.el=el; objects.push(o);
+  });
+  for(let i=0;i<2;i++){ const o=spawnOne(i<1); if(o){ o.y = Math.random()*(board.clientHeight*0.55); if(o.el) o.el.style.top=o.y+'px'; } }
+}
+function startTimer(){
+  clearInterval(timerInt);
+  timerInt=setInterval(()=>{
+    state.timer--;
+    if(state.timer<0) state.timer=0;
+    document.getElementById('timer').textContent=`0:${String(state.timer).padStart(2,'0')}`;
+    if(state.timer===0){ showGameOver(); document.getElementById('status').textContent='Time up! Final: '+score; }
+  },1000);
+}
+board.addEventListener('pointerdown', e=>{
+  if(gameOver) return;
+  if(e.target.closest('#startScreen') || e.target.closest('#gameOver')) return;
+  if(!state.current) return;
+  e.preventDefault();
+  const rect=board.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const y=e.clientY-rect.top;
+  active={startX:x,startY:y,startT:performance.now(),path:[{x,y,t:performance.now(),p:e.pressure||0.5}],pressures:[e.pressure||0.5],hit:null,hitDist:0};
+  let best=null,bestD=1e9;
+  objects.forEach(o=>{
+    if(o.done) return;
+    const cx=o.x+o.w/2, cy=o.y+o.w/2;
+    const d=Math.hypot(x-cx,y-cy);
+    if(d < o.w/2 + 18 && d < bestD){bestD=d; best=o;}
+  });
+  if(best){
+    active.hit=best; active.hitDist=bestD;
+    // feedback pressed
+    best.el.style.transform='scale(0.92)';
+  }
+  const ripple=document.createElement('div');
+  ripple.style.position='absolute'; ripple.style.left=(x-14)+'px'; ripple.style.top=(y-14)+'px';
+  ripple.style.width='28px'; ripple.style.height='28px'; ripple.style.borderRadius='999px'; ripple.style.border='2px solid #0F1B2D'; ripple.style.opacity='0.9'; ripple.style.pointerEvents='none';
+  ripple.style.transition='transform 260ms ease-out, opacity 260ms';
+  board.appendChild(ripple);
+  requestAnimationFrame(()=>{ ripple.style.transform='scale(1.8)'; ripple.style.opacity='0'; });
+  setTimeout(()=>ripple.remove(),300);
+  board.setPointerCapture(e.pointerId);
+});
+let trailPathEl=document.getElementById('trail-path');
+board.addEventListener('pointermove', e=>{
+  if(!active) return;
+  const rect=board.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const y=e.clientY-rect.top;
+  active.path.push({x,y,t:performance.now(),p:e.pressure||0.5});
+  active.pressures.push(e.pressure||0.5);
+  // draw slicing trail (Fruit Ninja style)
+  if(active.path.length>1){
+    let d=`M ${active.path[0].x} ${active.path[0].y}`;
+    for(let i=1;i<active.path.length;i++) d+=` L ${active.path[i].x} ${active.path[i].y}`;
+    trailPathEl.setAttribute('d', d);
+    trailPathEl.style.opacity='0.95';
+  }
+});
+function pathHitsShape(path, shape){
+  // does any segment of path intersect shape rect (expanded by 8px)
+  const rx=shape.x-8, ry=shape.y-8, rw=shape.w+16, rh=shape.w+16;
+  // check if start or end inside rect
+  for(const p of path){ if(p.x>=rx && p.x<=rx+rw && p.y>=ry && p.y<=ry+rh) return true; }
+  // check segment intersection with rect edges
+  for(let i=1;i<path.length;i++){
+    const a=path[i-1], b=path[i];
+    // simple: if segment bbox overlaps rect
+    const minX=Math.min(a.x,b.x), maxX=Math.max(a.x,b.x), minY=Math.min(a.y,b.y), maxY=Math.max(a.y,b.y);
+    if(maxX>=rx && minX<=rx+rw && maxY>=ry && minY<=ry+rh){
+      // quick check: if segment crosses, treat as hit
+      return true;
+    }
+  }
+  return false;
+}
+board.addEventListener('pointerup', e=>{
+  if(!active) return;
+  if(e.target.closest('#startScreen') || e.target.closest('#gameOver')) { active=null; return; }
+  if(!state.current){ active=null; return; }
+  const rect=board.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const y=e.clientY-rect.top;
+  // clear trail
+  setTimeout(()=>{ if(trailPathEl) trailPathEl.setAttribute('d',''); },280);
+  trailPathEl.style.opacity='0';
+  const pathLen=active.path.reduce((a,pt,i)=> i===0?0:a+Math.hypot(pt.x-active.path[i-1].x,pt.y-active.path[i-1].y),0);
+  const isSwipe=pathLen>36;
+  const dwell=performance.now()-active.startT;
+  let correct=false;
+  let action='';
+  let slicedTri=null;
+  if(isSwipe){
+    // find tri that the swipe path actually crossed (Fruit Ninja)
+    for(const o of objects){
+      if(o.done || o.type!=='tri') continue;
+      if(pathHitsShape(active.path, o)){ slicedTri=o; break; }
+    }
+  }
+  if(active.hit){
+    const o=active.hit;
+    if(o.type==='circle' && !isSwipe){
+      action='tap';
+      if(o.type===state.current.shape && o.color===state.current.color) correct=true;
+    } else if(o.type==='tri' && slicedTri){
+      // sliced tri is the one the blade crossed, not necessarily the down-hit
+      action='slice';
+      // prefer the sliced one as actual target
+      active.hit = slicedTri;
+      if(slicedTri.type===state.current.shape && slicedTri.color===state.current.color) correct=true;
+    } else if(slicedTri && !active.hit){
+      // swipe crossed a tri even if down was miss — count it
+      action='slice';
+      active.hit = slicedTri;
+      if(slicedTri.type===state.current.shape && slicedTri.color===state.current.color) correct=true;
+    } else if(o.type==='square'){
+      // double tap within 400ms on same square
+      const now=performance.now();
+      if(o.lastTap && (now - o.lastTap < 420) && o.tapCount===1){
+        // second tap
+        action='double';
+        o.tapCount=2;
+        if(o.type===state.current.shape && o.color===state.current.color) correct=true;
+        o.lastTap=0;
+      } else {
+        // first tap
+        o.tapCount=1;
+        o.lastTap=now;
+        // visual first tap feedback
+        o.el.style.transform='scale(0.88)';
+        setTimeout(()=>{ if(o.el) o.el.style.transform=''; },120);
+        // show hint
+        const hint=document.createElement('div');
+        hint.textContent='tap again!'; hint.style.position='absolute'; hint.style.left=(o.x+o.w/2-32)+'px'; hint.style.top=(o.y-18)+'px';
+        hint.style.background='white'; hint.style.border='1px solid #0F1B2D'; hint.style.borderRadius='999px'; hint.style.padding='2px 6px'; hint.style.fontSize='10px'; hint.style.fontWeight='800';
+        board.appendChild(hint);
+        setTimeout(()=>hint.remove(),600);
+        // do not clear yet
+        setTimeout(()=>{ if(o.tapCount===1){ o.tapCount=0; } },420);
+        document.getElementById('status').textContent='Tap again quickly!';
+        active=null;
+        return;
+      }
+    }
+  }
+  // log
+  state.logs.push({phase: (state.current?.shape||'none')+'/'+(state.current?.color||'none'), hit: active.hit?.id||'miss', action, correct, t:Math.round(performance.now())});
+  if(correct){
+    const o=active.hit;
+    o.done=true;
+    o.el.style.transition='transform 180ms ease-out, opacity 180ms';
+    o.el.style.transform='scale(1.32)'; o.el.style.opacity='0';
+    const plus=document.createElement('div');
+    plus.textContent='+1'; plus.style.position='absolute'; plus.style.left=(o.x+o.w/2-12)+'px'; plus.style.top=(o.y-6)+'px';
+    plus.style.background='#00D492'; plus.style.color='white'; plus.style.fontWeight='800'; plus.style.fontSize='12px'; plus.style.padding='2px 6px'; plus.style.borderRadius='999px'; plus.style.border='2px solid #0F1B2D';
+    plus.style.transition='transform 380ms ease-out, opacity 380ms';
+    board.appendChild(plus);
+    requestAnimationFrame(()=>{ plus.style.transform='translateY(-32px)'; plus.style.opacity='0'; });
+    setTimeout(()=>plus.remove(),400);
+    setTimeout(()=>{ if(o.el) o.el.remove(); const idx=objects.indexOf(o); if(idx!==-1) objects.splice(idx,1); },180);
+    if(navigator.vibrate) navigator.vibrate(30);
+    score++;
+    state.current.done++;
+    document.getElementById('status').textContent='✓ +1';
+    setTimeout(()=>document.getElementById('status').textContent='Tap circle • Slice tri • Double-tap square',700);
+    if(state.current.done>=state.current.need){
+      newRound();
+      const el=document.createElement('div');
+      el.textContent=`→ ${colorNames[state.current.color]} ${state.current.shape} X${state.current.need}`;
+      el.style.position='absolute'; el.style.left='50%'; el.style.top='50%'; el.style.transform='translate(-50%,-50%)';
+      el.style.background='#FFD60A'; el.style.border='2px solid #0F1B2D'; el.style.borderRadius='999px'; el.style.padding='8px 14px'; el.style.fontWeight='800'; el.style.fontSize='12px';
+      board.appendChild(el);
+      setTimeout(()=>el.remove(),900);
+    }
+  } else {
+    document.getElementById('status').textContent=active.hit ? '✗ Wrong' : 'miss';
+    if(active.hit){
+      active.hit.el.style.transform=''; 
+      active.hit.el.style.transition='transform 80ms';
+      active.hit.el.style.transform='translateX(-5px)';
+      setTimeout(()=>active.hit.el.style.transform='translateX(5px)',90);
+      setTimeout(()=>{ if(active.hit.el) active.hit.el.style.transform=''; },180);
+      if(active.hit.type==='square') active.hit.tapCount=0;
+      else active.hit.el.style.filter='';
+      if(navigator.vibrate) navigator.vibrate([12,28,12]);
+    }
+    setTimeout(()=>document.getElementById('status').textContent='Tap circle • Slice tri • Double-tap square',700);
+  }
+  active=null;
+  renderPills();
+  document.getElementById('score').textContent=score;
+  if(score>=0 && state.timer>0 && state.current.done<state.current.need){
+    // keep targets visible
+    const need = state.current;
+    const has = objects.filter(o=> !o.done && o.type===need.shape && o.color===need.color).length;
+    if(has===0) spawnOne(true);
+  }
+});
+document.getElementById('reset').onclick=()=>{
+  hideGameOver();
+  objects.forEach(o=>{ if(o.el) o.el.remove(); });
+  objects=[]; score=0; state={current:null, next:null, logs:[], timer:30};
+  document.getElementById('score').textContent='0';
+  document.getElementById('timer').textContent='0:30';
+  document.getElementById('status').textContent='Tap circle • Slice tri • Double-tap square';
+  clearInterval(spawnInt); clearInterval(timerInt);
+  // show start screen for speed preview again
+  document.getElementById('startScreen').classList.remove('hidden');
+  document.getElementById('startScreen').classList.add('flex');
+  updatePreview();
+  renderPills();
+};
+document.getElementById('playAgain').onclick=()=>{
+  document.getElementById('reset').click();
+};
+// start screen logic
+function setSpeed(mul, btn){
+  speedMul=mul;
+  document.querySelectorAll('.speed-btn').forEach(b=>{
+    b.classList.remove('bg-[#FFD60A]','shadow-[0_3px_0_#0F1B2D]');
+    b.classList.add('bg-[#E6F7FF]');
+  });
+  if(btn){ btn.classList.remove('bg-[#E6F7FF]','bg-[#FFE4E6]'); btn.classList.add('bg-[#FFD60A]','shadow-[0_3px_0_#0F1B2D]'); }
+  document.getElementById('speedSlider').value=String(mul);
+  updatePreview();
+}
+document.querySelectorAll('.speed-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const v=btn.dataset.speed;
+    if(v==='easy') setSpeed(0.6, btn);
+    if(v==='medium') setSpeed(1.0, btn);
+    if(v==='hard') setSpeed(1.7, btn);
+  });
+});
+document.getElementById('speedSlider').addEventListener('input', e=>{
+  const v=parseFloat(e.target.value);
+  speedMul=v;
+  document.querySelectorAll('.speed-btn').forEach(b=>{ b.classList.remove('bg-[#FFD60A]','shadow-[0_3px_0_#0F1B2D]'); b.classList.add('bg-[#E6F7FF]'); });
+  updatePreview();
+});
+document.getElementById('startBtn').addEventListener('click', ()=>{
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('startScreen').classList.remove('flex');
+  if(previewAnim && previewAnim.kill) previewAnim.kill();
+  // start game
+  newRound();
+  initBurst();
+  spawnInt=setInterval(spawnLoop, 1200);
+  renderPills();
+  startTimer();
+});
+document.getElementById('playAgain').addEventListener('click', ()=>{ /* handled by reset */ });
+// init preview
+updatePreview();
+// show start screen, game not started yet
+renderPills();
+// do not auto-start; wait for Start click
+</script>
+</body>
+</html>

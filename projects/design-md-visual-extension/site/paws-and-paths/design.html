@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paws & Paths — Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary:#855300;
+  --bg: #F7F5F0; /* Warmer limestone background */
+  --surface: #FFFFFF;
+  --surface-2: #FDFCFB;
+  --text: #1C1C18;
+  --text-muted: #6B6B65;
+  --border: rgba(62, 39, 35, 0.1); /* Warm brown border */
+  --viz-color: var(--primary);
+  --font-body: 'Manrope', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141412; /* Deep warm dark background */
+    --surface: #1C1C1A;
+    --surface-2: #242422;
+    --text: #EDEDEA;
+    --text-muted: #A0A09C;
+    --border: rgba(237, 237, 234, 0.1);
+    --viz-color: #FFF9C4; /* Tertiary sunlight for visibility in dark mode */
+  }
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100dvh;font-size:14px;line-height:1.6;transition: background 0.3s ease;}
+
+.topbar{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(8px);}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:18px;}
+
+.layout{display:grid;grid-template-columns:320px 1fr;min-height:calc(100dvh - 60px);max-width:1800px;margin:0 auto;}
+.sidebar{padding:40px 24px;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;gap:24px;overflow-y:auto;}
+
+.main{padding:40px;display:flex;flex-direction:column;gap:80px;overflow-y:auto;}
+
+.section-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text-muted); margin-bottom: 32px; display: flex; align-items: center; gap: 16px; }
+.section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.bento{display:grid;grid-template-columns:repeat(auto-fill, minmax(360px, 1fr));gap:24px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;display:flex;flex-direction:column;gap:24px;transition: transform 0.2s ease;}
+
+.token-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom: 4px;}
+.token-name{font-weight:800;font-size:14px;letter-spacing: -0.01em;}
+.token-value{font-family:monospace;font-size:10px;opacity:0.6;background:rgba(0,0,0,0.05);padding:2px 6px;border-radius:4px;color:var(--text);}
+
+/* Colors */
+.sw-block{border-radius:14px;overflow:hidden;border:1px solid var(--border);}
+.sw-strip{display:flex;height:32px;}
+.sw-strip span{flex:1;}
+
+/* Components */
+.comp-preview-box { 
+    padding: 40px; 
+    background-image: radial-gradient(var(--border) 1px, transparent 1px);
+    background-size: 20px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--border);
+    margin: 16px 0;
+}
+
+.comp-details {
+    font-size: 11px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    background: var(--bg);
+    padding: 16px;
+    border-radius: 8px;
+}
+.prop-key { font-weight: 700; opacity: 0.5; }
+.prop-val { font-family: monospace; text-align: right; }
+
+/* Scales */
+.spacing-viz { background: var(--viz-color); opacity: 0.3; border: 1px solid var(--viz-color); }
+.rounding-viz { border: 2px solid var(--viz-color); width: 60px; height: 60px; }
+
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div style="width:32px; height:32px; background:var(--primary); border-radius:10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+    Paws & Paths
+  </div>
+  <div style="font-family:monospace; font-weight:800; color:var(--primary); letter-spacing: 0.1em; background: rgba(0,0,0,0.03); padding: 4px 12px; border-radius: 99px;">
+    V0.0.1
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="section-title">Palettes</div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#f9f9ff; color: #000">
+          <div class="token-name">surface</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#f9f9ff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(50, 50, 51)"></span><span style="background-color: rgb(100, 100, 102)"></span><span style="background-color: rgb(149, 149, 153)"></span><span style="background-color: rgb(199, 199, 204)"></span><span style="background-color: rgb(249, 249, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#d3daea; color: #000">
+          <div class="token-name">surface-dim</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#d3daea</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(42, 44, 47)"></span><span style="background-color: rgb(84, 87, 94)"></span><span style="background-color: rgb(127, 131, 140)"></span><span style="background-color: rgb(169, 174, 187)"></span><span style="background-color: rgb(211, 218, 234)"></span><span style="background-color: rgb(253, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#f9f9ff; color: #000">
+          <div class="token-name">surface-bright</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#f9f9ff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(50, 50, 51)"></span><span style="background-color: rgb(100, 100, 102)"></span><span style="background-color: rgb(149, 149, 153)"></span><span style="background-color: rgb(199, 199, 204)"></span><span style="background-color: rgb(249, 249, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#ffffff; color: #000">
+          <div class="token-name">surface-container-lowest</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#ffffff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(51, 51, 51)"></span><span style="background-color: rgb(102, 102, 102)"></span><span style="background-color: rgb(153, 153, 153)"></span><span style="background-color: rgb(204, 204, 204)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#f0f3ff; color: #000">
+          <div class="token-name">surface-container-low</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#f0f3ff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(48, 49, 51)"></span><span style="background-color: rgb(96, 97, 102)"></span><span style="background-color: rgb(144, 146, 153)"></span><span style="background-color: rgb(192, 194, 204)"></span><span style="background-color: rgb(240, 243, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#e7eefe; color: #000">
+          <div class="token-name">surface-container</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#e7eefe</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(46, 48, 51)"></span><span style="background-color: rgb(92, 95, 102)"></span><span style="background-color: rgb(139, 143, 152)"></span><span style="background-color: rgb(185, 190, 203)"></span><span style="background-color: rgb(231, 238, 254)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#e2e8f8; color: #000">
+          <div class="token-name">surface-container-high</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#e2e8f8</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(45, 46, 50)"></span><span style="background-color: rgb(90, 93, 99)"></span><span style="background-color: rgb(136, 139, 149)"></span><span style="background-color: rgb(181, 186, 198)"></span><span style="background-color: rgb(226, 232, 248)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#dce2f3; color: #000">
+          <div class="token-name">surface-container-highest</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#dce2f3</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(44, 45, 49)"></span><span style="background-color: rgb(88, 90, 97)"></span><span style="background-color: rgb(132, 136, 146)"></span><span style="background-color: rgb(176, 181, 194)"></span><span style="background-color: rgb(220, 226, 243)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#151c27; color: #fff">
+          <div class="token-name">on-surface</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#151c27</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(4, 6, 8)"></span><span style="background-color: rgb(8, 11, 16)"></span><span style="background-color: rgb(13, 17, 23)"></span><span style="background-color: rgb(17, 22, 31)"></span><span style="background-color: rgb(21, 28, 39)"></span><span style="background-color: rgb(25, 34, 47)"></span><span style="background-color: rgb(29, 39, 55)"></span><span style="background-color: rgb(34, 45, 62)"></span><span style="background-color: rgb(38, 50, 70)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#534434; color: #fff">
+          <div class="token-name">on-surface-variant</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#534434</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(17, 14, 10)"></span><span style="background-color: rgb(33, 27, 21)"></span><span style="background-color: rgb(50, 41, 31)"></span><span style="background-color: rgb(66, 54, 42)"></span><span style="background-color: rgb(83, 68, 52)"></span><span style="background-color: rgb(100, 82, 62)"></span><span style="background-color: rgb(116, 95, 73)"></span><span style="background-color: rgb(133, 109, 83)"></span><span style="background-color: rgb(149, 122, 94)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#2a313d; color: #fff">
+          <div class="token-name">inverse-surface</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#2a313d</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(8, 10, 12)"></span><span style="background-color: rgb(17, 20, 24)"></span><span style="background-color: rgb(25, 29, 37)"></span><span style="background-color: rgb(34, 39, 49)"></span><span style="background-color: rgb(42, 49, 61)"></span><span style="background-color: rgb(50, 59, 73)"></span><span style="background-color: rgb(59, 69, 85)"></span><span style="background-color: rgb(67, 78, 98)"></span><span style="background-color: rgb(76, 88, 110)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#ebf1ff; color: #000">
+          <div class="token-name">inverse-on-surface</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#ebf1ff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(47, 48, 51)"></span><span style="background-color: rgb(94, 96, 102)"></span><span style="background-color: rgb(141, 145, 153)"></span><span style="background-color: rgb(188, 193, 204)"></span><span style="background-color: rgb(235, 241, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#867461; color: #fff">
+          <div class="token-name">outline</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#867461</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(27, 23, 19)"></span><span style="background-color: rgb(54, 46, 39)"></span><span style="background-color: rgb(80, 70, 58)"></span><span style="background-color: rgb(107, 93, 78)"></span><span style="background-color: rgb(134, 116, 97)"></span><span style="background-color: rgb(161, 139, 116)"></span><span style="background-color: rgb(188, 162, 136)"></span><span style="background-color: rgb(214, 186, 155)"></span><span style="background-color: rgb(241, 209, 175)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#d8c3ad; color: #000">
+          <div class="token-name">outline-variant</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#d8c3ad</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(43, 39, 35)"></span><span style="background-color: rgb(86, 78, 69)"></span><span style="background-color: rgb(130, 117, 104)"></span><span style="background-color: rgb(173, 156, 138)"></span><span style="background-color: rgb(216, 195, 173)"></span><span style="background-color: rgb(255, 234, 208)"></span><span style="background-color: rgb(255, 255, 242)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#855300; color: #fff">
+          <div class="token-name">surface-tint</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#855300</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(27, 17, 0)"></span><span style="background-color: rgb(53, 33, 0)"></span><span style="background-color: rgb(80, 50, 0)"></span><span style="background-color: rgb(106, 66, 0)"></span><span style="background-color: rgb(133, 83, 0)"></span><span style="background-color: rgb(160, 100, 0)"></span><span style="background-color: rgb(186, 116, 0)"></span><span style="background-color: rgb(213, 133, 0)"></span><span style="background-color: rgb(239, 149, 0)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#855300; color: #fff">
+          <div class="token-name">primary</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#855300</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(27, 17, 0)"></span><span style="background-color: rgb(53, 33, 0)"></span><span style="background-color: rgb(80, 50, 0)"></span><span style="background-color: rgb(106, 66, 0)"></span><span style="background-color: rgb(133, 83, 0)"></span><span style="background-color: rgb(160, 100, 0)"></span><span style="background-color: rgb(186, 116, 0)"></span><span style="background-color: rgb(213, 133, 0)"></span><span style="background-color: rgb(239, 149, 0)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#ffffff; color: #000">
+          <div class="token-name">on-primary</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#ffffff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(51, 51, 51)"></span><span style="background-color: rgb(102, 102, 102)"></span><span style="background-color: rgb(153, 153, 153)"></span><span style="background-color: rgb(204, 204, 204)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#f59e0b; color: #fff">
+          <div class="token-name">primary-container</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#f59e0b</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(49, 32, 2)"></span><span style="background-color: rgb(98, 63, 4)"></span><span style="background-color: rgb(147, 95, 7)"></span><span style="background-color: rgb(196, 126, 9)"></span><span style="background-color: rgb(245, 158, 11)"></span><span style="background-color: rgb(255, 190, 13)"></span><span style="background-color: rgb(255, 221, 15)"></span><span style="background-color: rgb(255, 253, 18)"></span><span style="background-color: rgb(255, 255, 20)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#613b00; color: #fff">
+          <div class="token-name">on-primary-container</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#613b00</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(19, 12, 0)"></span><span style="background-color: rgb(39, 24, 0)"></span><span style="background-color: rgb(58, 35, 0)"></span><span style="background-color: rgb(78, 47, 0)"></span><span style="background-color: rgb(97, 59, 0)"></span><span style="background-color: rgb(116, 71, 0)"></span><span style="background-color: rgb(136, 83, 0)"></span><span style="background-color: rgb(155, 94, 0)"></span><span style="background-color: rgb(175, 106, 0)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#ffb95f; color: #000">
+          <div class="token-name">inverse-primary</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#ffb95f</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(51, 37, 19)"></span><span style="background-color: rgb(102, 74, 38)"></span><span style="background-color: rgb(153, 111, 57)"></span><span style="background-color: rgb(204, 148, 76)"></span><span style="background-color: rgb(255, 185, 95)"></span><span style="background-color: rgb(255, 222, 114)"></span><span style="background-color: rgb(255, 255, 133)"></span><span style="background-color: rgb(255, 255, 152)"></span><span style="background-color: rgb(255, 255, 171)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#0058be; color: #fff">
+          <div class="token-name">secondary</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#0058be</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(0, 18, 38)"></span><span style="background-color: rgb(0, 35, 76)"></span><span style="background-color: rgb(0, 53, 114)"></span><span style="background-color: rgb(0, 70, 152)"></span><span style="background-color: rgb(0, 88, 190)"></span><span style="background-color: rgb(0, 106, 228)"></span><span style="background-color: rgb(0, 123, 255)"></span><span style="background-color: rgb(0, 141, 255)"></span><span style="background-color: rgb(0, 158, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#ffffff; color: #000">
+          <div class="token-name">on-secondary</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#ffffff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(51, 51, 51)"></span><span style="background-color: rgb(102, 102, 102)"></span><span style="background-color: rgb(153, 153, 153)"></span><span style="background-color: rgb(204, 204, 204)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#2170e4; color: #fff">
+          <div class="token-name">secondary-container</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#2170e4</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(7, 22, 46)"></span><span style="background-color: rgb(13, 45, 91)"></span><span style="background-color: rgb(20, 67, 137)"></span><span style="background-color: rgb(26, 90, 182)"></span><span style="background-color: rgb(33, 112, 228)"></span><span style="background-color: rgb(40, 134, 255)"></span><span style="background-color: rgb(46, 157, 255)"></span><span style="background-color: rgb(53, 179, 255)"></span><span style="background-color: rgb(59, 202, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#fefcff; color: #000">
+          <div class="token-name">on-secondary-container</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#fefcff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(51, 50, 51)"></span><span style="background-color: rgb(102, 101, 102)"></span><span style="background-color: rgb(152, 151, 153)"></span><span style="background-color: rgb(203, 202, 204)"></span><span style="background-color: rgb(254, 252, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#00658b; color: #fff">
+          <div class="token-name">tertiary</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#00658b</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(0, 20, 28)"></span><span style="background-color: rgb(0, 40, 56)"></span><span style="background-color: rgb(0, 61, 83)"></span><span style="background-color: rgb(0, 81, 111)"></span><span style="background-color: rgb(0, 101, 139)"></span><span style="background-color: rgb(0, 121, 167)"></span><span style="background-color: rgb(0, 141, 195)"></span><span style="background-color: rgb(0, 162, 222)"></span><span style="background-color: rgb(0, 182, 250)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#ffffff; color: #000">
+          <div class="token-name">on-tertiary</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#ffffff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(51, 51, 51)"></span><span style="background-color: rgb(102, 102, 102)"></span><span style="background-color: rgb(153, 153, 153)"></span><span style="background-color: rgb(204, 204, 204)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#1abdff; color: #fff">
+          <div class="token-name">tertiary-container</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#1abdff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(5, 38, 51)"></span><span style="background-color: rgb(10, 76, 102)"></span><span style="background-color: rgb(16, 113, 153)"></span><span style="background-color: rgb(21, 151, 204)"></span><span style="background-color: rgb(26, 189, 255)"></span><span style="background-color: rgb(31, 227, 255)"></span><span style="background-color: rgb(36, 255, 255)"></span><span style="background-color: rgb(42, 255, 255)"></span><span style="background-color: rgb(47, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#004966; color: #fff">
+          <div class="token-name">on-tertiary-container</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#004966</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(0, 15, 20)"></span><span style="background-color: rgb(0, 29, 41)"></span><span style="background-color: rgb(0, 44, 61)"></span><span style="background-color: rgb(0, 58, 82)"></span><span style="background-color: rgb(0, 73, 102)"></span><span style="background-color: rgb(0, 88, 122)"></span><span style="background-color: rgb(0, 102, 143)"></span><span style="background-color: rgb(0, 117, 163)"></span><span style="background-color: rgb(0, 131, 184)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#ba1a1a; color: #fff">
+          <div class="token-name">error</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#ba1a1a</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(37, 5, 5)"></span><span style="background-color: rgb(74, 10, 10)"></span><span style="background-color: rgb(112, 16, 16)"></span><span style="background-color: rgb(149, 21, 21)"></span><span style="background-color: rgb(186, 26, 26)"></span><span style="background-color: rgb(223, 31, 31)"></span><span style="background-color: rgb(255, 36, 36)"></span><span style="background-color: rgb(255, 42, 42)"></span><span style="background-color: rgb(255, 47, 47)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#ffffff; color: #000">
+          <div class="token-name">on-error</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#ffffff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(51, 51, 51)"></span><span style="background-color: rgb(102, 102, 102)"></span><span style="background-color: rgb(153, 153, 153)"></span><span style="background-color: rgb(204, 204, 204)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#ffdad6; color: #000">
+          <div class="token-name">error-container</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#ffdad6</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(51, 44, 43)"></span><span style="background-color: rgb(102, 87, 86)"></span><span style="background-color: rgb(153, 131, 128)"></span><span style="background-color: rgb(204, 174, 171)"></span><span style="background-color: rgb(255, 218, 214)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#93000a; color: #fff">
+          <div class="token-name">on-error-container</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#93000a</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(29, 0, 2)"></span><span style="background-color: rgb(59, 0, 4)"></span><span style="background-color: rgb(88, 0, 6)"></span><span style="background-color: rgb(118, 0, 8)"></span><span style="background-color: rgb(147, 0, 10)"></span><span style="background-color: rgb(176, 0, 12)"></span><span style="background-color: rgb(206, 0, 14)"></span><span style="background-color: rgb(235, 0, 16)"></span><span style="background-color: rgb(255, 0, 18)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#ffddb8; color: #000">
+          <div class="token-name">primary-fixed</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#ffddb8</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(51, 44, 37)"></span><span style="background-color: rgb(102, 88, 74)"></span><span style="background-color: rgb(153, 133, 110)"></span><span style="background-color: rgb(204, 177, 147)"></span><span style="background-color: rgb(255, 221, 184)"></span><span style="background-color: rgb(255, 255, 221)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#ffb95f; color: #000">
+          <div class="token-name">primary-fixed-dim</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#ffb95f</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(51, 37, 19)"></span><span style="background-color: rgb(102, 74, 38)"></span><span style="background-color: rgb(153, 111, 57)"></span><span style="background-color: rgb(204, 148, 76)"></span><span style="background-color: rgb(255, 185, 95)"></span><span style="background-color: rgb(255, 222, 114)"></span><span style="background-color: rgb(255, 255, 133)"></span><span style="background-color: rgb(255, 255, 152)"></span><span style="background-color: rgb(255, 255, 171)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#2a1700; color: #fff">
+          <div class="token-name">on-primary-fixed</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#2a1700</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(8, 5, 0)"></span><span style="background-color: rgb(17, 9, 0)"></span><span style="background-color: rgb(25, 14, 0)"></span><span style="background-color: rgb(34, 18, 0)"></span><span style="background-color: rgb(42, 23, 0)"></span><span style="background-color: rgb(50, 28, 0)"></span><span style="background-color: rgb(59, 32, 0)"></span><span style="background-color: rgb(67, 37, 0)"></span><span style="background-color: rgb(76, 41, 0)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#653e00; color: #fff">
+          <div class="token-name">on-primary-fixed-variant</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#653e00</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(20, 12, 0)"></span><span style="background-color: rgb(40, 25, 0)"></span><span style="background-color: rgb(61, 37, 0)"></span><span style="background-color: rgb(81, 50, 0)"></span><span style="background-color: rgb(101, 62, 0)"></span><span style="background-color: rgb(121, 74, 0)"></span><span style="background-color: rgb(141, 87, 0)"></span><span style="background-color: rgb(162, 99, 0)"></span><span style="background-color: rgb(182, 112, 0)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#d8e2ff; color: #000">
+          <div class="token-name">secondary-fixed</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#d8e2ff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(43, 45, 51)"></span><span style="background-color: rgb(86, 90, 102)"></span><span style="background-color: rgb(130, 136, 153)"></span><span style="background-color: rgb(173, 181, 204)"></span><span style="background-color: rgb(216, 226, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#adc6ff; color: #000">
+          <div class="token-name">secondary-fixed-dim</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#adc6ff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(35, 40, 51)"></span><span style="background-color: rgb(69, 79, 102)"></span><span style="background-color: rgb(104, 119, 153)"></span><span style="background-color: rgb(138, 158, 204)"></span><span style="background-color: rgb(173, 198, 255)"></span><span style="background-color: rgb(208, 238, 255)"></span><span style="background-color: rgb(242, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#001a42; color: #fff">
+          <div class="token-name">on-secondary-fixed</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#001a42</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(0, 5, 13)"></span><span style="background-color: rgb(0, 10, 26)"></span><span style="background-color: rgb(0, 16, 40)"></span><span style="background-color: rgb(0, 21, 53)"></span><span style="background-color: rgb(0, 26, 66)"></span><span style="background-color: rgb(0, 31, 79)"></span><span style="background-color: rgb(0, 36, 92)"></span><span style="background-color: rgb(0, 42, 106)"></span><span style="background-color: rgb(0, 47, 119)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#004395; color: #fff">
+          <div class="token-name">on-secondary-fixed-variant</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#004395</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(0, 13, 30)"></span><span style="background-color: rgb(0, 27, 60)"></span><span style="background-color: rgb(0, 40, 89)"></span><span style="background-color: rgb(0, 54, 119)"></span><span style="background-color: rgb(0, 67, 149)"></span><span style="background-color: rgb(0, 80, 179)"></span><span style="background-color: rgb(0, 94, 209)"></span><span style="background-color: rgb(0, 107, 238)"></span><span style="background-color: rgb(0, 121, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#c5e7ff; color: #000">
+          <div class="token-name">tertiary-fixed</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#c5e7ff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(39, 46, 51)"></span><span style="background-color: rgb(79, 92, 102)"></span><span style="background-color: rgb(118, 139, 153)"></span><span style="background-color: rgb(158, 185, 204)"></span><span style="background-color: rgb(197, 231, 255)"></span><span style="background-color: rgb(236, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#7fd0ff; color: #000">
+          <div class="token-name">tertiary-fixed-dim</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#7fd0ff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(25, 42, 51)"></span><span style="background-color: rgb(51, 83, 102)"></span><span style="background-color: rgb(76, 125, 153)"></span><span style="background-color: rgb(102, 166, 204)"></span><span style="background-color: rgb(127, 208, 255)"></span><span style="background-color: rgb(152, 250, 255)"></span><span style="background-color: rgb(178, 255, 255)"></span><span style="background-color: rgb(203, 255, 255)"></span><span style="background-color: rgb(229, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#001e2d; color: #fff">
+          <div class="token-name">on-tertiary-fixed</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#001e2d</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(0, 6, 9)"></span><span style="background-color: rgb(0, 12, 18)"></span><span style="background-color: rgb(0, 18, 27)"></span><span style="background-color: rgb(0, 24, 36)"></span><span style="background-color: rgb(0, 30, 45)"></span><span style="background-color: rgb(0, 36, 54)"></span><span style="background-color: rgb(0, 42, 63)"></span><span style="background-color: rgb(0, 48, 72)"></span><span style="background-color: rgb(0, 54, 81)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#004c6a; color: #fff">
+          <div class="token-name">on-tertiary-fixed-variant</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#004c6a</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(0, 15, 21)"></span><span style="background-color: rgb(0, 30, 42)"></span><span style="background-color: rgb(0, 46, 64)"></span><span style="background-color: rgb(0, 61, 85)"></span><span style="background-color: rgb(0, 76, 106)"></span><span style="background-color: rgb(0, 91, 127)"></span><span style="background-color: rgb(0, 106, 148)"></span><span style="background-color: rgb(0, 122, 170)"></span><span style="background-color: rgb(0, 137, 191)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#f9f9ff; color: #000">
+          <div class="token-name">background</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#f9f9ff</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(50, 50, 51)"></span><span style="background-color: rgb(100, 100, 102)"></span><span style="background-color: rgb(149, 149, 153)"></span><span style="background-color: rgb(199, 199, 204)"></span><span style="background-color: rgb(249, 249, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#151c27; color: #fff">
+          <div class="token-name">on-background</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#151c27</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(4, 6, 8)"></span><span style="background-color: rgb(8, 11, 16)"></span><span style="background-color: rgb(13, 17, 23)"></span><span style="background-color: rgb(17, 22, 31)"></span><span style="background-color: rgb(21, 28, 39)"></span><span style="background-color: rgb(25, 34, 47)"></span><span style="background-color: rgb(29, 39, 55)"></span><span style="background-color: rgb(34, 45, 62)"></span><span style="background-color: rgb(38, 50, 70)"></span>
+        </div>
+      </div>
+    
+      <div class="sw-block">
+        <div style="padding:16px; background:#dce2f3; color: #000">
+          <div class="token-name">surface-variant</div>
+          <div style="font-size:10px; opacity:0.8; font-family:monospace;">#dce2f3</div>
+        </div>
+        <div class="sw-strip">
+          <span style="background-color: rgb(44, 45, 49)"></span><span style="background-color: rgb(88, 90, 97)"></span><span style="background-color: rgb(132, 136, 146)"></span><span style="background-color: rgb(176, 181, 194)"></span><span style="background-color: rgb(220, 226, 243)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span><span style="background-color: rgb(255, 255, 255)"></span>
+        </div>
+      </div>
+    
+  </aside>
+
+  <main class="main">
+    
+    <!-- Typography -->
+    <section>
+      <div class="section-title">Typography</div>
+      <div class="bento">
+        
+          <div class="card">
+            <div class="token-header">
+              <span class="token-name">display</span>
+              <span class="token-value">Plus Jakarta Sans</span>
+            </div>
+            <div style="
+              font-family: 'Plus Jakarta Sans', sans-serif;
+              font-size: 44px;
+              font-weight: 800;
+              letter-spacing: -0.02em;
+              line-height: 52px;
+              margin: 20px 0;
+              overflow: hidden;
+            ">The quick brown fox</div>
+            <div class="comp-details" style="grid-template-columns: 1fr;">
+               <div>Size: 44px / Weight: 800 / Lead: 52px</div>
+            </div>
+          </div>
+        
+          <div class="card">
+            <div class="token-header">
+              <span class="token-name">headline-lg</span>
+              <span class="token-value">Plus Jakarta Sans</span>
+            </div>
+            <div style="
+              font-family: 'Plus Jakarta Sans', sans-serif;
+              font-size: 32px;
+              font-weight: 700;
+              letter-spacing: -0.01em;
+              line-height: 40px;
+              margin: 20px 0;
+              overflow: hidden;
+            ">The quick brown fox</div>
+            <div class="comp-details" style="grid-template-columns: 1fr;">
+               <div>Size: 32px / Weight: 700 / Lead: 40px</div>
+            </div>
+          </div>
+        
+          <div class="card">
+            <div class="token-header">
+              <span class="token-name">headline-md</span>
+              <span class="token-value">Plus Jakarta Sans</span>
+            </div>
+            <div style="
+              font-family: 'Plus Jakarta Sans', sans-serif;
+              font-size: 24px;
+              font-weight: 700;
+              letter-spacing: ;
+              line-height: 32px;
+              margin: 20px 0;
+              overflow: hidden;
+            ">The quick brown fox</div>
+            <div class="comp-details" style="grid-template-columns: 1fr;">
+               <div>Size: 24px / Weight: 700 / Lead: 32px</div>
+            </div>
+          </div>
+        
+          <div class="card">
+            <div class="token-header">
+              <span class="token-name">title-lg</span>
+              <span class="token-value">Plus Jakarta Sans</span>
+            </div>
+            <div style="
+              font-family: 'Plus Jakarta Sans', sans-serif;
+              font-size: 20px;
+              font-weight: 600;
+              letter-spacing: ;
+              line-height: 28px;
+              margin: 20px 0;
+              overflow: hidden;
+            ">The quick brown fox</div>
+            <div class="comp-details" style="grid-template-columns: 1fr;">
+               <div>Size: 20px / Weight: 600 / Lead: 28px</div>
+            </div>
+          </div>
+        
+          <div class="card">
+            <div class="token-header">
+              <span class="token-name">body-lg</span>
+              <span class="token-value">Plus Jakarta Sans</span>
+            </div>
+            <div style="
+              font-family: 'Plus Jakarta Sans', sans-serif;
+              font-size: 18px;
+              font-weight: 400;
+              letter-spacing: ;
+              line-height: 28px;
+              margin: 20px 0;
+              overflow: hidden;
+            ">The quick brown fox</div>
+            <div class="comp-details" style="grid-template-columns: 1fr;">
+               <div>Size: 18px / Weight: 400 / Lead: 28px</div>
+            </div>
+          </div>
+        
+          <div class="card">
+            <div class="token-header">
+              <span class="token-name">body-md</span>
+              <span class="token-value">Plus Jakarta Sans</span>
+            </div>
+            <div style="
+              font-family: 'Plus Jakarta Sans', sans-serif;
+              font-size: 16px;
+              font-weight: 400;
+              letter-spacing: ;
+              line-height: 24px;
+              margin: 20px 0;
+              overflow: hidden;
+            ">The quick brown fox</div>
+            <div class="comp-details" style="grid-template-columns: 1fr;">
+               <div>Size: 16px / Weight: 400 / Lead: 24px</div>
+            </div>
+          </div>
+        
+          <div class="card">
+            <div class="token-header">
+              <span class="token-name">label-md</span>
+              <span class="token-value">Plus Jakarta Sans</span>
+            </div>
+            <div style="
+              font-family: 'Plus Jakarta Sans', sans-serif;
+              font-size: 14px;
+              font-weight: 600;
+              letter-spacing: 0.01em;
+              line-height: 20px;
+              margin: 20px 0;
+              overflow: hidden;
+            ">The quick brown fox</div>
+            <div class="comp-details" style="grid-template-columns: 1fr;">
+               <div>Size: 14px / Weight: 600 / Lead: 20px</div>
+            </div>
+          </div>
+        
+          <div class="card">
+            <div class="token-header">
+              <span class="token-name">label-sm</span>
+              <span class="token-value">Plus Jakarta Sans</span>
+            </div>
+            <div style="
+              font-family: 'Plus Jakarta Sans', sans-serif;
+              font-size: 12px;
+              font-weight: 500;
+              letter-spacing: ;
+              line-height: 16px;
+              margin: 20px 0;
+              overflow: hidden;
+            ">The quick brown fox</div>
+            <div class="comp-details" style="grid-template-columns: 1fr;">
+               <div>Size: 12px / Weight: 500 / Lead: 16px</div>
+            </div>
+          </div>
+        
+      </div>
+    </section>
+
+    <!-- Components -->
+    <section>
+      <div class="section-title">Components</div>
+      <div class="bento">
+        
+          <div class="card">
+            <div class="token-header"><span class="token-name">button-primary</span></div>
+            <div class="comp-preview-box">
+              <div style="
+                background-color: #855300;
+                color: #ffffff;
+                border-radius: 1rem;
+                padding: 24px;
+                width: auto;
+                height: auto;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                
+            font-family: 'Plus Jakarta Sans';
+            font-size: 14px;
+            font-weight: 600;
+          
+              ">
+                Preview
+              </div>
+            </div>
+            <div class="comp-details">
+              
+                <span class="prop-key">backgroundColor</span>
+                <span class="prop-val">#855300</span>
+              
+                <span class="prop-key">textColor</span>
+                <span class="prop-val">#ffffff</span>
+              
+                <span class="prop-key">typography</span>
+                <span class="prop-val">14px Plus Jakarta Sans</span>
+              
+                <span class="prop-key">rounded</span>
+                <span class="prop-val">1rem</span>
+              
+                <span class="prop-key">padding</span>
+                <span class="prop-val">24px</span>
+              
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="token-header"><span class="token-name">button-primary-hover</span></div>
+            <div class="comp-preview-box">
+              <div style="
+                background-color: #f59e0b;
+                color: #613b00;
+                border-radius: 0px;
+                padding: 12px 24px;
+                width: auto;
+                height: auto;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                
+              ">
+                Preview
+              </div>
+            </div>
+            <div class="comp-details">
+              
+                <span class="prop-key">backgroundColor</span>
+                <span class="prop-val">#f59e0b</span>
+              
+                <span class="prop-key">textColor</span>
+                <span class="prop-val">#613b00</span>
+              
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="token-header"><span class="token-name">button-secondary</span></div>
+            <div class="comp-preview-box">
+              <div style="
+                background-color: #0058be;
+                color: #ffffff;
+                border-radius: 1rem;
+                padding: 24px;
+                width: auto;
+                height: auto;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                
+            font-family: 'Plus Jakarta Sans';
+            font-size: 14px;
+            font-weight: 600;
+          
+              ">
+                Preview
+              </div>
+            </div>
+            <div class="comp-details">
+              
+                <span class="prop-key">backgroundColor</span>
+                <span class="prop-val">#0058be</span>
+              
+                <span class="prop-key">textColor</span>
+                <span class="prop-val">#ffffff</span>
+              
+                <span class="prop-key">typography</span>
+                <span class="prop-val">14px Plus Jakarta Sans</span>
+              
+                <span class="prop-key">rounded</span>
+                <span class="prop-val">1rem</span>
+              
+                <span class="prop-key">padding</span>
+                <span class="prop-val">24px</span>
+              
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="token-header"><span class="token-name">button-secondary-hover</span></div>
+            <div class="comp-preview-box">
+              <div style="
+                background-color: #2170e4;
+                color: #fefcff;
+                border-radius: 0px;
+                padding: 12px 24px;
+                width: auto;
+                height: auto;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                
+              ">
+                Preview
+              </div>
+            </div>
+            <div class="comp-details">
+              
+                <span class="prop-key">backgroundColor</span>
+                <span class="prop-val">#2170e4</span>
+              
+                <span class="prop-key">textColor</span>
+                <span class="prop-val">#fefcff</span>
+              
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="token-header"><span class="token-name">card-profile</span></div>
+            <div class="comp-preview-box">
+              <div style="
+                background-color: #ffffff;
+                color: inherit;
+                border-radius: 1.5rem;
+                padding: 24px;
+                width: auto;
+                height: auto;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                
+              ">
+                Preview
+              </div>
+            </div>
+            <div class="comp-details">
+              
+                <span class="prop-key">backgroundColor</span>
+                <span class="prop-val">#ffffff</span>
+              
+                <span class="prop-key">rounded</span>
+                <span class="prop-val">1.5rem</span>
+              
+                <span class="prop-key">padding</span>
+                <span class="prop-val">24px</span>
+              
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="token-header"><span class="token-name">card-walk-stat</span></div>
+            <div class="comp-preview-box">
+              <div style="
+                background-color: #2170e4;
+                color: #fefcff;
+                border-radius: 0.75rem;
+                padding: 12px;
+                width: auto;
+                height: auto;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                
+              ">
+                Preview
+              </div>
+            </div>
+            <div class="comp-details">
+              
+                <span class="prop-key">backgroundColor</span>
+                <span class="prop-val">#2170e4</span>
+              
+                <span class="prop-key">textColor</span>
+                <span class="prop-val">#fefcff</span>
+              
+                <span class="prop-key">rounded</span>
+                <span class="prop-val">0.75rem</span>
+              
+                <span class="prop-key">padding</span>
+                <span class="prop-val">12px</span>
+              
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="token-header"><span class="token-name">input-field</span></div>
+            <div class="comp-preview-box">
+              <div style="
+                background-color: #f0f3ff;
+                color: #151c27;
+                border-radius: 0.5rem;
+                padding: 12px;
+                width: auto;
+                height: auto;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                
+            font-family: 'Plus Jakarta Sans';
+            font-size: 16px;
+            font-weight: 400;
+          
+              ">
+                Preview
+              </div>
+            </div>
+            <div class="comp-details">
+              
+                <span class="prop-key">backgroundColor</span>
+                <span class="prop-val">#f0f3ff</span>
+              
+                <span class="prop-key">textColor</span>
+                <span class="prop-val">#151c27</span>
+              
+                <span class="prop-key">typography</span>
+                <span class="prop-val">16px Plus Jakarta Sans</span>
+              
+                <span class="prop-key">rounded</span>
+                <span class="prop-val">0.5rem</span>
+              
+                <span class="prop-key">padding</span>
+                <span class="prop-val">12px</span>
+              
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="token-header"><span class="token-name">list-item-walker</span></div>
+            <div class="comp-preview-box">
+              <div style="
+                background-color: transparent;
+                color: inherit;
+                border-radius: 0.75rem;
+                padding: 12px;
+                width: auto;
+                height: auto;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                
+              ">
+                Preview
+              </div>
+            </div>
+            <div class="comp-details">
+              
+                <span class="prop-key">backgroundColor</span>
+                <span class="prop-val">transparent</span>
+              
+                <span class="prop-key">padding</span>
+                <span class="prop-val">12px</span>
+              
+                <span class="prop-key">rounded</span>
+                <span class="prop-val">0.75rem</span>
+              
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="token-header"><span class="token-name">list-item-walker-hover</span></div>
+            <div class="comp-preview-box">
+              <div style="
+                background-color: #e2e8f8;
+                color: inherit;
+                border-radius: 0px;
+                padding: 12px 24px;
+                width: auto;
+                height: auto;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                
+              ">
+                Preview
+              </div>
+            </div>
+            <div class="comp-details">
+              
+                <span class="prop-key">backgroundColor</span>
+                <span class="prop-val">#e2e8f8</span>
+              
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="token-header"><span class="token-name">badge-status</span></div>
+            <div class="comp-preview-box">
+              <div style="
+                background-color: #1abdff;
+                color: #004966;
+                border-radius: 9999px;
+                padding: 4px;
+                width: auto;
+                height: auto;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                
+            font-family: 'Plus Jakarta Sans';
+            font-size: 12px;
+            font-weight: 500;
+          
+              ">
+                Preview
+              </div>
+            </div>
+            <div class="comp-details">
+              
+                <span class="prop-key">backgroundColor</span>
+                <span class="prop-val">#1abdff</span>
+              
+                <span class="prop-key">textColor</span>
+                <span class="prop-val">#004966</span>
+              
+                <span class="prop-key">typography</span>
+                <span class="prop-val">12px Plus Jakarta Sans</span>
+              
+                <span class="prop-key">rounded</span>
+                <span class="prop-val">9999px</span>
+              
+                <span class="prop-key">padding</span>
+                <span class="prop-val">4px</span>
+              
+            </div>
+          </div>
+          
+      </div>
+    </section>
+
+    <!-- Scales -->
+    <section style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+      <div>
+        <div class="section-title">Spacing</div>
+        <div class="card" style="gap:24px;">
+          
+            <div style="display:flex; align-items:center; gap:20px;">
+              <div style="width:100px; font-weight:800; font-size:12px; color:var(--text-muted);">base</div>
+              <div class="spacing-viz" style="width: 8px; height: 8px; min-width: 2px; min-height: 2px;"></div>
+              <div class="token-value" style="margin-left:auto;">8px</div>
+            </div>
+          
+            <div style="display:flex; align-items:center; gap:20px;">
+              <div style="width:100px; font-weight:800; font-size:12px; color:var(--text-muted);">xs</div>
+              <div class="spacing-viz" style="width: 4px; height: 4px; min-width: 2px; min-height: 2px;"></div>
+              <div class="token-value" style="margin-left:auto;">4px</div>
+            </div>
+          
+            <div style="display:flex; align-items:center; gap:20px;">
+              <div style="width:100px; font-weight:800; font-size:12px; color:var(--text-muted);">sm</div>
+              <div class="spacing-viz" style="width: 12px; height: 12px; min-width: 2px; min-height: 2px;"></div>
+              <div class="token-value" style="margin-left:auto;">12px</div>
+            </div>
+          
+            <div style="display:flex; align-items:center; gap:20px;">
+              <div style="width:100px; font-weight:800; font-size:12px; color:var(--text-muted);">md</div>
+              <div class="spacing-viz" style="width: 24px; height: 24px; min-width: 2px; min-height: 2px;"></div>
+              <div class="token-value" style="margin-left:auto;">24px</div>
+            </div>
+          
+            <div style="display:flex; align-items:center; gap:20px;">
+              <div style="width:100px; font-weight:800; font-size:12px; color:var(--text-muted);">lg</div>
+              <div class="spacing-viz" style="width: 40px; height: 40px; min-width: 2px; min-height: 2px;"></div>
+              <div class="token-value" style="margin-left:auto;">40px</div>
+            </div>
+          
+            <div style="display:flex; align-items:center; gap:20px;">
+              <div style="width:100px; font-weight:800; font-size:12px; color:var(--text-muted);">xl</div>
+              <div class="spacing-viz" style="width: 64px; height: 64px; min-width: 2px; min-height: 2px;"></div>
+              <div class="token-value" style="margin-left:auto;">64px</div>
+            </div>
+          
+            <div style="display:flex; align-items:center; gap:20px;">
+              <div style="width:100px; font-weight:800; font-size:12px; color:var(--text-muted);">gutter</div>
+              <div class="spacing-viz" style="width: 16px; height: 16px; min-width: 2px; min-height: 2px;"></div>
+              <div class="token-value" style="margin-left:auto;">16px</div>
+            </div>
+          
+            <div style="display:flex; align-items:center; gap:20px;">
+              <div style="width:100px; font-weight:800; font-size:12px; color:var(--text-muted);">margin</div>
+              <div class="spacing-viz" style="width: 24px; height: 24px; min-width: 2px; min-height: 2px;"></div>
+              <div class="token-value" style="margin-left:auto;">24px</div>
+            </div>
+          
+        </div>
+      </div>
+      <div>
+        <div class="section-title">Rounding</div>
+        <div class="bento" style="grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));">
+          
+            <div style="display:flex; flex-direction:column; align-items:center; gap:16px; background:var(--surface); padding:20px; border-radius:12px; border:1px solid var(--border);">
+              <div class="rounding-viz" style="border-radius: 0.25rem"></div>
+              <div class="token-name" style="font-size:12px;">sm</div>
+              <div class="token-value">0.25rem</div>
+            </div>
+          
+            <div style="display:flex; flex-direction:column; align-items:center; gap:16px; background:var(--surface); padding:20px; border-radius:12px; border:1px solid var(--border);">
+              <div class="rounding-viz" style="border-radius: 0.5rem"></div>
+              <div class="token-name" style="font-size:12px;">DEFAULT</div>
+              <div class="token-value">0.5rem</div>
+            </div>
+          
+            <div style="display:flex; flex-direction:column; align-items:center; gap:16px; background:var(--surface); padding:20px; border-radius:12px; border:1px solid var(--border);">
+              <div class="rounding-viz" style="border-radius: 0.75rem"></div>
+              <div class="token-name" style="font-size:12px;">md</div>
+              <div class="token-value">0.75rem</div>
+            </div>
+          
+            <div style="display:flex; flex-direction:column; align-items:center; gap:16px; background:var(--surface); padding:20px; border-radius:12px; border:1px solid var(--border);">
+              <div class="rounding-viz" style="border-radius: 1rem"></div>
+              <div class="token-name" style="font-size:12px;">lg</div>
+              <div class="token-value">1rem</div>
+            </div>
+          
+            <div style="display:flex; flex-direction:column; align-items:center; gap:16px; background:var(--surface); padding:20px; border-radius:12px; border:1px solid var(--border);">
+              <div class="rounding-viz" style="border-radius: 1.5rem"></div>
+              <div class="token-name" style="font-size:12px;">xl</div>
+              <div class="token-value">1.5rem</div>
+            </div>
+          
+            <div style="display:flex; flex-direction:column; align-items:center; gap:16px; background:var(--surface); padding:20px; border-radius:12px; border:1px solid var(--border);">
+              <div class="rounding-viz" style="border-radius: 9999px"></div>
+              <div class="token-name" style="font-size:12px;">full</div>
+              <div class="token-value">9999px</div>
+            </div>
+          
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>

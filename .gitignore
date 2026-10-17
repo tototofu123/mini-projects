@@ -1,0 +1,10 @@
+
+
+# --- build output from the merged Vite projects ---
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+build-errors.txt
+vite.config.js
+vite.config.d.ts

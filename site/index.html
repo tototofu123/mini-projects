@@ -12,15 +12,17 @@
     display: flex; align-items: center; justify-content: center;
     background: #0d1117; color: #e6edf3;
     font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-    padding: 2rem;
+    padding: 2rem 1rem;
   }
-  main { width: 100%; max-width: 46rem; }
+  main { width: 100%; max-width: 52rem; }
   h1 { font-size: 1.75rem; margin: 0 0 .25rem; letter-spacing: -.02em; }
   p.sub { margin: 0 0 2rem; color: #8b949e; }
-  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+  h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em;
+       color: #6e7681; margin: 2rem 0 .6rem; font-weight: 600; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .45rem; }
   a {
     display: flex; align-items: baseline; gap: .75rem;
-    padding: .7rem .9rem; border-radius: 8px;
+    padding: .65rem .9rem; border-radius: 8px;
     background: #161b22; border: 1px solid #30363d;
     color: #e6edf3; text-decoration: none;
     transition: border-color .12s, background .12s;
@@ -28,20 +30,40 @@
   a:hover { border-color: #58a6ff; background: #1c2128; }
   a b { font-weight: 600; }
   a span { color: #8b949e; font-size: .875rem; }
-  footer { margin-top: 2rem; font-size: .8125rem; color: #6e7681; }
+  footer { margin-top: 2.5rem; font-size: .8125rem; color: #6e7681; }
   footer a { display: inline; padding: 0; background: none; border: 0; color: #58a6ff; }
 </style>
 </head>
 <body>
 <main>
   <h1>mini-projects</h1>
-  <p class="sub">Small self-contained experiments — games, visual toys, teaching tools.</p>
+  <p class="sub">Games, visual toys, ML experiments and teaching tools.</p>
 
+  <h2>Machine learning</h2>
   <ul>
-    <li><a href="./connect4/"><b>connect4</b><span>Connect Four, Python + UI</span></a></li>
-    <li><a href="./fingercount/"><b>fingercount</b><span>Finger-count gesture recognition, OpenCV</span></a></li>
+    <li><a href="./is-it-ai-image/"><b>is-it-ai-image</b><span>CNN: real vs AI-generated</span></a></li>
+    <li><a href="./pullup-detector/"><b>pullup-detector</b><span>Rep counting with MoveNet</span></a></li>
+    <li><a href="./anti-cheating/"><b>anti-cheating</b><span>Proctoring simulation with math solving</span></a></li>
+  </ul>
+
+  <h2>Games &amp; visual toys</h2>
+  <ul>
+    <li><a href="./boids-deep-sea/"><b>boids-deep-sea</b><span>3D manta boids flocking</span></a></li>
+    <li><a href="./quorridor-game/"><b>quorridor-game</b><span>Quoridor with BFS validation</span></a></li>
+    <li><a href="./jumping-game/"><b>jumping-game</b><span>One-button platformer</span></a></li>
+    <li><a href="./object-click-game/"><b>object-click-game</b><span>Reaction-time clicking</span></a></li>
+    <li><a href="./connect4/"><b>connect4</b><span>Connect Four in Python</span></a></li>
+    <li><a href="./fingercount/"><b>fingercount</b><span>Finger-count gesture recognition</span></a></li>
+  </ul>
+
+  <h2>Tools &amp; sites</h2>
+  <ul>
+    <li><a href="./circuitbuilder/"><b>circuitbuilder</b><span>Interactive circuit simulator</span></a></li>
+    <li><a href="./design-md-visual-extension/"><b>design-md-visual-extension</b><span>Design token visualizer</span></a></li>
     <li><a href="./char-to-bitmap/"><b>char-to-bitmap</b><span>Bitmap typography renderer</span></a></li>
     <li><a href="./shell-basics/"><b>shell-basics</b><span>Shell-command teaching tool</span></a></li>
+    <li><a href="./macau-trip/"><b>macau-trip</b><span>Leaflet itinerary</span></a></li>
+    <li><a href="./testing-website/"><b>testing-website</b><span>HTML/CSS coursework exercises</span></a></li>
   </ul>
 
   <footer>
