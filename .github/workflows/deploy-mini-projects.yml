@@ -43,6 +43,12 @@ jobs:
           set -euo pipefail
           rm -rf _site
           mkdir -p _site
+          # Root landing page, if present.
+          if [ -d site ]; then
+            cp -R site/. _site/
+            echo "staged root landing page"
+          fi
+          # Each project site into its own subpath.
           for src in projects/*/site; do
             [ -d "$src" ] || continue
             name="$(basename "$(dirname "$src")")"
