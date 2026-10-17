@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+models/checkpoints/
+models/merged/
+models/gguf/
+models/base/
+*.gguf
+*.safetensors
+*.bin
+*.pth
+*.log
+*.bat
+unsloth_compiled_cache/
+training.log*
