@@ -1,0 +1,121 @@
+================================================================================
+SECTION: CONTACT (Earth / The Cave)
+
+Vibe: Ancient, quiet, and tactile. A secret chamber discovered at the end
+of a long journey.
+Goal: Transform a standard, boring "Contact Me" list into a memorable moment
+of discovery using lighting and masking mechanics.
+
+GLOBAL CONTAINER & ARCHITECTURE
+
+Background: #000000 (Pure Pitch Black).
+
+Layout: Center-aligned content container, min-height: 100vh.
+
+Z-Index Layering (Crucial for the effect):
+
+Z-Index 1 (Bottom): The actual content (Text, Links, Artifact).
+
+Z-Index 2 (Middle): A subtle, dark rock texture image (mix-blend-mode: multiply).
+
+Z-Index 3 (Top): The "Darkness" overlay mask.
+
+LAYOUT ELEMENTS & TYPOGRAPHY (The Hidden Content)
+
+[ A. Section Header ]
+
+Text: CARVED IN STONE
+
+Typography: Syne, 64px (or text-5xl to text-7xl fluid), Weight 800.
+
+Color: #FCD34D (Warm Amber), with an intrinsic subtle drop shadow:
+drop-shadow(0 0 15px rgba(252, 211, 77, 0.4)).
+
+Layout: Centered at the top of the content block.
+
+[ B. Contact Links ]
+
+Layout: A 2x2 grid centered on the screen.
+
+Items: Resume, GitHub, LinkedIn, Email.
+
+Typography: Space Grotesk, 24px to 32px.
+
+Default Color: #D6D3D1 (Sandy/Ash Gray).
+
+Hover State: Text color shifts to #FFFFFF, and a small right-facing arrow →
+fades in from the left (opacity: 0 to opacity: 1, transform: translateX(5px)).
+
+[ C. The Ancient Artifact ]
+
+Positioning: At the very bottom center of the section.
+
+Visual: The t.tofu logo, but rendered in the "Ancient" style (dark brown/gray
+stone texture, heavy shadows, no neon).
+
+MICRO-INTERACTION 1: THE FLASHLIGHT CURSOR
+
+When the user arrives, the screen is almost entirely black. They must use their
+mouse to read the wall.
+
+The Darkness Overlay (Z-Index 3):
+
+A div covering the entire viewport: position: absolute; inset: 0; background: #000;
+
+The Mask Logic:
+
+The Darkness overlay has a CSS mask applied:
+-webkit-mask-image: radial-gradient(circle 250px at var(--mouse-x, 50%) var(--mouse-y, 50%), transparent 0%, black 100%);
+
+As the mouse moves, the var(--mouse-x) and var(--mouse-y) are updated
+via a requestAnimationFrame loop.
+
+Visual Result: A 250px "hole" is cut into the pitch-black overlay, revealing
+the glowing amber text and rock texture strictly underneath the cursor.
+
+MICRO-INTERACTION 2: IGNITING THE TORCH
+
+A secret mechanism that allows the user to turn the lights on permanently.
+
+The Torch Bracket:
+
+Positioning: Fixed to the top-left or middle-left wall of the cave.
+
+Visual (Unlit): A faint, dark geometric outline of a sconce/bracket. It is
+barely visible even when the flashlight shines on it.
+
+Affordance: When the flashlight passes over it, a tiny, faint text prompt
+fades in: [ Ignite Torch ] (DM Sans, 12px, #D6D3D1, opacity: 0.5).
+
+The Click Event (Ignition):
+
+When the user clicks the torch bracket, it triggers the setLit(true) state.
+
+Animation 1 (The Flame): A bright #F97316 (Orange/Plasma) circle blooms
+from the bracket, utilizing animate-pulse and heavy filter: blur().
+
+Animation 2 (Banish the Dark): The Darkness Overlay (Z-Index 3) fades its
+opacity from 1 to 0 over 1.5 seconds (transition: opacity 1.5s ease-out).
+
+Animation 3 (Ambient Light): The rock texture layer (Z-Index 2) warms up,
+shifting its color tint slightly toward amber to simulate firelight.
+
+Post-Ignition State:
+
+The flashlight cursor is disabled.
+
+The user's mouse reverts to a standard pointer.
+
+The entire cave is now fully visible, bathed in a warm, flickering glow.
+
+All contact links are fully accessible and readable without hunting.
+
+TECHNICAL UX & PERFORMANCE NOTES
+
+Accessibility: Do NOT use display: none on the text when the lights are out,
+or screen readers won't find it. The text must always exist in the DOM; it
+is only visually obscured by the Z-Index 3 black overlay.
+
+Performance: CSS mask-image is highly performant. Update the CSS custom
+properties (--mouse-x) on the container, not on the individual text elements,
+to minimize recalculations.

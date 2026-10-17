@@ -1,0 +1,96 @@
+================================================================================
+TRANSITION PHASE: ABOUT -> PROJECTS (The VR Portal)
+
+Vibe: Leaving the volatile, heavy engine room and stepping into a clean,
+suspended, high-pressure aerodynamic space.
+Goal: Execute a massive paradigm shift in color and mechanics by using a
+scroll-locked 3D/SVG morph sequence, transitioning the user from the "Fire"
+era to the "Air" era.
+
+SCROLL MECHANICS (The Timeline Lock)
+
+This transition requires "Scroll-Jacking" to orchestrate the animations
+perfectly without the user scrolling past them.
+
+Container Setup: A position: relative wrapper with a large height
+(e.g., height: 300vh).
+
+Viewport Lock: A position: sticky; top: 0; height: 100vh; child element
+that holds the visuals. As the user scrolls down the 300vh container,
+the visuals stay pinned to the screen, and the scroll progress (0% to 100%)
+drives the animation timeline below.
+
+STAGE 1: THE AIRLOCK (0% - 25% Scroll Progress)
+
+The transition begins by extinguishing the "Fire" elements.
+
+Heat Dissipation: The ambient orange radial gradient from the bottom of the
+About section gets rapidly blown away downwards.
+
+Cursor Detachment:
+
+The "Plasma Shooter" custom cursor immediately detaches from the user's
+mouse coordinates.
+
+It animates via an ease-out curve to the exact dead center of the viewport.
+
+The user's mouse reverts to a standard pointer.
+
+Background: Remains #0F172A (Deep Matte Slate) during this phase.
+
+STAGE 2: THE MORPH (25% - 60% Scroll Progress)
+
+The artifact transforms to bridge the timeline from the 2100s to the Modern era.
+
+The Transformation:
+
+The centralized Plasma Shooter graphic scales up slightly and begins
+a rapid rotation (e.g., flipping 180 degrees on the Y-axis).
+
+During the rotation, the SVG path morphs (or the WebGL model swaps)
+from the volatile weapon into a sleek, silver, minimalist VR Headset.
+
+Visual Cue: As the headset locks into place facing the user, a subtle glowing
+chamfered edge (CSS box-shadow or Canvas glow) traces the outline of
+the headset's lenses, indicating it is a portal.
+
+STAGE 3: THE DIVE (60% - 95% Scroll Progress)
+
+The user is forced "inside" the headset.
+
+The Zoom: The VR Headset scales exponentially (transform: scale(1) to scale(50)).
+The camera appears to push directly into the glowing lenses.
+
+The Color Inversion (The Flash):
+
+As the edges of the VR lenses expand past the boundaries of the user's monitor,
+the background color undergoes a rapid, hard transition.
+
+#0F172A (Deep Matte Slate) instantly flashes to #F8FAFC (Light Slate).
+
+Wind Tunnel Effect:
+
+Faint, fast-moving horizontal speed-lines (using a lightweight Canvas
+particle emitter) shoot past the camera, establishing the "Air" and
+aerodynamic physics of the next section.
+
+STAGE 4: PARALLAX HAND-OFF (95% - 100% Scroll Progress)
+
+The lock is released, and the user has fully arrived in the Projects section.
+
+Physics Initialization: The dangling Project cards drop into the viewport from
+the top, bouncing slightly on their invisible spring constraints.
+
+Control Return: The scroll lock ends (position: sticky hits the bottom of
+its wrapper). The user resumes normal vertical scrolling, but they are now
+navigating inside the "fake 3D" parallax space of the Modern Gallery.
+
+TECHNICAL UX & PERFORMANCE NOTES
+
+Cleanup: The moment the screen flashes to white (#F8FAFC) at Stage 3, you
+MUST unmount the Heat Haze DOM nodes and the border-melting <feDisplacementMap>
+filters from the About section. Leaving them active off-screen will severely
+tank the framerate of the spring physics in the upcoming Projects section.
+
+Animation Engine: Use a library like GSAP ScrollTrigger to map the scroll
+progress to the scale, morph, and color inversion properties effortlessly.

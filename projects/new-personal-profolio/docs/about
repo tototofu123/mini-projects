@@ -1,0 +1,126 @@
+================================================================================
+SECTION: ABOUT (Future / Fire)
+
+Vibe: A highly volatile, energy-dense engine room.
+Goal: Introduce the user to your core narrative (AI + UI) while letting them
+physically interact with the "heat" of your tech stack via the cursor.
+
+GLOBAL CONTAINER & ARCHITECTURE
+
+Background: #0F172A (Deep Matte Slate) - continues seamlessly from the Hero.
+
+Ambient Lighting: A massive, subtle radial gradient fixed to the center-bottom
+of the section to simulate a glowing core.
+background: radial-gradient(circle at 50% 100%, rgba(249, 115, 22, 0.05) 0%, transparent 60%);
+
+Layout: A strict absolute-positioned coordinate layout relative to the viewport.
+
+LAYOUT ELEMENTS & TYPOGRAPHY
+
+[ A. Section Header ]
+
+Text: "ABOUT ME"
+
+Positioning: Absolute, top-center of the viewport.
+
+Typography: Syne, Size: 1.5rem, Weight: 700 (Bold), Color: #F97316 (Orange).
+
+[ B. Left Column: 4 Information Boxes ]
+
+Positioning: Absolute positioning spanning from 15vh to 90vh vertically, and anchored at 15vw on the left.
+
+Layout: A flexbox column containing 4 distinct boxes that flex-grow equally to fill the height.
+
+Box Content & Typography:
+Header (Strong): Space Grotesk, 14px, #94A3B8, Uppercase.
+Description (P): DM Sans, 1.25rem, #F8FAFC.
+
+Box 1: "What I do"
+"I look at the complete picture, bridging the gap between physical systems and digital intelligence."
+
+Box 2: "AI"
+"Training intelligent models and generative AI architectures."
+
+Box 3: "UI"
+"Crafting high-performance UI and interactive digital experiences."
+
+Box 4: "Embedded Systems"
+"Integrating embedded hardware and physical computing solutions."
+
+[ C. Right Column: Asset Placeholder ]
+
+Positioning: Absolute positioning on the right side. Spans from 70vw to 90vw horizontally, and 30vh to 75vh vertically.
+
+Visual: Currently a dashed border placeholder. It will eventually hold an interactive WebGL or media asset representing the technical themes.
+
+MICRO-INTERACTION 1: THE HEAT HAZE (Text Stabilization)
+(Mechanics remain standard as per earlier specification when text interactions are built).
+
+The biography text is highly volatile and difficult to read until the user
+intervenes with their cursor.
+
+Default State (Volatile):
+
+The text is wrapped in individual <span> tags per word.
+
+CSS: color: transparent; text-shadow: 0 0 12px rgba(248, 250, 252, 0.6);
+
+Effect: The text looks like a glowing, blurry heat haze.
+
+Hover State (The Cooling Stabilizer):
+
+The mouse event listener calculates distance between the cursor and each word.
+
+Radius: 150px around the cursor.
+
+Action: Any <span> within that radius gets a .cooled class.
+
+.cooled CSS: color: #F8FAFC; text-shadow: 0 0 0px rgba(248,250,252,1);
+
+Transition: transition: all 0.2s ease-out;
+
+UX Result: As the user sweeps the mouse over the text, the blur instantly
+snaps into crisp, readable text, leaving a fading trail of blur behind it.
+
+MICRO-INTERACTION 2: THE PLASMA SHOOTER (Border Melting)
+
+The user can "shoot" the structural UI boxes on the left to interact with the environment.
+
+Cursor Override:
+
+As soon as the user enters the About section, the cursor changes to a
+custom SVG reticle. cursor: url('/assets/plasma-reticle.svg') 16 16, crosshair;
+
+Click Event (The Shot):
+
+When the user clicks on one of the Tech Stack UI boxes, it triggers a
+temporary "Melt" state for that specific box.
+
+The Melt State (Active):
+
+Duration: 1.5 seconds.
+
+Border Distortion: Uses an inline SVG filter <feDisplacementMap> mapped
+to the border, OR rapid CSS border-radius manipulation (e.g., changing
+from 4px to 40% 60% 70% 30% randomly).
+
+Glow Injection: box-shadow: 0 0 20px rgba(249, 115, 22, 0.8); (Bright plasma orange).
+
+Border Color: Shifts from #1E293B to #F97316.
+
+The Healing State (Recovery):
+
+After 1.5 seconds, the SVG filter is removed, and the CSS properties
+transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1); smoothly snap the
+box back to its strict, rigid, default geometric shape.
+
+TECHNICAL UX & PERFORMANCE NOTES
+
+To prevent DOM thrashing with the Heat Haze effect, do NOT use React state
+to track the mouse coordinates for the word spans. Use a useRef to hold
+the container, and a single requestAnimationFrame loop in a useEffect
+to toggle the .cooled classes directly on the DOM nodes.
+
+The SVG Displacement filter for the melting boxes should be pre-defined in
+the HTML <defs> tag and only applied via CSS class (filter: url(#melt))
+on click, rather than generating the SVG dynamically on every click.

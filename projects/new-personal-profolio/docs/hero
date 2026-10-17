@@ -1,0 +1,129 @@
+================================================================================
+SECTION: HERO (Future / Fire) - V2 UPDATED
+
+Vibe: High-performance engineering meets unpredictable interactive art.
+Goal: Establish authority via a highly structured UI, then surprise the user
+with the hardware-accelerated 'Gacha' cursor mask and liquid physics.
+
+GLOBAL CONTAINER SPECIFICATIONS
+
+Dimensions: min-height: 100vh, width: 100vw.
+
+Background: #0F172A (Deep Matte Slate).
+
+Global Click Event (Outside Avatar):
+
+Attached to the main or section wrapper.
+
+If the user clicks anywhere outside the Avatar container, cycle the
+underlying Base Layer to the next available style.
+
+THE ASSET POOL (The 4 Styles)
+
+Photo - Original high-res headshot (The Reality).
+
+ASCII - Text-based code render (Represents CODE / Engineering).
+
+Pixel-Picasso - Abstract, blocky, cubist pixel art (Represents UI / Art).
+
+Depth-Dots - LiDAR/Point-cloud map of the face (Represents AI / Hardware).
+
+THE HERO LAYOUT & CENTERPIECE
+
+Layout: Absolute positioning relative to the viewport.
+
+Avatar Container (Center):
+Dimensions: Height takes up exactly 85% of the viewport height (vh). Width is 1.75x larger (e.g. 87.5vh) to stretch towards the GitHub box and underlay the text.
+Positioning: Perfectly centered horizontally, with the bottom stuck flush to the bottom of the hero section. Lower z-index to underlay the intro text.
+Styling: border: 2px solid #1E293B (border-bottom removed if flush), border-radius: 16px 16px 0 0, cursor: crosshair, overflow: hidden.
+
+Intro Text (Right):
+Positioning: Vertically centered, pinned to the right side with a maximum width of 25% of the viewport (25vw). Higher z-index to overlap the avatar.
+Line 1: "Hi, I am Toto Lai" (Largest font size, prominent greeting, generous line-height to prevent clipping).
+Line 2: "an AI engineer and UI developer" (Slightly smaller, generous line-height).
+Line 3: "based in Hong Kong" (Slightly smaller, generous line-height).
+
+Github Stats Box:
+Positioning: A large box (200% original size) positioned absolutely in the bottom-left corner of the Hero section.
+Content: Displays live or static GitHub info and stats.
+
+Student Subtitle:
+Positioning: Placed absolutely in the bottom-right corner of the Hero section, parallel to the GitHub stats box. Max-width constraints apply so it wraps nicely.
+Text: "Computer Engineering and Artificial Intelligence student at HKUST"
+
+INTERACTION LOGIC (React State & DOM Events)
+
+[ A. State Variables ]
+
+baseIndex: The ID of the image currently locked as the background.
+
+maskIndex: The ID of the image revealed by the flashlight hover.
+
+isLiquidAnimating: Boolean to block interactions during the click transition.
+
+[ B. The Hover & Idle Mechanic (Lando Norris + Re-roll) ]
+
+The mouse tracks normally, mapping --x and --y to a circular CSS clip-path
+or Canvas mask to act as the flashlight.
+
+The Idle Timer:
+
+Inside onMouseMove, clear an existing timeout, then set a new timeout
+for 600ms.
+
+If the user keeps scrubbing, the timer never fires, and maskIndex stays
+locked (continuous background).
+
+If the user STOPS moving their mouse for 600ms inside the container, the
+timer fires: trigger a fast CSS opacity fade on the mask layer, randomize
+the maskIndex, and fade it back in.
+
+[ C. The Liquid Click (Lock-In) ]
+
+Trigger: User clicks inside the Avatar container.
+
+The Shader/Effect:
+
+We do not just snap the image. We apply a WebGL ripple shader (or an SVG
+<feDisplacementMap> mapped to a radial wave).
+
+The epicenter of the ripple is exactly e.nativeEvent.offsetX and offsetY
+(where they clicked, not the center of the image).
+
+The Sequence:
+
+isLiquidAnimating = true (disables the hover mask tracking temporarily).
+
+The liquid ripple expands outward from the cursor. As it expands, the
+maskIndex image visually overwrites the baseIndex image.
+
+Once the ripple hits the edges (approx 0.8s), setBaseIndex(maskIndex).
+
+Reactivate the hover tracking, and immediately randomize the maskIndex
+so the flashlight holds a new style.
+
+TECHNICAL EXPLANATION & IMPLEMENTATION NOTES
+
+Why use an Idle Timer for the randomization instead of randomizing on every frame?
+If you randomize the mask image while the mouse is moving, you get a chaotic,
+strobe-light flickering effect that is harsh on the eyes and looks broken.
+By using a setTimeout debounce in your mouse tracker, you enforce intentionality.
+The user gets to "paint" and explore the ASCII texture smoothly. When they pause
+to look at it, the system surprises them by shifting to the Depth-Dots.
+
+How to build the Liquid Click without heavy WebGL:
+If you want to avoid writing a custom Three.js shader just for this button,
+you can achieve the liquid reveal using CSS and SVG.
+
+Create an SVG <filter> with <feTurbulence> (for water noise) and
+<feDisplacementMap>.
+
+On click, spawn a temporary div that holds the new image, perfectly aligned
+over the base image.
+
+Apply clip-path: circle(0px at X Y) to this new div, and animate the radius
+to 150% (covering the whole box).
+
+Apply the SVG liquid displacement filter to the edge of that expanding circle.
+This perfectly mimics dropping a stone into water and having the new image
+ripple outward.
