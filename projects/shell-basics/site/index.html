@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shell Basics — Windows &amp; Linux commands</title>
+    <meta
+      name="description"
+      content="A beginner-friendly cheat sheet for Windows CMD, PowerShell, and Linux shell commands."
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <span class="prompt" aria-hidden="true">$</span>
+        <div>
+          <p class="eyebrow">Beginner lab</p>
+          <h1>Shell Basics</h1>
+        </div>
+      </div>
+      <p class="lede">
+        Same jobs, three shells. Learn the everyday commands for
+        <strong>Windows CMD</strong>, <strong>PowerShell</strong>, and
+        <strong>Linux</strong> side by side.
+      </p>
+    </header>
+
+    <section class="toolbar" aria-label="Filters">
+      <label class="search">
+        <span class="sr-only">Search commands</span>
+        <input
+          id="search"
+          type="search"
+          placeholder="Search: list files, copy, process…"
+          autocomplete="off"
+        />
+      </label>
+      <div class="filters" role="group" aria-label="Shell">
+        <button class="chip is-active" data-shell="all" type="button">All shells</button>
+        <button class="chip" data-shell="cmd" type="button">CMD</button>
+        <button class="chip" data-shell="pwsh" type="button">PowerShell</button>
+        <button class="chip" data-shell="linux" type="button">Linux</button>
+      </div>
+      <nav class="topics" id="topics" aria-label="Topics"></nav>
+    </section>
+
+    <main id="catalog" class="catalog"></main>
+
+    <aside class="tips">
+      <h2>How to open a shell</h2>
+      <ul>
+        <li>
+          <strong>Windows CMD:</strong> press <kbd>Win</kbd> + <kbd>R</kbd>, type
+          <code>cmd</code>, Enter.
+        </li>
+        <li>
+          <strong>PowerShell:</strong> press <kbd>Win</kbd>, type
+          <code>powershell</code>, Enter. On newer Windows, <code>pwsh</code> is
+          PowerShell 7.
+        </li>
+        <li>
+          <strong>Linux:</strong> open Terminal, or press
+          <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd> on many desktops.
+        </li>
+      </ul>
+    </aside>
+
+    <footer>
+      <p>Static HTML + CSS + JavaScript. No build step. Copy a command, then try it locally.</p>
+    </footer>
+
+    <script src="js/commands.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

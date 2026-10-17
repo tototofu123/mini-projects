@@ -1,0 +1,65 @@
+name: Deploy mini-projects sites
+
+# Publishes every static site under projects/<name>/site at
+# https://tototofu123.github.io/mini-projects/<name>/
+#
+# The sites were split out of four standalone repos (connect4, fingercount,
+# char-to-bitmap, shell-basics), each of which deployed to its own
+# /<repo>/ Pages URL via the Actions workflow. Their markup already uses only
+# relative paths, so relocating them under a subpath needs no rewrites --
+# only a single upload of all four directories.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "projects/*/site/**"
+      - "site/**"
+      - ".github/workflows/deploy-mini-projects.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Assemble sites under their Pages subpaths
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf _site
+          mkdir -p _site
+          for src in projects/*/site; do
+            [ -d "$src" ] || continue
+            name="$(basename "$(dirname "$src")")"
+            mkdir -p "_site/$name"
+            cp -R "$src/." "_site/$name/"
+            echo "staged $name"
+          done
+          ls -la _site
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

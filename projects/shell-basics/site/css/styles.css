@@ -1,0 +1,268 @@
+:root {
+  --bg: #16140f;
+  --panel: #211e16;
+  --ink: #f3ead6;
+  --muted: #b7ab90;
+  --line: #3a3426;
+  --amber: #e2a54a;
+  --cmd: #d27a4a;
+  --pwsh: #6aa4d8;
+  --linux: #7cb87a;
+  --ok: #c9e08b;
+  font-family: "Segoe UI", "IBM Plex Sans", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #2a2418, transparent 55%),
+    var(--bg);
+  color: var(--ink);
+}
+
+body {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2.25rem 1.25rem 4rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.site-header {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.brand {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.prompt {
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  background: #0f0e0b;
+  color: var(--ok);
+  font: 700 1.4rem/1 "Cascadia Mono", "Consolas", monospace;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--amber);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0.1rem 0 0;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  margin: 0;
+  max-width: 42rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.toolbar {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.search input,
+.chip {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--ink);
+}
+
+.search input {
+  width: 100%;
+  padding: 0.8rem 0.95rem;
+  font: inherit;
+  border-radius: 4px;
+}
+
+.search input:focus,
+.chip:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.filters,
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip,
+.topic {
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 0.38rem 0.8rem;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.topic {
+  border: 1px dashed var(--line);
+  background: transparent;
+  color: var(--muted);
+}
+
+.chip.is-active,
+.topic.is-active {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: #1a1408;
+}
+
+.catalog {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 1.1rem 1.15rem 1.2rem;
+}
+
+.card header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+  margin-bottom: 0.7rem;
+}
+
+.card p {
+  margin: 0 0 0.95rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.tag {
+  font-size: 0.75rem;
+  color: var(--amber);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.grid {
+  display: grid;
+  gap: 0.7rem;
+}
+
+@media (min-width: 840px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.shell {
+  border: 1px solid var(--line);
+  background: #12110d;
+  min-height: 100%;
+}
+
+.shell h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0.65rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.82rem;
+}
+
+.shell.cmd h3 {
+  color: var(--cmd);
+}
+.shell.pwsh h3 {
+  color: var(--pwsh);
+}
+.shell.linux h3 {
+  color: var(--linux);
+}
+
+.shell pre {
+  margin: 0;
+  padding: 0.7rem 0.7rem 0.85rem;
+  overflow-x: auto;
+  font: 0.86rem/1.45 "Cascadia Mono", "Consolas", "Liberation Mono", monospace;
+  color: #efe6cd;
+}
+
+.copy {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+}
+
+.copy:hover,
+.copy.copied {
+  color: var(--ok);
+}
+
+.hidden {
+  display: none;
+}
+
+.tips {
+  margin-top: 1.75rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1.2rem;
+}
+
+.tips ul {
+  padding-left: 1.1rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+kbd,
+code {
+  font-family: "Cascadia Mono", "Consolas", monospace;
+  background: #0f0e0b;
+  border: 1px solid var(--line);
+  padding: 0.05rem 0.35rem;
+  color: var(--ink);
+}
+
+.empty {
+  color: var(--muted);
+  padding: 1.5rem 0;
+}
+
+footer {
+  margin-top: 2rem;
+  color: #8c816b;
+  font-size: 0.9rem;
+}
