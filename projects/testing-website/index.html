@@ -1,0 +1,275 @@
+<!doctype html>
+<html> 
+<head>
+        <title>My Web Page</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/jpg" href="images/favicon.jpg">
+        <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1> This is my website </h1>
+    <p id="odd">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam repellat maxime sit excepturi odit temporibus facere earum, eaque quia modi voluptate fuga, asperiores voluptas corporis tempora! Adipisci error sed accusamus?</p>
+    <p id="even">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam repellat maxime sit excepturi odit temporibus facere earum, eaque quia modi voluptate fuga, asperiores voluptas corporis tempora! Adipisci error sed accusamus?</p>
+    <p id="odd">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam repellat maxime sit excepturi odit temporibus facere earum, eaque quia modi voluptate fuga, asperiores voluptas corporis tempora! Adipisci error sed accusamus?</p>
+    <p id="even">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam repellat maxime sit excepturi odit temporibus facere earum, eaque quia modi voluptate fuga, asperiores voluptas corporis tempora! Adipisci error sed accusamus?</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <hr>
+    <header style="background-color: mediumpurple;">
+        <h1> Welcome to my page!</h1>
+        <a href="">Home</a>
+        <a href="">About Us</a>
+        <a href="">Products</a>
+        <a href="">Contact Us</a>
+        <hr>
+    </header>
+
+    <main>
+        <h4>Check out this dog:</h4>
+        <image src="images/dog.jpg" alt="A cute dog" width="300">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam repellat maxime sit excepturi odit temporibus facere earum, eaque quia modi voluptate fuga, asperiores voluptas corporis tempora! Adipisci error sed accusamus?</p>
+    </main>
+
+    <footer style="background-color: mediumpurple;">
+        <hr>
+        author: Toboulders<br>
+        &copy; copyright reserved<br>
+        <small><a href="mailto:Testing@hello.com">Testing@hello.com</a></small>
+
+
+    </footer>
+
+
+
+
+
+
+
+
+
+    <hr>
+    <form action="index.php" method="POST" enctype="multipart/form-data"> 
+      <label for="username">username:</label>
+      <input type="text" id="username" placeholder="Type Here" minlength="6" maxlength="15">  
+      <br>
+      <label for="password"> password:</label>
+      <input type="password" id="password"><br>
+
+      <label for ="email">email:</label>
+      <input type="email" id="email" placeholder="typehere@gmail.com"><br>
+
+      <label for="phone"> phone number:</label>
+      <input type="tel" id="phone" placeholder="1234-5678" pattern="[0-9]{4}-[0-9]{4}"><br>
+
+      <label for="birthday"> birthday:</label>
+      <input type="date" id="birthday"><br>
+
+      <lavel for ="quantity"> quantity (1-99):</lavel>
+      <input type="number" id="quantity" name="quantity" min="1" max="99" value="1"><br>
+
+      <label for="title">title:</label>
+
+      <label for ="Mr"> Mr.</label>
+      <input type="radio" id="Mr" name="title" value="Mr.">
+      <label for ="Ms"> Ms.</label>
+      <input type="radio" id="Ms" name="title" value="Ms.">
+      <label for ="Mrs"> Mrs.</label>
+      <input type="radio" id="Mrs" name="title" value="Mrs."><br>
+
+
+      <label for="payment">payment method:</label>
+      <select>
+        <option value="visa">Visa</option>
+        <option value="mastercard">MasterCard</option>
+        <option value="giftcard">giftcard</option>
+      </select><br>
+
+
+      <label for ="suscribe">suscribe:</label>
+      <input type="checkbox" id="suscribe" ><br>
+
+      <label for="comment">comment:</label>
+      <textarea id="comment" rows="4" cols="30" placeholder="Type your comment here..."></textarea><br>
+
+      <label file="file">file:</label>
+      <input type="file" id="file" accept="image/png, image/jpg"><br>
+
+      <input type="submit"><br>
+      <input type="reset">
+ 
+
+
+    </form> 
+
+
+
+
+
+
+
+        <hr>
+    <button onclick="doSomething()">Click me to change text</button>
+    <p id="greeting" style="font-size: 25px;">Hello</p>
+    <script>
+        function doSomething() {
+            document.getElementById("greeting").innerHTML = "Goodbye";  
+        }
+    </script>
+
+    <a href="page2.html" target="_blank">    
+    <button style="font-size: 25px; background-color:grey; color: lightblue; border-radius:25px; ">click me !</button>
+    
+
+    </a>
+
+
+
+    <hr>
+    <h3>Store Hours</h3>
+    <table border="1" style="background-color: black;">
+        <tr algin=center; style="background-color: lightblue;">
+            <th width="100">Sunday</th>
+            <th width="100">Monday</th>
+            <th width="100">Tuesday</th>
+            <th width="100">Wednesday</th>
+            <th width="100">Thursday</th>
+            <th width="100">Friday</th>
+            <th width="100">Saturday</th>
+        </tr>
+        <tr align="center" style="background-color: azure;">
+            <td>Closed</td>
+            <td>9am - 5pm</td>
+            <td>9am - 5pm</td>
+            <td>9am - 5pm</td>
+            <td>9am - 5pm</td>
+            <td>9am - 5pm</td>
+            <td>10am - 2pm</td>
+    </table>
+    
+
+
+    <hr>    
+    <h4> Grocery List </h4> 
+    <ul> <!--unordered list-->
+        <li> milk </li>
+        <li> eggs  </li>
+        <li> bread </li>
+        <li> coffee supplies</li>
+        <ul>
+            <li> coffee beans </li>
+            <li> creamer </li>
+            <li> sugar </li>
+        </ul>
+    </ul>
+
+    <h4> To-Do List </h4>
+    <ol> <!--ordered list-->
+        <li> Eat breakfast </li>
+        <li> Go to school </li>
+        <li> Walk dog </li>
+        <li> Go to work </li>
+    </ol>
+    <!--description list-->
+    <h4> Mythical Creatures </h4>
+    <dl style="background-color: aquamarine; border:2px solid">
+        <dt>dragon</dt>
+        <dd>A mythical fire-breathing reptile</dd>
+        <dt> phoenix</dt>
+        <dd>A mythical bird that is reborn from its ashes</dd>
+        <dt>vampire</dt>
+        <dd>A mythical creature that drinks blood</dd>
+        <dt>warewolf</dt>
+        <dd>A mythical creature that transforms from human to wolf</dd>
+    </dl>
+
+        <hr>    
+    <h1><spam style="background-color:cadetblue"> This is a spam title </spam></h1>
+    <h1><div style="background-color: chocolate;"> This is a div title</div> </h1>
+
+    <p><spam style="background-color:cadetblue">This is a span sentence</spam></p>
+    <p><div style="background-color:chocolate">This is a div sentence</div></p>
+    
+    <p><spam style="background-color: cadetblue;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum fugiat velit pariatur molestiae, quibusdam accusantium architecto beatae ratione sunt. Dicta consectetur, est ratione cupiditate delectus repellat quam magni dolor totam.</spam></p>
+    <p><div style="background-color: chocolate;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum fugiat velit pariatur molestiae, quibusdam accusantium architecto beatae ratione sunt. Dicta consectetur, est ratione cupiditate delectus repellat quam magni dolor totam.</div></p>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum fugiat velit pariatur molestiae, quibusdam accusantium architecto beatae ratione sunt. Dicta consectetur, est ratione cupiditate delectus repellat quam magni dolor totam.</p>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum fugiat velit pariatur molestiae, quibusdam accusantium architecto beatae ratione sunt. Dicta consectetur, est ratione cupiditate delectus repellat quam magni dolor totam.</p>
+    <br>
+    <p> This is normal text</p>
+    <p> This is <b>bold</b> text</p>
+    <p> This is <i>italic</i> text</p>
+    <p> This is <u>underlined</u> text</p>
+    <p> This is <del>deleted</del> text</p>
+    <p> This is <big>big</big> text</p>
+    <p> This is <small>small</small> text</p>
+    <p> This is <sub>subscript</subsub> text</p>
+    <p> This is <sup>supersupscript<sup> text</p>
+    <p> This is <tt>monoscript<tt> text</p>
+    <p> This is <mark style="background-color: aqua;">highlighted</mark> text</p>
+    
+
+
+        <hr>
+    <a target="_blank" href="https://fminside.net/clubs/4-fm-24/868-paris-saint-germain">
+    <video src="/video/fm24.mp4" controls autoplay muted loop;
+    width="500px"></video>
+    </a>
+
+    <hr>
+    <p>Bad Romance - Lady Gaga</p>    
+    <audio controls>
+        <source src="music/Bad Romance.mp3" type="audio/mpeg">
+    </audio>
+    <br>
+    <p>Counting Stars - One Republic</p>
+    <audio controls>
+        <source src="music/Counting Stars.mp3" type="audio/mpeg">
+    </audio>
+    <br>
+    <p>Teeth - 5 Seconds of Summer</p>
+    <audio controls>
+        <source src="music/Teeth.mp3" type="audio/mpeg">
+    </audio>
+    <br>
+<hr>
+    <a href="https://www.google.com"
+    target="_blank" 
+    title="Goes to google"> <!--new tab, hover show-->
+    click me
+
+    </a>
+<br>
+    <a href="lyrics.html" ; target=" _blank"; title="Goes to song lyrics">
+        song lyrics for Bad Romance
+    </a>
+
+    <br>
+    <a href="mailto: test@gmail.com">
+      email me  
+    </a>
+
+    <hr><br>
+    <h1> This is a cute dog </h1>
+    <a href="https://en.wikipedia.org/wiki/Dog" ; target="_blank"; title="Goes to dog wiki">
+    <hr>    
+    <img src="images/dog.jpg"
+    height,width ="300"
+    alt="A cute dog picture"> <!--alt will read text for visually impared-->>
+    <img src= "images/smiling_dog.gif"
+    height, width="200"
+    alt="A smiling dog picture">
+
+    </body>
+</html>
